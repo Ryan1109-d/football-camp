@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>清華大學足球冬令營 2027｜長青 Stay Young</title>
+<meta name="description" content="2027 寒假清華大學足球冬令營，國小三到六年級專屬，專業教練帶領五天全天密集訓練。1/25–1/29，名額 25 人。">
+<style>
+:root{
+  --bg:#e2d9c7;
+  --bg-alt:#d8cdb6;
+  --card:#ece5d6;
+  --card-light:#f2ecdf;
+  --border:#c9bda5;
+  --border-soft:#d5cab2;
+  --text:#26231d;
+  --text-2:#2b2822;
+  --text-body:#6e614c;
+  --text-muted:#8a7a5e;
+  --text-faint:#9a8c70;
+  --green:#2e5e3a;
+  --orange:#a06a2c;
+  --red:#9a4a3a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text)}
+/* ===== Nav ===== */
+.nav{position:sticky;top:0;z-index:100;background:rgba(226,217,199,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{font-size:14px;font-weight:600;color:var(--text-2);text-decoration:none;white-space:nowrap}
+.nav-logo span{color:var(--text-muted);font-size:10px;font-weight:400;margin-left:8px;letter-spacing:.08em;text-transform:uppercase}
+.nav-links{display:flex;gap:1.4rem}
+.nav-links a{font-size:13px;color:var(--text-body);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--text-2)}
+.nav-cta{font-size:13px;font-weight:500;background:var(--green);color:#fff;border:none;border-radius:6px;padding:8px 18px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.nav-cta:hover{background:#25492e}
+/* ===== Hero ===== */
+.hero{padding:5.5rem 1.75rem 4.5rem;text-align:center;border-bottom:.5px solid var(--border)}
+.hero-badge{display:inline-block;background:rgba(46,94,58,.09);border:.5px solid rgba(46,94,58,.3);color:var(--green);font-size:11px;font-weight:500;letter-spacing:.08em;padding:5px 14px;border-radius:99px;margin-bottom:1.6rem;text-transform:uppercase}
+.hero h1{font-size:clamp(30px,6vw,42px);font-weight:600;line-height:1.2;margin-bottom:1rem;letter-spacing:-.02em}
+.hero h1 em{color:var(--green);font-style:normal}
+.hero-sub{font-size:15px;color:var(--text-body);line-height:1.8;max-width:440px;margin:0 auto 2.2rem}
+.hero-meta{display:flex;justify-content:center;border:.5px solid var(--border);background:var(--card);border-radius:10px;overflow:hidden;max-width:480px;margin:0 auto 2.4rem}
+.hmi{flex:1;padding:1rem .5rem;text-align:center;border-right:.5px solid var(--border-soft)}
+.hmi:last-child{border-right:none}
+.hml{font-size:10px;color:var(--text-faint);letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px}
+.hmv{font-size:13px;font-weight:500;color:var(--text-2)}
+.hero-btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.btn-green{display:inline-block;background:var(--green);color:#fff;border:none;border-radius:7px;padding:12px 28px;font-size:14px;font-weight:500;cursor:pointer;text-decoration:none}
+.btn-green:hover{background:#25492e}
+.btn-out{display:inline-block;background:transparent;color:#5a4f3c;border:.5px solid #b5a888;border-radius:7px;padding:12px 24px;font-size:14px;cursor:pointer;text-decoration:none}
+.btn-out:hover{background:var(--card)}
+.divider{text-align:center;padding:.65rem;font-size:11px;color:var(--text-faint);letter-spacing:.07em;text-transform:uppercase;background:var(--bg-alt);border-bottom:.5px solid var(--border)}
+/* ===== Sections ===== */
+.sec{padding:3.5rem 1.75rem;border-bottom:.5px solid var(--border)}
+.sec.alt{background:var(--bg-alt)}
+.sec-inner{max-width:920px;margin:0 auto}
+.sl{font-size:11px;color:var(--green);font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.st{font-size:23px;font-weight:600;margin-bottom:.7rem}
+.ss{font-size:14px;color:var(--text-body);line-height:1.8;max-width:500px}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:1.7rem}
+.fc{background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1.25rem}
+.ft{font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:4px}
+.fd{font-size:12px;color:var(--text-body);line-height:1.65}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:1.7rem}
+.dc{background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1rem}
+.dtag{font-size:10px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.dn{font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:5px}
+.di{font-size:12px;color:var(--text-body);line-height:1.7}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:1.7rem}
+.cc{background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1.25rem;display:flex;gap:1rem}
+.cav{width:42px;height:42px;border-radius:50%;flex-shrink:0;background:rgba(46,94,58,.09);border:.5px solid rgba(46,94,58,.25);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--green);font-weight:600}
+.cn{font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:2px}
+.cr{font-size:11px;color:var(--green);margin-bottom:5px}
+.cb{font-size:12px;color:var(--text-body);line-height:1.65}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:1.7rem}
+.pc{background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1.25rem}
+.pc.hi{border:2px solid var(--green)}
+.ptag{display:inline-block;background:rgba(46,94,58,.1);color:var(--green);font-size:10px;font-weight:500;letter-spacing:.06em;padding:3px 10px;border-radius:99px;margin-bottom:.7rem;text-transform:uppercase}
+.pdesc{font-size:12px;color:var(--text-body);margin-bottom:5px}
+.pnum{font-size:27px;font-weight:600}
+.punit{font-size:13px;color:var(--text-faint);font-weight:400}
+.pnote{font-size:11px;color:var(--text-muted);margin-top:6px;line-height:1.6}
+.ph-spacer{height:25px}
+.refund-box{margin-top:1.4rem;background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1.25rem 1.4rem}
+.refund-title{font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:.85rem}
+.refund-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.ri{background:var(--card-light);border:.5px solid var(--border-soft);border-radius:8px;padding:.8rem;text-align:center}
+.ri-when{font-size:11px;color:var(--text-muted);margin-bottom:3px}
+.ri-amt{font-size:14px;font-weight:600;color:var(--green)}
+.ri-amt.low{color:var(--orange)}
+.ri-amt.zero{color:var(--red)}
+.refund-note{font-size:11px;color:var(--text-faint);margin-top:.85rem;line-height:1.65}
+.faq-list{max-width:600px;margin-top:1.7rem}
+.faq-i{border-bottom:.5px solid var(--border);padding:1.05rem 0}
+.faq-q{font-size:14px;font-weight:600;color:var(--text-2);margin-bottom:5px}
+.faq-a{font-size:13px;color:var(--text-body);line-height:1.75}
+/* ===== CTA band ===== */
+.cta-band{padding:3.5rem 1.75rem;text-align:center;border-bottom:.5px solid var(--border);background:var(--bg-alt)}
+.cta-band .st{margin-bottom:.5rem}
+.cta-band p{font-size:14px;color:var(--text-body);margin-bottom:1.6rem}
+/* ===== Footer ===== */
+footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.fl{font-size:14px;font-weight:600;color:var(--card)}
+.fs{font-size:11px;color:var(--text-muted);margin-top:3px;letter-spacing:.08em;text-transform:uppercase}
+.fi2{font-size:12px;color:var(--text-muted);text-align:right;line-height:1.9}
+.fi2 a{color:var(--text-muted);text-decoration:none}
+/* ===== Scroll reveal ===== */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal.d1{transition-delay:.08s}
+.reveal.d2{transition-delay:.16s}
+.reveal.d3{transition-delay:.24s}
+.reveal.d4{transition-delay:.32s}
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+}
+/* ===== Mobile ===== */
+@media (max-width:640px){
+  .nav{padding:0 1rem}
+  .nav-links{display:none}
+  .hero-meta{flex-wrap:wrap}
+  .hmi{flex:1 1 50%;border-bottom:.5px solid var(--border-soft)}
+  .hmi:nth-child(3),.hmi:nth-child(4){border-bottom:none}
+  .hmi:nth-child(2){border-right:none}
+  footer{flex-direction:column;text-align:center}
+  .fi2{text-align:center}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a class="nav-logo" href="#top">清華大學足球冬令營 <span>長青 · Stay Young</span></a>
+  <div class="nav-links">
+    <a href="#about">介紹</a>
+    <a href="#schedule">課程</a>
+    <a href="#coaches">教練</a>
+    <a href="#pricing">收費</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a class="nav-cta" href="signup.html">立即報名</a>
+</nav>
+<section class="hero" id="top">
+  <div class="hero-badge">2027 寒假 · 清大足球冬令營</div>
+  <h1>這個寒假，<em>讓孩子上場</em></h1>
+  <p class="hero-sub">專業教練帶領，國小三到六年級專屬全天密集足球訓練。五天，讓每個孩子在球場上找到自己。</p>
+  <div class="hero-meta">
+    <div class="hmi"><div class="hml">日期</div><div class="hmv">1/25 – 1/29</div></div>
+    <div class="hmi"><div class="hml">對象</div><div class="hmv">國小 3–6 年級</div></div>
+    <div class="hmi"><div class="hml">地點</div><div class="hmv">國立清華大學</div></div>
+    <div class="hmi"><div class="hml">名額</div><div class="hmv">25 人</div></div>
+  </div>
+  <div class="hero-btns">
+    <a class="btn-green" href="signup.html">立即報名 →</a>
+    <a class="btn-out" href="#about">了解課程</a>
+  </div>
+</section>
+<div class="divider">— 長青運動 · 清大場地 · 專業教練 —</div>
+<section class="sec" id="about">
+  <div class="sec-inner">
+    <div class="reveal">
+      <div class="sl">營隊介紹</div>
+      <div class="st">五天全天，紮實訓練</div>
+      <p class="ss">長青足球冬令營由專業教練設計課程，適合初學到有基礎的國小三到六年級學員，課程循序漸進，五天內感受到明顯進步。</p>
+    </div>
+    <div class="fgrid">
+      <div class="fc reveal"><div class="ft">系統課程</div><div class="fd">從基本功到對抗賽，完整五天訓練規劃</div></div>
+      <div class="fc reveal d1"><div class="ft">小班制</div><div class="fd">上限 25 人，每位學員都能獲得關注</div></div>
+      <div class="fc reveal d2"><div class="ft">清大場地</div><div class="fd">室內場地，不受天候影響</div></div>
+      <div class="fc reveal d3"><div class="ft">結業典禮</div><div class="fd">精緻證書、家長觀賽、電子合照</div></div>
+    </div>
+  </div>
+</section>
+<section class="sec alt" id="schedule">
+  <div class="sec-inner">
+    <div class="reveal">
+      <div class="sl">課程內容</div>
+      <div class="st">每日訓練重點</div>
+      <p class="ss">五天循序漸進，由個人技術走向團隊配合，最後以對抗賽收尾。</p>
+    </div>
+    <!-- TODO: 換成真實課表 -->
+    <div class="dgrid">
+      <div class="dc reveal"><div class="dtag">Day 1 · 週一</div><div class="dn">基本功入門</div><div class="di">控球技巧<br>熱身操<br>自我介紹賽</div></div>
+      <div class="dc reveal d1"><div class="dtag">Day 2 · 週二</div><div class="dn">傳球接球</div><div class="di">短傳訓練<br>移動配合<br>小組練習</div></div>
+      <div class="dc reveal d2"><div class="dtag">Day 3 · 週三</div><div class="dn">射門守門</div><div class="di">射門姿勢<br>守門基礎<br>攻守輪換</div></div>
+      <div class="dc reveal d3"><div class="dtag">Day 4 · 週四</div><div class="dn">戰術配合</div><div class="di">陣型介紹<br>跑位概念<br>團隊對練</div></div>
+      <div class="dc reveal d4"><div class="dtag">Day 5 · 週五</div><div class="dn">成果對抗賽</div><div class="di">分組對抗<br>家長觀賽<br>結業典禮</div></div>
+    </div>
+  </div>
+</section>
+<section class="sec" id="coaches">
+  <div class="sec-inner">
+    <div class="reveal">
+      <div class="sl">教練介紹</div>
+      <div class="st">專業，用心帶領</div>
+    </div>
+    <div class="cgrid">
+      <!-- TODO: 換成真實教練姓名與簡介 -->
+      <div class="cc reveal"><div class="cav">A</div><div><div class="cn">行政教練（待填）</div><div class="cr">課程規劃 · 行政統籌</div><div class="cb">多年足球教學經驗，負責整體課程設計與現場協調。</div></div></div>
+      <div class="cc reveal d1"><div class="cav">B</div><div><div class="cn">執行教練（待填）</div><div class="cr">技術指導 · 場地執行</div><div class="cb">清大足球隊成員，親身示範技術動作，帶領孩子實戰練習。</div></div></div>
+    </div>
+  </div>
+</section>
+<section class="sec alt" id="pricing">
+  <div class="sec-inner">
+    <div class="reveal">
+      <div class="sl">收費方案</div>
+      <div class="st">簡單透明</div>
+    </div>
+    <div class="pgrid">
+      <div class="pc hi reveal"><div class="ptag">優惠價</div><div class="pdesc">團體 5 人 / 清大師生 / 特約企業</div><div class="pnum">$6,600 <span class="punit">/ 人</span></div><div class="pnote">符合資格者報名即享，無需額外申請</div></div>
+      <div class="pc reveal d1"><div class="ph-spacer"></div><div class="pdesc">一般報名</div><div class="pnum">$7,200 <span class="punit">/ 人</span></div><div class="pnote">個人報名，無需任何條件</div></div>
+      <div class="pc reveal d2"><div class="ph-spacer"></div><div class="pdesc">開班門檻</div><div class="pnum">12 <span class="punit">人</span></div><div class="pnote">確認開班後才會寄送繳費通知，未達門檻不會收取任何費用</div></div>
+    </div>
+    <div class="refund-box reveal">
+      <div class="refund-title">退費規則（繳費後）</div>
+      <div class="refund-grid">
+        <div class="ri"><div class="ri-when">開課 14 天前</div><div class="ri-amt">全額退費</div></div>
+        <div class="ri"><div class="ri-when">開課前 7–14 天</div><div class="ri-amt low">退 70%</div></div>
+        <div class="ri"><div class="ri-when">開課前 1–7 天</div><div class="ri-amt low">退 50%</div></div>
+        <div class="ri"><div class="ri-when">開課當天起</div><div class="ri-amt zero">不退費</div></div>
+      </div>
+      <div class="refund-note">如遇天災（颱風、地震等），依新竹市政府停課公告辦理，停課日將另行協調補課或按比例退費。</div>
+    </div>
+  </div>
+</section>
+<section class="sec" id="faq">
+  <div class="sec-inner">
+    <div class="reveal">
+      <div class="sl">FAQ</div>
+      <div class="st">常見問題</div>
+    </div>
+    <div class="faq-list">
+      <div class="faq-i reveal"><div class="faq-q">需要自備足球裝備嗎？</div><div class="faq-a">建議穿著運動服與室內運動鞋，護脛請自備。球具由營隊提供，無需自帶。</div></div>
+      <div class="faq-i reveal"><div class="faq-q">完全沒有足球基礎可以參加嗎？</div><div class="faq-a">可以。課程從零開始設計，適合初學到有基礎的國小三到六年級學員。</div></div>
+      <div class="faq-i reveal"><div class="faq-q">報名後何時繳費？</div><div class="faq-a">報名送出即完成登記，並收到報名確認信。達開班門檻並確認開班後，才會以 email 寄送繳費通知。</div></div>
+      <div class="faq-i reveal"><div class="faq-q">額滿後如何候補？</div><div class="faq-a">報名超過 25 人後自動列入候補名單。有名額釋出時，我們將以 email 通知候補者。</div></div>
+      <div class="faq-i reveal"><div class="faq-q">家長可以觀賽嗎？</div><div class="faq-a">第五天下午有成果對抗賽，歡迎家長前來觀賽並參加結業典禮。</div></div>
+    </div>
+  </div>
+</section>
+<section class="cta-band">
+  <div class="reveal">
+    <div class="st">準備好讓孩子上場了嗎？</div>
+    <p>名額 25 人，額滿候補。</p>
+    <a class="btn-green" href="signup.html">前往報名 →</a>
+  </div>
+</section>
+<footer>
+  <div>
+    <div class="fl">長青運動</div>
+    <div class="fs">Stay Young</div>
+  </div>
+  <div class="fi2">
+    <!-- TODO: 信箱確定後更新 -->
+    stayyoung@gmail.com<br>
+    IG @stayyoungtw
+  </div>
+</footer>
+<script>
+// 滾動浮現：進出視窗都重播
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    e.target.classList.toggle('visible', e.isIntersecting);
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
