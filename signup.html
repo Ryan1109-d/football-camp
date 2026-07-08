@@ -46,6 +46,13 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .fg input,.fg select{background:var(--card-light);border:.5px solid #b5a888;border-radius:6px;padding:10px 12px;font-size:14px;color:var(--text-2);width:100%;font-family:inherit}
 .fg input:focus,.fg select:focus{outline:none;border-color:var(--green)}
 .fg input.err,.fg select.err{border-color:var(--red)}
+.group-box{grid-column:1/-1;background:rgba(46,122,70,.06);border:.5px solid rgba(46,122,70,.3);border-radius:8px;padding:1rem}
+.gb-title{font-size:12px;font-weight:600;color:var(--green);margin-bottom:4px}
+.gb-hint{font-size:12px;color:#5a4f3c;line-height:1.7;margin-bottom:10px}
+.gb-hint strong{color:var(--green)}
+.gb-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gb-input{background:var(--card-light);border:.5px solid #b5a888;border-radius:6px;padding:9px 12px;font-size:13px;color:var(--text-2);width:100%}
+.gb-input:focus{outline:none;border-color:var(--green)}
 .same-check{grid-column:1/-1;display:flex;flex-direction:row;align-items:center;gap:8px;padding:.2rem 0}
 .same-check input{width:16px;height:16px;accent-color:var(--green);margin:0;flex:none}
 .same-check label{font-size:13px;color:var(--text-2);cursor:pointer;margin:0}
@@ -165,6 +172,17 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
           <option value="清大教職員">清大教職員</option>
         </select>
       </div>
+      <div class="group-box" id="groupBox" style="display:none">
+        <div class="gb-title">團報學員名單</div>
+        <div class="gb-hint">請填寫同行其他學員姓名。<strong>提醒：每位學員皆需各自填寫一份報名表。</strong></div>
+        <div class="gb-grid">
+          <input type="text" class="gb-input" id="gm1" placeholder="學員 1 姓名">
+          <input type="text" class="gb-input" id="gm2" placeholder="學員 2 姓名">
+          <input type="text" class="gb-input" id="gm3" placeholder="學員 3 姓名">
+          <input type="text" class="gb-input" id="gm4" placeholder="學員 4 姓名">
+          <input type="text" class="gb-input" id="gm5" placeholder="學員 5 姓名">
+        </div>
+      </div>
       <div class="lunch-box">
         <div class="lt">午餐安排 <span class="req" style="color:var(--red)">*</span></div>
         <label class="lopt">
@@ -198,7 +216,7 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     <div class="fs">清華大學足球冬令營</div>
   </div>
   <div class="fi2">
-    stayyoung985@gmail.com
+    聯繫我們：stayyoung985@gmail.com
   </div>
 </footer>
 <script>
@@ -234,6 +252,10 @@ sameAsEmg.addEventListener('change', () => {
     document.getElementById('payerEmail').value = document.getElementById('email').value;
   });
 });
+// 團報名單顯示聯動
+document.getElementById('discount').addEventListener('change', (e) => {
+  document.getElementById('groupBox').style.display = e.target.value === '團報' ? 'block' : 'none';
+});
 const isPhone = v => /^09\d{8}$/.test(v.replace(/[-\s]/g,''));
 const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 form.addEventListener('submit', async (e) => {
@@ -254,6 +276,14 @@ form.addEventListener('submit', async (e) => {
     const el = document.getElementById(id);
     if (el.value.trim() && !fn(el.value)) { el.classList.add('err'); valid = false; }
   });
+  // 團報驗證:至少填4位其他學員(含本人共5人)
+  if (document.getElementById('discount').value === '團報') {
+    const gms = ['gm1','gm2','gm3','gm4','gm5'].map(id => document.getElementById(id).value.trim()).filter(Boolean);
+    if (gms.length < 4) {
+      alert('團報資格需 5 人（含本人）以上，請至少填寫 4 位其他學員姓名。');
+      return;
+    }
+  }
   if (!valid) {
     msgBox.textContent = '請確認紅框欄位：必填未填，或電話 / 信箱 / 年齡格式有誤。';
     msgBox.classList.add('fail');
@@ -274,6 +304,7 @@ form.addEventListener('submit', async (e) => {
     payerEmail: document.getElementById('payerEmail').value.trim(),
     discount: document.getElementById('discount').value,
     lunch: document.querySelector('input[name="lunch"]:checked').value,
+    groupMembers: ['gm1','gm2','gm3','gm4','gm5'].map(id => document.getElementById(id).value.trim()).filter(Boolean).join('、') || '—',
     submittedAt: new Date().toISOString()
   };
   // ---- 送出 ----

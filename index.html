@@ -29,7 +29,6 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text)}
-
 /* ===== Nav ===== */
 .nav{position:sticky;top:0;z-index:100;background:rgba(226,217,199,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:56px}
 .nav-logo{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:900;color:var(--text-2);text-decoration:none;white-space:nowrap;letter-spacing:.03em}
@@ -39,7 +38,6 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .nav-links a:hover{color:var(--text-2)}
 .nav-cta{font-size:13px;font-weight:500;background:var(--green);color:#fff;border:none;border-radius:6px;padding:8px 18px;cursor:pointer;text-decoration:none;white-space:nowrap}
 .nav-cta:hover{background:#25492e}
-
 /* ===== Hero ===== */
 .top-banner{width:100%;border-bottom:.5px solid var(--border)}
 .top-banner img{display:block;width:100%;height:clamp(133px,23vw,253px);object-fit:cover;object-position:center top;filter:saturate(.88) brightness(.96)}
@@ -53,6 +51,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .hero-badge{display:inline-block;background:rgba(46,122,70,.1);border:1px solid rgba(46,122,70,.35);color:var(--green);font-size:.8rem;font-weight:700;letter-spacing:.15em;padding:.4rem 1.3rem;border-radius:20px;margin-bottom:1.6rem;text-transform:uppercase}
 .hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2.5rem,7.5vw,4.2rem);font-weight:900;line-height:1.15;margin-bottom:1.1rem;letter-spacing:.03em}
 .hero h1 em{color:var(--green);font-style:normal}
+.beginner-pill{display:inline-block;background:rgba(224,139,31,.12);border:1px solid rgba(224,139,31,.4);color:#b06d10;font-size:.95rem;font-weight:700;padding:.5rem 1.5rem;border-radius:24px;margin-bottom:2rem;letter-spacing:.05em}
 .hero-sub{font-size:16px;color:var(--text-body);line-height:1.8;max-width:440px;margin:0 auto 2.2rem}
 .hero-meta{display:flex;justify-content:center;border:.5px solid var(--border);background:var(--card);border-radius:10px;overflow:hidden;max-width:580px;margin:0 auto 2.4rem}
 .hmi{flex:1;padding:1rem .5rem;text-align:center;border-right:.5px solid var(--border-soft)}
@@ -65,9 +64,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .btn-green:hover{background:#25492e}
 .btn-out{display:inline-block;background:transparent;color:#5a4f3c;border:.5px solid #b5a888;border-radius:7px;padding:12px 24px;font-size:14px;cursor:pointer;text-decoration:none}
 .btn-out:hover{background:var(--card)}
-
 .divider{text-align:center;padding:.65rem;font-size:11px;color:var(--text-faint);letter-spacing:.07em;text-transform:uppercase;background:var(--bg-alt);border-bottom:.5px solid var(--border)}
-
 /* ===== Sections ===== */
 .sec{padding:5rem 1.75rem;border-bottom:.5px solid var(--border)}
 .sec.alt{background:var(--bg-alt)}
@@ -75,7 +72,6 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .sl{font-size:.8rem;color:var(--amber);font-weight:700;letter-spacing:.25em;text-transform:uppercase;margin-bottom:.75rem}
 .st{font-family:'Noto Serif TC',serif;font-size:clamp(1.7rem,3.8vw,2.4rem);font-weight:900;margin-bottom:.9rem;line-height:1.25}
 .ss{font-size:15px;color:var(--text-body);line-height:1.85;max-width:520px}
-
 .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:1.7rem}
 .fc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.4rem;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
 .fc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green)}
@@ -85,14 +81,12 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .fc:hover{transform:translateY(-4px);border-color:var(--green)}
 .ft{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2);margin-bottom:5px}
 .fd{font-size:13px;color:var(--text-body);line-height:1.65}
-
 .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:1.7rem}
 .dc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.1rem;transition:transform .2s,border-color .2s}
 .dc:hover{transform:translateY(-3px);border-color:var(--amber)}
 .dtag{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
 .dn{font-family:'Noto Serif TC',serif;font-size:1.05rem;font-weight:700;color:var(--text-2);margin-bottom:5px}
 .di{font-size:13px;color:var(--text-body);line-height:1.7}
-
 .timeline{margin-top:2rem;max-width:620px}
 .tl-item{display:flex;align-items:flex-start;gap:1rem;padding:.85rem 0;position:relative}
 .tl-item::before{content:'';position:absolute;left:calc(110px + .5rem + 5px);top:0;bottom:0;width:1px;background:var(--border)}
@@ -113,7 +107,6 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .cn{font-size:16px;font-weight:600;color:var(--text-2);margin-bottom:2px}
 .cr{font-size:12px;color:var(--green);margin-bottom:5px}
 .cb{font-size:13px;color:var(--text-body);line-height:1.65}
-
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:1.7rem}
 .g-tile{aspect-ratio:4/3;background:var(--card);border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center}
 .g-tile span{font-size:12px;color:var(--text-faint)}
@@ -128,7 +121,6 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .punit{font-size:13px;color:var(--text-faint);font-weight:400}
 .pnote{font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.6}
 .ph-spacer{height:25px}
-
 .refund-box{margin-top:1.4rem;background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1.25rem 1.4rem}
 .refund-title{font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:.85rem}
 .refund-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
@@ -138,24 +130,20 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .ri-amt.low{color:var(--orange)}
 .ri-amt.zero{color:var(--red)}
 .refund-note{font-size:11px;color:var(--text-faint);margin-top:.85rem;line-height:1.65}
-
 .faq-list{max-width:600px;margin-top:1.7rem}
 .faq-i{border-bottom:.5px solid var(--border);padding:1.05rem 0}
 .faq-q{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2);margin-bottom:6px}
 .faq-a{font-size:14px;color:var(--text-body);line-height:1.75}
-
 /* ===== CTA band ===== */
 .cta-band{padding:3.5rem 1.75rem;text-align:center;border-bottom:.5px solid var(--border);background:var(--bg-alt)}
 .cta-band .st{margin-bottom:.5rem}
 .cta-band p{font-size:14px;color:var(--text-body);margin-bottom:1.6rem}
-
 /* ===== Footer ===== */
 footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
 .fl{font-size:14px;font-weight:600;color:var(--card)}
 .fs{font-size:11px;color:var(--text-muted);margin-top:3px;letter-spacing:.08em;text-transform:uppercase}
 .fi2{font-size:12px;color:var(--text-muted);text-align:right;line-height:1.9}
 .fi2 a{color:var(--text-muted);text-decoration:none}
-
 /* ===== Scroll reveal ===== */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -166,7 +154,6 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
 @media (prefers-reduced-motion: reduce){
   .reveal{opacity:1;transform:none;transition:none}
 }
-
 /* ===== Mobile ===== */
 @media (max-width:640px){
   .nav{padding:0 1rem}
@@ -181,7 +168,6 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
 </style>
 </head>
 <body>
-
 <nav class="nav">
   <a class="nav-logo" href="#top">清華大學足球冬令營 <span>Stay Young</span></a>
   <div class="nav-links">
@@ -194,17 +180,16 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
   </div>
   <a class="nav-cta" href="signup.html">立即報名</a>
 </nav>
-
 <div class="top-banner">
   <img src="images/banner.jpg" alt="孩子們在球場上奔跑">
 </div>
-
 <section class="hero" id="top">
   <div class="hero-glow"></div>
   <div class="soccer-ball">⚽</div>
   <div class="hero-badge">2027 寒假 · 清大足球冬令營</div>
   <h1>Stay Young <em>追足夢想</em></h1>
-  <p class="hero-sub">專業教練帶領，國小三到六年級全天足球訓練。五天，讓孩子在球場上找到自己。</p>
+  <p class="hero-sub">專業教練帶領，讓孩子在球場上找到自己。</p>
+  <div class="beginner-pill">⚽ 零基礎、初學者都非常歡迎</div>
   <div class="hero-meta">
     <div class="hmi"><div class="hml">日期</div><div class="hmv">1/25 – 1/29</div></div>
     <div class="hmi"><div class="hml">對象</div><div class="hmv">國小 3–6 年級</div></div>
@@ -217,15 +202,13 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     <a class="btn-out" href="#about">了解課程</a>
   </div>
 </section>
-
 <div class="divider">— Stay Young · 清大場地 · 專業教練 —</div>
-
 <section class="sec" id="about">
   <div class="sec-inner">
     <div class="reveal">
       <div class="sl">營隊介紹</div>
       <div class="st">五天全天，紮實訓練</div>
-      <p class="ss">課程由專業教練設計，適合初學到有基礎的學員，循序漸進，五天看得見進步。</p>
+      <p class="ss">無論是第一次踢球的零基礎孩子，還是已有基礎想更進一步的小球員，課程由專業教練循序漸進設計，五天看得見進步。</p>
     </div>
     <div class="fgrid">
       <div class="fc reveal"><div class="ft">系統課程</div><div class="fd">從基本功到團隊配合，完整五天訓練規劃</div></div>
@@ -235,7 +218,6 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     </div>
   </div>
 </section>
-
 <section class="sec alt" id="schedule">
   <div class="sec-inner">
     <div class="reveal">
@@ -252,8 +234,6 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     </div>
   </div>
 </section>
-
-
 <section class="sec" id="daily">
   <div class="sec-inner">
     <div class="reveal">
@@ -290,7 +270,6 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     </div>
   </div>
 </section>
-
 <section class="sec alt" id="coaches">
   <div class="sec-inner">
     <div class="reveal">
@@ -304,8 +283,6 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     </div>
   </div>
 </section>
-
-
 <section class="sec" id="gallery">
   <div class="sec-inner">
     <div class="reveal">
@@ -322,12 +299,10 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     </div>
   </div>
 </section>
-
 <section class="sec alt" id="pricing">
   <div class="sec-inner">
     <div class="reveal">
       <div class="sl">收費方案</div>
-      <div class="st">簡單透明</div>
     </div>
     <div class="pgrid">
       <div class="pc hi reveal"><div class="ptag">優惠價</div><div class="pdesc">團體 5 人 / 清大教職員</div><div class="pnum">$6,600 <span class="punit">/ 人</span></div><div class="pnote">符合資格者報名即享，無需額外申請</div></div>
@@ -346,7 +321,6 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     </div>
   </div>
 </section>
-
 <section class="sec" id="faq">
   <div class="sec-inner">
     <div class="reveal">
@@ -362,7 +336,6 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     </div>
   </div>
 </section>
-
 <section class="cta-band">
   <div class="reveal">
     <div class="st">準備好讓孩子上場了嗎？</div>
@@ -370,17 +343,15 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     <a class="btn-green" href="signup.html">前往報名 →</a>
   </div>
 </section>
-
 <footer>
   <div>
     <div class="fl">Stay Young</div>
     <div class="fs">清華大學足球冬令營</div>
   </div>
   <div class="fi2">
-    stayyoung985@gmail.com
+    聯繫我們：stayyoung985@gmail.com
   </div>
 </footer>
-
 <script>
 // 滾動浮現：進出視窗都重播
 const io = new IntersectionObserver((entries) => {
