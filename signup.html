@@ -46,6 +46,9 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .fg input,.fg select{background:var(--card-light);border:.5px solid #b5a888;border-radius:6px;padding:10px 12px;font-size:14px;color:var(--text-2);width:100%;font-family:inherit}
 .fg input:focus,.fg select:focus{outline:none;border-color:var(--green)}
 .fg input.err,.fg select.err{border-color:var(--red)}
+.same-check{grid-column:1/-1;display:flex;flex-direction:row;align-items:center;gap:8px;padding:.2rem 0}
+.same-check input{width:16px;height:16px;accent-color:var(--green);margin:0;flex:none}
+.same-check label{font-size:13px;color:var(--text-2);cursor:pointer;margin:0}
 .lunch-box{grid-column:1/-1;background:var(--card);border:.5px solid var(--border);border-radius:8px;padding:1rem}
 .lt{font-size:12px;color:var(--text-body);margin-bottom:10px}
 .lopt{display:flex;align-items:flex-start;gap:8px;cursor:pointer;margin-bottom:9px}
@@ -127,7 +130,7 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
         </select>
       </div>
       <div class="fg full">
-        <label for="email">收信信箱 <span class="req">*</span>　<span style="color:var(--text-faint);font-weight:400">報名確認信與後續通知寄送至此</span></label>
+        <label for="email">信箱 <span class="req">*</span>　<span style="color:var(--text-faint);font-weight:400">報名確認信與後續通知寄送至此</span></label>
         <input type="email" id="email" name="email" placeholder="email@example.com" required>
       </div>
       <div class="fg">
@@ -138,11 +141,9 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
         <label for="emgPhone">緊急聯絡人電話 <span class="req">*</span></label>
         <input type="tel" id="emgPhone" name="emgPhone" placeholder="0912345678" required>
       </div>
-      <div class="fg full" style="margin-top:.3rem">
-        <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-          <input type="checkbox" id="sameAsEmg" style="accent-color:var(--green)">
-          <span>繳款人同緊急聯絡人</span>
-        </label>
+      <div class="same-check">
+        <input type="checkbox" id="sameAsEmg">
+        <label for="sameAsEmg">繳款人同緊急聯絡人</label>
       </div>
       <div class="fg">
         <label for="payerName">繳款人姓名 <span class="req">*</span></label>
@@ -161,7 +162,7 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
         <select id="discount" name="discount" required>
           <option value="一般報名">一般報名</option>
           <option value="團報">5 人以上團報</option>
-          <option value="清大師生">清大師生</option>
+          <option value="清大教職員">清大教職員</option>
         </select>
       </div>
       <div class="lunch-box">
@@ -288,19 +289,19 @@ form.addEventListener('submit', async (e) => {
     });
     const result = await res.json();
     if (result.status === 'ok') {
-      form.reset();
-      payerFields.forEach(id => document.getElementById(id).readOnly = false);
-      msgBox.innerHTML = '報名成功！確認信已寄至您的收信信箱，請留意收件匣（含垃圾郵件夾）。' +
-        (result.waitlist ? '<br><strong>目前名額已滿，您已列入候補名單</strong>，有名額釋出時將以 email 通知。' : '');
-      msgBox.classList.add('ok');
+      const msg = result.waitlist
+        ? '報名成功！\n\n目前名額已滿，您已列入候補名單，有名額釋出時將以 email 通知。\n確認信已寄至您的信箱，請留意收件匣（含垃圾郵件夾）。'
+        : '報名成功！\n\n確認信已寄至您的信箱，請留意收件匣（含垃圾郵件夾）。';
+      alert(msg);
+      window.location.href = 'index.html';
+      return;
     } else {
       throw new Error(result.message || '送出失敗');
     }
   } catch (err) {
-    msgBox.textContent = err.message === '此學員已使用相同信箱報名過'
-      ? err.message
-      : '送出失敗，請稍後再試，或直接來信 stayyoung985@gmail.com 報名。';
-    msgBox.classList.add('fail');
+    alert(err.message === '此學員已使用相同信箱報名過'
+      ? '送出失敗：此學員已使用相同信箱報名過。'
+      : '送出失敗，請稍後再試，或直接來信 stayyoung985@gmail.com 報名。');
   } finally {
     btn.disabled = false;
     btn.textContent = '送出報名 →';
