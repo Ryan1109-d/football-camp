@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>清華大學足球冬令營 2027｜Stay Young</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <meta name="description" content="2027 寒假清華大學足球冬令營，國小三到六年級專屬，專業教練帶領五天全天密集訓練。1/25–1/29，名額 25 人。">
 <style>
 :root{
@@ -18,17 +19,20 @@
   --text-body:#6e614c;
   --text-muted:#8a7a5e;
   --text-faint:#9a8c70;
-  --green:#2e5e3a;
+  --green:#2e7a46;
+  --green-deep:#1f5c33;
+  --amber:#e08b1f;
+  --amber-light:#f2b45c;
   --orange:#a06a2c;
   --red:#9a4a3a;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text)}
+body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text)}
 
 /* ===== Nav ===== */
 .nav{position:sticky;top:0;z-index:100;background:rgba(226,217,199,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:56px}
-.nav-logo{font-size:14px;font-weight:600;color:var(--text-2);text-decoration:none;white-space:nowrap}
+.nav-logo{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:900;color:var(--text-2);text-decoration:none;white-space:nowrap;letter-spacing:.03em}
 .nav-logo span{color:var(--text-muted);font-size:10px;font-weight:400;margin-left:8px;letter-spacing:.08em;text-transform:uppercase}
 .nav-links{display:flex;gap:1.4rem}
 .nav-links a{font-size:13px;color:var(--text-body);text-decoration:none;transition:color .15s}
@@ -41,9 +45,13 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .top-banner img{display:block;width:100%;height:clamp(133px,23vw,253px);object-fit:cover;object-position:center top;filter:saturate(.88) brightness(.96)}
 .banner-placeholder{width:100%;height:clamp(133px,23vw,253px);background:var(--card);border-bottom:1px dashed var(--border);display:flex;align-items:center;justify-content:center}
 .banner-placeholder span{font-size:13px;color:var(--text-faint)}
-.hero{padding:4.5rem 1.75rem 4.25rem;text-align:center;border-bottom:.5px solid var(--border)}
-.hero-badge{display:inline-block;background:rgba(46,94,58,.09);border:.5px solid rgba(46,94,58,.3);color:var(--green);font-size:11px;font-weight:500;letter-spacing:.08em;padding:5px 14px;border-radius:99px;margin-bottom:1.6rem;text-transform:uppercase}
-.hero h1{font-size:clamp(30px,6vw,42px);font-weight:600;line-height:1.2;margin-bottom:1rem;letter-spacing:-.02em}
+.hero{padding:4rem 1.75rem 4.5rem;text-align:center;border-bottom:.5px solid var(--border);position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(46,122,70,.1) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 85% 90%,rgba(224,139,31,.08) 0%,transparent 60%);pointer-events:none}
+.soccer-ball{font-size:3.2rem;margin-bottom:1rem;animation:float 3s ease-in-out infinite;position:relative;z-index:1}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero>*{position:relative;z-index:1}
+.hero-badge{display:inline-block;background:rgba(46,122,70,.1);border:1px solid rgba(46,122,70,.35);color:var(--green);font-size:.8rem;font-weight:700;letter-spacing:.15em;padding:.4rem 1.3rem;border-radius:20px;margin-bottom:1.6rem;text-transform:uppercase}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2.5rem,7.5vw,4.2rem);font-weight:900;line-height:1.15;margin-bottom:1.1rem;letter-spacing:.03em}
 .hero h1 em{color:var(--green);font-style:normal}
 .hero-sub{font-size:16px;color:var(--text-body);line-height:1.8;max-width:440px;margin:0 auto 2.2rem}
 .hero-meta{display:flex;justify-content:center;border:.5px solid var(--border);background:var(--card);border-radius:10px;overflow:hidden;max-width:580px;margin:0 auto 2.4rem}
@@ -52,7 +60,8 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .hml{font-size:11px;color:var(--text-faint);letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px}
 .hmv{font-size:14px;font-weight:500;color:var(--text-2)}
 .hero-btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
-.btn-green{display:inline-block;background:var(--green);color:#fff;border:none;border-radius:7px;padding:12px 28px;font-size:14px;font-weight:500;cursor:pointer;text-decoration:none}
+.btn-green{display:inline-block;background:var(--green);color:#fff;border:none;border-radius:8px;padding:.9rem 2.4rem;font-size:1rem;font-weight:700;letter-spacing:.05em;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
+.btn-green:hover{transform:translateY(-2px)}
 .btn-green:hover{background:#25492e}
 .btn-out{display:inline-block;background:transparent;color:#5a4f3c;border:.5px solid #b5a888;border-radius:7px;padding:12px 24px;font-size:14px;cursor:pointer;text-decoration:none}
 .btn-out:hover{background:var(--card)}
@@ -63,19 +72,25 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .sec{padding:5rem 1.75rem;border-bottom:.5px solid var(--border)}
 .sec.alt{background:var(--bg-alt)}
 .sec-inner{max-width:920px;margin:0 auto}
-.sl{font-size:12px;color:var(--green);font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
-.st{font-size:26px;font-weight:600;margin-bottom:.7rem}
+.sl{font-size:.8rem;color:var(--amber);font-weight:700;letter-spacing:.25em;text-transform:uppercase;margin-bottom:.75rem}
+.st{font-family:'Noto Serif TC',serif;font-size:clamp(1.7rem,3.8vw,2.4rem);font-weight:900;margin-bottom:.9rem;line-height:1.25}
 .ss{font-size:15px;color:var(--text-body);line-height:1.85;max-width:520px}
 
 .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:1.7rem}
-.fc{background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1.25rem}
-.ft{font-size:15px;font-weight:600;color:var(--text-2);margin-bottom:4px}
+.fc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.4rem;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+.fc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green)}
+.fc:nth-child(2)::before{background:var(--amber)}
+.fc:nth-child(3)::before{background:var(--green-deep)}
+.fc:nth-child(4)::before{background:var(--amber-light)}
+.fc:hover{transform:translateY(-4px);border-color:var(--green)}
+.ft{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2);margin-bottom:5px}
 .fd{font-size:13px;color:var(--text-body);line-height:1.65}
 
 .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:1.7rem}
-.dc{background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1rem}
+.dc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.1rem;transition:transform .2s,border-color .2s}
+.dc:hover{transform:translateY(-3px);border-color:var(--amber)}
 .dtag{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
-.dn{font-size:15px;font-weight:600;color:var(--text-2);margin-bottom:5px}
+.dn{font-family:'Noto Serif TC',serif;font-size:1.05rem;font-weight:700;color:var(--text-2);margin-bottom:5px}
 .di{font-size:13px;color:var(--text-body);line-height:1.7}
 
 .timeline{margin-top:2rem;max-width:620px}
@@ -91,7 +106,8 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .tl-name{font-size:16px;font-weight:600;color:var(--text-2)}
 .tl-desc{font-size:13px;color:var(--text-body);margin-top:2px;line-height:1.6}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:1.7rem}
-.cc{background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1.25rem;display:flex;gap:1rem}
+.cc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.4rem;display:flex;gap:1.1rem;transition:transform .2s,border-color .2s}
+.cc:hover{transform:translateY(-4px);border-color:var(--amber)}
 .cav{width:76px;height:76px;border-radius:50%;flex-shrink:0;background:rgba(46,94,58,.09);border:.5px solid rgba(46,94,58,.25);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--green);font-weight:600;overflow:hidden}
 .cav img{width:100%;height:100%;object-fit:cover}
 .cn{font-size:16px;font-weight:600;color:var(--text-2);margin-bottom:2px}
@@ -103,11 +119,12 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .g-tile span{font-size:12px;color:var(--text-faint)}
 .g-tile img{width:100%;height:100%;object-fit:cover;border-radius:10px}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:1.7rem}
-.pc{background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1.25rem}
+.pc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.35rem;transition:transform .2s,border-color .2s}
+.pc:hover{transform:translateY(-3px)}
 .pc.hi{border:2px solid var(--green)}
 .ptag{display:inline-block;background:rgba(46,94,58,.1);color:var(--green);font-size:10px;font-weight:500;letter-spacing:.06em;padding:3px 10px;border-radius:99px;margin-bottom:.7rem;text-transform:uppercase}
 .pdesc{font-size:13px;color:var(--text-body);margin-bottom:5px}
-.pnum{font-size:30px;font-weight:600}
+.pnum{font-family:'Noto Serif TC',serif;font-size:2.1rem;font-weight:900;color:var(--text-2)}
 .punit{font-size:13px;color:var(--text-faint);font-weight:400}
 .pnote{font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.6}
 .ph-spacer{height:25px}
@@ -124,7 +141,7 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 
 .faq-list{max-width:600px;margin-top:1.7rem}
 .faq-i{border-bottom:.5px solid var(--border);padding:1.05rem 0}
-.faq-q{font-size:16px;font-weight:600;color:var(--text-2);margin-bottom:5px}
+.faq-q{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2);margin-bottom:6px}
 .faq-a{font-size:14px;color:var(--text-body);line-height:1.75}
 
 /* ===== CTA band ===== */
@@ -183,6 +200,8 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
 </div>
 
 <section class="hero" id="top">
+  <div class="hero-glow"></div>
+  <div class="soccer-ball">⚽</div>
   <div class="hero-badge">2027 寒假 · 清大足球冬令營</div>
   <h1>Stay Young <em>追足夢想</em></h1>
   <p class="hero-sub">專業教練帶領，國小三到六年級全天足球訓練。五天，讓孩子在球場上找到自己。</p>
