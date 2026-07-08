@@ -23,25 +23,21 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text)}
-
 .nav{position:sticky;top:0;z-index:100;background:rgba(226,217,199,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:56px}
 .nav-logo{font-size:14px;font-weight:600;color:var(--text-2);text-decoration:none;white-space:nowrap}
 .nav-logo span{color:var(--text-muted);font-size:10px;font-weight:400;margin-left:8px;letter-spacing:.08em;text-transform:uppercase}
 .nav-year{font-size:12px;color:var(--text-muted)}
-
 .reg-wrap{padding:2.75rem 1.75rem 4rem;min-height:calc(100vh - 56px - 80px)}
 .reg-box{max-width:560px;margin:0 auto}
 .breadcrumb{font-size:12px;color:var(--text-faint);margin-bottom:1.3rem}
 .breadcrumb a{color:var(--green);text-decoration:none}
 .reg-title{font-size:23px;font-weight:600;margin-bottom:.4rem}
 .reg-sub{font-size:13px;color:var(--text-body);line-height:1.75;margin-bottom:1.6rem}
-
 .flow-strip{display:flex;border:.5px solid var(--border);background:var(--card);border-radius:10px;overflow:hidden;margin-bottom:1.8rem}
 .flow-step{flex:1;padding:.9rem .4rem;text-align:center;border-right:.5px solid var(--border-soft)}
 .flow-step:last-child{border-right:none}
 .flow-num{width:22px;height:22px;border-radius:50%;background:rgba(46,94,58,.1);border:.5px solid rgba(46,94,58,.3);color:var(--green);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin:0 auto 5px}
 .flow-txt{font-size:11px;color:#5a4f3c;line-height:1.5}
-
 .form-g{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg.full{grid-column:1/-1}
@@ -50,7 +46,6 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .fg input,.fg select{background:var(--card-light);border:.5px solid #b5a888;border-radius:6px;padding:10px 12px;font-size:14px;color:var(--text-2);width:100%;font-family:inherit}
 .fg input:focus,.fg select:focus{outline:none;border-color:var(--green)}
 .fg input.err,.fg select.err{border-color:var(--red)}
-
 .lunch-box{grid-column:1/-1;background:var(--card);border:.5px solid var(--border);border-radius:8px;padding:1rem}
 .lt{font-size:12px;color:var(--text-body);margin-bottom:10px}
 .lopt{display:flex;align-items:flex-start;gap:8px;cursor:pointer;margin-bottom:9px}
@@ -58,26 +53,21 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .lopt input{margin-top:2px;accent-color:var(--green);flex-shrink:0}
 .lol{font-size:13px;color:var(--text-2)}
 .los{font-size:11px;color:var(--text-muted);margin-top:1px}
-
 .notice-box{grid-column:1/-1;background:rgba(46,94,58,.06);border:.5px solid rgba(46,94,58,.25);border-radius:8px;padding:.95rem 1rem}
 .notice-title{font-size:12px;font-weight:600;color:var(--green);margin-bottom:4px}
 .notice-text{font-size:12px;color:#5a4f3c;line-height:1.7}
-
 .fnote{font-size:11px;color:var(--text-muted);line-height:1.65;grid-column:1/-1}
 .fnote a{color:var(--green)}
 .fsub{grid-column:1/-1;background:var(--green);color:#fff;border:none;border-radius:7px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
 .fsub:hover{background:#25492e}
 .fsub:disabled{opacity:.55;cursor:not-allowed}
-
 .msg{grid-column:1/-1;border-radius:8px;padding:.9rem 1rem;font-size:13px;line-height:1.7;display:none}
 .msg.ok{display:block;background:rgba(46,94,58,.08);border:.5px solid rgba(46,94,58,.35);color:var(--green)}
 .msg.fail{display:block;background:rgba(154,74,58,.08);border:.5px solid rgba(154,74,58,.35);color:var(--red)}
-
 footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
 .fl{font-size:14px;font-weight:600;color:var(--card)}
 .fs{font-size:11px;color:var(--text-muted);margin-top:3px;letter-spacing:.08em;text-transform:uppercase}
 .fi2{font-size:12px;color:var(--text-muted);text-align:right;line-height:1.9}
-
 @media (max-width:640px){
   .nav{padding:0 1rem}
   .form-g{grid-template-columns:1fr}
@@ -88,41 +78,43 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
 </style>
 </head>
 <body>
-
 <nav class="nav">
   <a class="nav-logo" href="index.html">清華大學足球冬令營 <span>Stay Young</span></a>
   <div class="nav-year">2027 寒假</div>
 </nav>
-
 <div class="reg-wrap">
   <div class="reg-box">
     <div class="breadcrumb"><a href="index.html">← 返回首頁</a></div>
     <div class="reg-title">報名表單</div>
     <p class="reg-sub">填妥以下資料並送出，即完成報名登記。</p>
-
     <div class="flow-strip">
       <div class="flow-step"><div class="flow-num">1</div><div class="flow-txt">送出報名<br>收到確認信</div></div>
       <div class="flow-step"><div class="flow-num">2</div><div class="flow-txt">確認開班<br>寄繳費通知</div></div>
       <div class="flow-step"><div class="flow-num">3</div><div class="flow-txt">完成繳費<br>確認錄取</div></div>
       <div class="flow-step"><div class="flow-num">4</div><div class="flow-txt">收到行前信<br>準備開課</div></div>
     </div>
-
     <form class="form-g" id="signupForm" novalidate>
-      <div class="fg">
-        <label for="parentName">家長姓名 <span class="req">*</span></label>
-        <input type="text" id="parentName" name="parentName" placeholder="王小明" required>
+      <div class="fg full">
+        <label for="session">報名梯次 <span class="req">*</span></label>
+        <select id="session" name="session" required>
+          <option value="第一梯 2027/1/25–1/29">第一梯｜2027/1/25（一）– 1/29（五）</option>
+        </select>
       </div>
       <div class="fg">
         <label for="studentName">學員姓名 <span class="req">*</span></label>
         <input type="text" id="studentName" name="studentName" placeholder="王小華" required>
       </div>
       <div class="fg">
-        <label for="phone">聯絡電話 <span class="req">*</span></label>
-        <input type="tel" id="phone" name="phone" placeholder="0912345678" required>
+        <label for="gender">學員性別 <span class="req">*</span></label>
+        <select id="gender" name="gender" required>
+          <option value="">請選擇</option>
+          <option value="男">男</option>
+          <option value="女">女</option>
+        </select>
       </div>
       <div class="fg">
-        <label for="email">電子信箱 <span class="req">*</span></label>
-        <input type="email" id="email" name="email" placeholder="email@example.com" required>
+        <label for="age">學員年齡 <span class="req">*</span></label>
+        <input type="number" id="age" name="age" min="7" max="13" placeholder="10" required>
       </div>
       <div class="fg">
         <label for="grade">學員年級 <span class="req">*</span></label>
@@ -134,16 +126,44 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
           <option value="小六">小學六年級</option>
         </select>
       </div>
+      <div class="fg full">
+        <label for="email">收信信箱 <span class="req">*</span>　<span style="color:var(--text-faint);font-weight:400">報名確認信與後續通知寄送至此</span></label>
+        <input type="email" id="email" name="email" placeholder="email@example.com" required>
+      </div>
       <div class="fg">
+        <label for="emgName">緊急聯絡人 <span class="req">*</span></label>
+        <input type="text" id="emgName" name="emgName" placeholder="王小明" required>
+      </div>
+      <div class="fg">
+        <label for="emgPhone">緊急聯絡人電話 <span class="req">*</span></label>
+        <input type="tel" id="emgPhone" name="emgPhone" placeholder="0912345678" required>
+      </div>
+      <div class="fg full" style="margin-top:.3rem">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" id="sameAsEmg" style="accent-color:var(--green)">
+          <span>繳款人同緊急聯絡人</span>
+        </label>
+      </div>
+      <div class="fg">
+        <label for="payerName">繳款人姓名 <span class="req">*</span></label>
+        <input type="text" id="payerName" name="payerName" placeholder="王小明" required>
+      </div>
+      <div class="fg">
+        <label for="payerPhone">繳款人電話 <span class="req">*</span></label>
+        <input type="tel" id="payerPhone" name="payerPhone" placeholder="0912345678" required>
+      </div>
+      <div class="fg full">
+        <label for="payerEmail">繳款人信箱 <span class="req">*</span></label>
+        <input type="email" id="payerEmail" name="payerEmail" placeholder="email@example.com" required>
+      </div>
+      <div class="fg full">
         <label for="discount">優惠身份 <span class="req">*</span></label>
         <select id="discount" name="discount" required>
           <option value="一般報名">一般報名</option>
           <option value="團報">5 人以上團報</option>
           <option value="清大師生">清大師生</option>
-          <option value="特約企業">特約企業</option>
         </select>
       </div>
-
       <div class="lunch-box">
         <div class="lt">午餐安排 <span class="req" style="color:var(--red)">*</span></div>
         <label class="lopt">
@@ -161,21 +181,16 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
           </div>
         </label>
       </div>
-
       <div class="notice-box">
         <div class="notice-title">報名後流程說明</div>
         <div class="notice-text">送出報名後，您會先收到「報名確認信」。待報名人數達開班標準並確認開班後，我們才會寄送「繳費通知」，屆時再完成繳費即可。開班前不會收取任何費用。</div>
       </div>
-
       <p class="fnote">報名截止：2027/1/17（日）。額滿後自動進入候補名單，有名額釋出時以 email 通知。退費規則詳見<a href="index.html#pricing">首頁收費方案區</a>。</p>
-
       <div class="msg" id="formMsg"></div>
-
       <button type="submit" class="fsub" id="submitBtn">送出報名 →</button>
     </form>
   </div>
 </div>
-
 <footer>
   <div>
     <div class="fl">Stay Young</div>
@@ -185,56 +200,81 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     stayyoung985@gmail.com
   </div>
 </footer>
-
 <script>
 // ====== 後端設定 ======
 // TODO: 部署 Google Apps Script 後，把 Web App URL 貼到這裡
 const GAS_URL = 'YOUR_GAS_WEB_APP_URL_HERE';
-
 const form = document.getElementById('signupForm');
 const btn = document.getElementById('submitBtn');
 const msgBox = document.getElementById('formMsg');
-
+// 繳款人同緊急聯絡人
+const sameAsEmg = document.getElementById('sameAsEmg');
+const payerFields = ['payerName','payerPhone','payerEmail'];
+sameAsEmg.addEventListener('change', () => {
+  if (sameAsEmg.checked) {
+    document.getElementById('payerName').value = document.getElementById('emgName').value;
+    document.getElementById('payerPhone').value = document.getElementById('emgPhone').value;
+    document.getElementById('payerEmail').value = document.getElementById('email').value;
+    payerFields.forEach(id => document.getElementById(id).readOnly = true);
+  } else {
+    payerFields.forEach(id => {
+      const el = document.getElementById(id);
+      el.readOnly = false;
+      el.value = '';
+    });
+  }
+});
+// 勾選狀態下，來源欄位變動即時同步
+['emgName','emgPhone','email'].forEach(src => {
+  document.getElementById(src).addEventListener('input', () => {
+    if (!sameAsEmg.checked) return;
+    document.getElementById('payerName').value = document.getElementById('emgName').value;
+    document.getElementById('payerPhone').value = document.getElementById('emgPhone').value;
+    document.getElementById('payerEmail').value = document.getElementById('email').value;
+  });
+});
+const isPhone = v => /^09\d{8}$/.test(v.replace(/[-\s]/g,''));
+const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   msgBox.className = 'msg';
-
   // ---- 前端驗證 ----
   let valid = true;
-  const required = ['parentName','studentName','phone','email','grade'];
-  required.forEach(id => {
+  const requiredText = ['studentName','age','email','emgName','emgPhone','payerName','payerPhone','payerEmail'];
+  const requiredSelect = ['session','gender','grade'];
+  [...requiredText, ...requiredSelect].forEach(id => {
     const el = document.getElementById(id);
     el.classList.remove('err');
-    if (!el.value.trim()) { el.classList.add('err'); valid = false; }
+    if (!el.value || !String(el.value).trim()) { el.classList.add('err'); valid = false; }
   });
-  // 電話格式（台灣手機）
-  const phone = document.getElementById('phone');
-  if (phone.value.trim() && !/^09\d{8}$/.test(phone.value.replace(/[-\s]/g,''))) {
-    phone.classList.add('err'); valid = false;
-  }
-  // email 格式
-  const email = document.getElementById('email');
-  if (email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
-    email.classList.add('err'); valid = false;
-  }
+  const age = document.getElementById('age');
+  if (age.value && (Number(age.value) < 7 || Number(age.value) > 13)) { age.classList.add('err'); valid = false; }
+  [['emgPhone', isPhone], ['payerPhone', isPhone], ['email', isEmail], ['payerEmail', isEmail]].forEach(([id, fn]) => {
+    const el = document.getElementById(id);
+    if (el.value.trim() && !fn(el.value)) { el.classList.add('err'); valid = false; }
+  });
   if (!valid) {
-    msgBox.textContent = '請確認紅框欄位：必填未填，或電話 / 信箱格式有誤。';
+    msgBox.textContent = '請確認紅框欄位：必填未填，或電話 / 信箱 / 年齡格式有誤。';
     msgBox.classList.add('fail');
     return;
   }
-
   // ---- 組資料 ----
   const data = {
-    parentName: document.getElementById('parentName').value.trim(),
+    session: document.getElementById('session').value,
     studentName: document.getElementById('studentName').value.trim(),
-    phone: phone.value.replace(/[-\s]/g,''),
-    email: email.value.trim(),
+    gender: document.getElementById('gender').value,
+    age: document.getElementById('age').value,
     grade: document.getElementById('grade').value,
+    email: document.getElementById('email').value.trim(),
+    emgName: document.getElementById('emgName').value.trim(),
+    emgPhone: document.getElementById('emgPhone').value.replace(/[-\s]/g,''),
+    payerName: document.getElementById('payerName').value.trim(),
+    payerPhone: document.getElementById('payerPhone').value.replace(/[-\s]/g,''),
+    payerEmail: document.getElementById('payerEmail').value.trim(),
     discount: document.getElementById('discount').value,
     lunch: document.querySelector('input[name="lunch"]:checked').value,
     submittedAt: new Date().toISOString()
   };
-
   // ---- 送出 ----
   btn.disabled = true;
   btn.textContent = '送出中…';
@@ -249,14 +289,17 @@ form.addEventListener('submit', async (e) => {
     const result = await res.json();
     if (result.status === 'ok') {
       form.reset();
-      msgBox.innerHTML = '報名成功！確認信已寄至您的信箱，請留意收件匣（含垃圾郵件夾）。' +
+      payerFields.forEach(id => document.getElementById(id).readOnly = false);
+      msgBox.innerHTML = '報名成功！確認信已寄至您的收信信箱，請留意收件匣（含垃圾郵件夾）。' +
         (result.waitlist ? '<br><strong>目前名額已滿，您已列入候補名單</strong>，有名額釋出時將以 email 通知。' : '');
       msgBox.classList.add('ok');
     } else {
       throw new Error(result.message || '送出失敗');
     }
   } catch (err) {
-    msgBox.textContent = '送出失敗，請稍後再試，或直接來信 stayyoung985@gmail.com 報名。';
+    msgBox.textContent = err.message === '此學員已使用相同信箱報名過'
+      ? err.message
+      : '送出失敗，請稍後再試，或直接來信 stayyoung985@gmail.com 報名。';
     msgBox.classList.add('fail');
   } finally {
     btn.disabled = false;
