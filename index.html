@@ -30,7 +30,7 @@
 html{scroll-behavior:smooth}
 body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text)}
 /* ===== Nav ===== */
-.nav{position:sticky;top:0;z-index:100;background:rgba(226,217,199,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav{position:sticky;top:0;z-index:100;background:rgba(226,217,199,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);box-shadow:0 2px 12px rgba(43,40,34,.06);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:56px}
 .nav-logo{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:900;color:var(--text-2);text-decoration:none;white-space:nowrap;letter-spacing:.03em}
 .nav-logo span{color:var(--text-muted);font-size:10px;font-weight:400;margin-left:8px;letter-spacing:.08em;text-transform:uppercase}
 .nav-links{display:flex;gap:1.4rem}
@@ -44,7 +44,8 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .banner-placeholder{width:100%;height:clamp(133px,23vw,253px);background:var(--card);border-bottom:1px dashed var(--border);display:flex;align-items:center;justify-content:center}
 .banner-placeholder span{font-size:13px;color:var(--text-faint)}
 .hero{padding:4rem 1.75rem 4.5rem;text-align:center;border-bottom:.5px solid var(--border);position:relative;overflow:hidden}
-.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(46,122,70,.1) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 85% 90%,rgba(224,139,31,.08) 0%,transparent 60%);pointer-events:none}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 60% at 50% 0%,rgba(46,122,70,.13) 0%,transparent 70%),radial-gradient(ellipse 45% 45% at 85% 90%,rgba(224,139,31,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(46,122,70,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(46,122,70,.05) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
 .soccer-ball{font-size:3.2rem;margin-bottom:1rem;animation:float 3s ease-in-out infinite;position:relative;z-index:1}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .hero>*{position:relative;z-index:1}
@@ -59,7 +60,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .hmv{font-size:14px;font-weight:500;color:var(--text-2)}
 .hero-btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
 .btn-green{display:inline-block;background:var(--green);color:#fff;border:none;border-radius:8px;padding:.9rem 2.4rem;font-size:1rem;font-weight:700;letter-spacing:.05em;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
-.btn-green:hover{transform:translateY(-2px)}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(46,122,70,.3)}
 .btn-green:hover{background:#25492e}
 .btn-out{display:inline-block;background:transparent;color:#5a4f3c;border:.5px solid #b5a888;border-radius:7px;padding:12px 24px;font-size:14px;cursor:pointer;text-decoration:none}
 .btn-out:hover{background:var(--card)}
@@ -69,7 +70,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .sec.alt{background:var(--bg-alt)}
 .sec-inner{max-width:920px;margin:0 auto}
 .sl{font-size:.8rem;color:var(--amber);font-weight:700;letter-spacing:.25em;text-transform:uppercase;margin-bottom:.75rem}
-.st{font-family:'Noto Serif TC',serif;font-size:clamp(1.7rem,3.8vw,2.4rem);font-weight:900;margin-bottom:.9rem;line-height:1.25}
+.st{font-family:'Noto Serif TC',serif;font-size:clamp(1.7rem,3.8vw,2.4rem);font-weight:900;margin-bottom:.9rem;line-height:1.25;letter-spacing:.04em}
 .ss{font-size:15px;color:var(--text-body);line-height:1.85;max-width:520px}
 .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:1.7rem}
 .fc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.4rem;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
@@ -77,12 +78,12 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .fc:nth-child(2)::before{background:var(--amber)}
 .fc:nth-child(3)::before{background:var(--green-deep)}
 .fc:nth-child(4)::before{background:var(--amber-light)}
-.fc:hover{transform:translateY(-4px);border-color:var(--green)}
+.fc:hover{transform:translateY(-4px);border-color:var(--green);box-shadow:0 12px 28px rgba(43,40,34,.12)}
 .ft{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2);margin-bottom:5px}
 .fd{font-size:13px;color:var(--text-body);line-height:1.65}
 .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:1.7rem}
 .dc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.1rem;transition:transform .2s,border-color .2s}
-.dc:hover{transform:translateY(-3px);border-color:var(--amber)}
+.dc:hover{transform:translateY(-3px);border-color:var(--amber);box-shadow:0 10px 22px rgba(43,40,34,.1)}
 .dtag{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
 .dn{font-family:'Noto Serif TC',serif;font-size:1.05rem;font-weight:700;color:var(--text-2);margin-bottom:5px}
 .di{font-size:13px;color:var(--text-body);line-height:1.7}
@@ -100,20 +101,20 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .tl-desc{font-size:13px;color:var(--text-body);margin-top:2px;line-height:1.6}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:1.7rem}
 .cc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.4rem;display:flex;gap:1.1rem;transition:transform .2s,border-color .2s}
-.cc:hover{transform:translateY(-4px);border-color:var(--amber)}
+.cc:hover{transform:translateY(-4px);border-color:var(--amber);box-shadow:0 12px 28px rgba(43,40,34,.12)}
 .cav{width:76px;height:76px;border-radius:50%;flex-shrink:0;background:rgba(46,94,58,.09);border:.5px solid rgba(46,94,58,.25);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--green);font-weight:600;overflow:hidden}
 .cav img{width:100%;height:100%;object-fit:cover}
 .cn{font-size:16px;font-weight:600;color:var(--text-2);margin-bottom:2px}
 .cr{font-size:12px;color:var(--green);margin-bottom:5px}
 .cb{font-size:13px;color:var(--text-body);line-height:1.65}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:1.7rem}
-.g-tile{aspect-ratio:4/3;background:var(--card);border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.g-tile{aspect-ratio:4/3;background:linear-gradient(135deg,var(--card),rgba(46,122,70,.05));border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center}
 .g-tile span{font-size:12px;color:var(--text-faint)}
 .g-tile img{width:100%;height:100%;object-fit:cover;border-radius:10px}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:1.7rem}
 .pc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.35rem;transition:transform .2s,border-color .2s}
-.pc:hover{transform:translateY(-3px)}
-.pc.hi{border:2px solid var(--green)}
+.pc:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(43,40,34,.1)}
+.pc.hi{border:2px solid var(--green);background:linear-gradient(135deg,rgba(46,122,70,.06),rgba(224,139,31,.05))}
 .ptag{display:inline-block;background:rgba(46,94,58,.1);color:var(--green);font-size:10px;font-weight:500;letter-spacing:.06em;padding:3px 10px;border-radius:99px;margin-bottom:.7rem;text-transform:uppercase}
 .pdesc{font-size:13px;color:var(--text-body);margin-bottom:5px}
 .pnum{font-family:'Noto Serif TC',serif;font-size:2.1rem;font-weight:900;color:var(--text-2)}
@@ -184,6 +185,7 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
 </div>
 <section class="hero" id="top">
   <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
   <div class="soccer-ball">⚽</div>
   <div class="hero-badge">NTHU Football Winter Camp 2027</div>
   <h1>Stay Young <em>追足夢想</em></h1>
@@ -191,7 +193,7 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
   <div class="hero-meta">
     <div class="hmi"><div class="hml">日期</div><div class="hmv">1/25 – 1/29</div></div>
     <div class="hmi"><div class="hml">對象</div><div class="hmv">國小 3–6 年級</div></div>
-    <div class="hmi"><div class="hml">地點</div><div class="hmv">國立清華大學</div></div>
+    <div class="hmi"><div class="hml">地點</div><div class="hmv">國立清華大學<span style="display:block;font-size:10px;color:var(--green);font-weight:700;margin-top:1px">室內場地</span></div></div>
     <div class="hmi"><div class="hml">名額</div><div class="hmv">25 人</div></div>
     <div class="hmi"><div class="hml">報名截止</div><div class="hmv">1/17（日）</div></div>
   </div>
@@ -200,7 +202,7 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     <a class="btn-out" href="#about">了解課程</a>
   </div>
 </section>
-<div class="divider">— Stay Young · 清大場地 · 專業教練 —</div>
+<div class="divider">— Stay Young · 全程室內場地 · 專業教練 —</div>
 <section class="sec" id="about">
   <div class="sec-inner">
     <div class="reveal">
@@ -211,7 +213,7 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     <div class="fgrid">
       <div class="fc reveal"><div class="ft">零基礎友善</div><div class="fd">從最基本的觸球開始教起，第一次踢球也能安心參加</div></div>
       <div class="fc reveal d1"><div class="ft">小班制</div><div class="fd">上限 25 人，每位學員都能獲得關注</div></div>
-      <div class="fc reveal d2"><div class="ft">清大場地</div><div class="fd">室內場地，不受天候影響</div></div>
+      <div class="fc reveal d2"><div class="ft">全程室內</div><div class="fd">室內場地不受天候影響，颳風下雨照常上課</div></div>
       <div class="fc reveal d3"><div class="ft">結業紀念</div><div class="fd">精緻證書、電子合照、紀念小物</div></div>
     </div>
   </div>
@@ -343,8 +345,8 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
 </section>
 <footer>
   <div>
-    <div class="fl">Stay Young</div>
-    <div class="fs">清華大學足球冬令營</div>
+    <div class="fl">Stay Young <span style="color:var(--amber-light);font-weight:400">追足夢想</span></div>
+    <div class="fs">清華大學足球冬令營 2027</div>
   </div>
   <div class="fi2">
     聯繫我們：stayyoung985@gmail.com

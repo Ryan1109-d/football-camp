@@ -63,6 +63,10 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .lopt input{margin-top:2px;accent-color:var(--green);flex-shrink:0}
 .lol{font-size:13px;color:var(--text-2)}
 .los{font-size:11px;color:var(--text-muted);margin-top:1px}
+.meal-type{margin:2px 0 8px 24px;display:flex;align-items:center;gap:14px;background:var(--card-light);border:.5px solid var(--border-soft);border-radius:6px;padding:8px 12px}
+.mt-label{font-size:12px;color:var(--text-body)}
+.mt-opt{font-size:13px;color:var(--text-2);display:flex;align-items:center;gap:5px;cursor:pointer}
+.mt-opt input{accent-color:var(--green);margin:0}
 .notice-box{grid-column:1/-1;background:rgba(46,94,58,.06);border:.5px solid rgba(46,94,58,.25);border-radius:8px;padding:.95rem 1rem}
 .notice-title{font-size:12px;font-weight:600;color:var(--green);margin-bottom:4px}
 .notice-text{font-size:12px;color:#5a4f3c;line-height:1.7}
@@ -192,6 +196,11 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
             <div class="los">五天共 $500，每天 $100，上課當天繳給教練</div>
           </div>
         </label>
+        <div class="meal-type" id="mealType" style="display:none">
+          <span class="mt-label">餐食選擇：</span>
+          <label class="mt-opt"><input type="radio" name="mealType" value="葷">葷食</label>
+          <label class="mt-opt"><input type="radio" name="mealType" value="素">素食</label>
+        </div>
         <label class="lopt">
           <input type="radio" name="lunch" value="自帶餐食" checked>
           <div>
@@ -252,6 +261,13 @@ sameAsEmg.addEventListener('change', () => {
     document.getElementById('payerEmail').value = document.getElementById('email').value;
   });
 });
+// 午餐葷素聯動
+document.querySelectorAll('input[name="lunch"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('mealType').style.display =
+      document.querySelector('input[name="lunch"]:checked').value === '代訂午餐' ? 'flex' : 'none';
+  });
+});
 // 團報名單顯示聯動
 document.getElementById('discount').addEventListener('change', (e) => {
   document.getElementById('groupBox').style.display = e.target.value === '團報' ? 'block' : 'none';
@@ -276,6 +292,12 @@ form.addEventListener('submit', async (e) => {
     const el = document.getElementById(id);
     if (el.value.trim() && !fn(el.value)) { el.classList.add('err'); valid = false; }
   });
+  // 代訂午餐必選葷素
+  if (document.querySelector('input[name="lunch"]:checked').value === '代訂午餐' &&
+      !document.querySelector('input[name="mealType"]:checked')) {
+    alert('請選擇餐食（葷食／素食）。');
+    return;
+  }
   // 團報驗證:至少填4位其他學員(含本人共5人)
   if (document.getElementById('discount').value === '團報') {
     const gms = ['gm1','gm2','gm3','gm4','gm5'].map(id => document.getElementById(id).value.trim()).filter(Boolean);
@@ -303,7 +325,12 @@ form.addEventListener('submit', async (e) => {
     payerPhone: document.getElementById('payerPhone').value.replace(/[-\s]/g,''),
     payerEmail: document.getElementById('payerEmail').value.trim(),
     discount: document.getElementById('discount').value,
-    lunch: document.querySelector('input[name="lunch"]:checked').value,
+    lunch: (() => {
+      const l = document.querySelector('input[name="lunch"]:checked').value;
+      if (l !== '代訂午餐') return l;
+      const m = document.querySelector('input[name="mealType"]:checked');
+      return `代訂午餐（${m ? m.value : ''}）`;
+    })(),
     groupMembers: ['gm1','gm2','gm3','gm4','gm5'].map(id => document.getElementById(id).value.trim()).filter(Boolean).join('、') || '—',
     submittedAt: new Date().toISOString()
   };
