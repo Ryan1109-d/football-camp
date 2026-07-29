@@ -7,23 +7,23 @@
 <meta name="robots" content="noindex">
 <style>
 :root{
-  --bg:#e2d9c7;
-  --bg-alt:#d8cdb6;
-  --card:#ece5d6;
-  --card-light:#f2ecdf;
-  --border:#c9bda5;
-  --border-soft:#d5cab2;
-  --text:#26231d;
-  --text-2:#2b2822;
-  --text-body:#6e614c;
-  --text-muted:#8a7a5e;
-  --text-faint:#9a8c70;
-  --green:#2e5e3a;
-  --red:#9a4a3a;
+  --bg:#ffffff;
+  --bg-alt:#f2f6fa;
+  --card:#fbfcfe;
+  --card-light:#f2f6fa;
+  --border:#d9e2ec;
+  --border-soft:#e4ebf2;
+  --text:#1c2733;
+  --text-2:#22303f;
+  --text-body:#5a6b7c;
+  --text-muted:#7b8a99;
+  --text-faint:#9aa7b3;
+  --green:#1b5aa0;
+  --red:#b0483a;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text)}
-.nav{position:sticky;top:0;z-index:100;background:rgba(226,217,199,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:56px}
 .nav-logo{font-size:14px;font-weight:600;color:var(--text-2);text-decoration:none;white-space:nowrap}
 .nav-logo span{color:var(--text-muted);font-size:10px;font-weight:400;margin-left:8px;letter-spacing:.08em;text-transform:uppercase}
 .nav-year{font-size:12px;color:var(--text-muted)}
@@ -36,22 +36,22 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .flow-strip{display:flex;border:.5px solid var(--border);background:var(--card);border-radius:10px;overflow:hidden;margin-bottom:1.8rem}
 .flow-step{flex:1;padding:.9rem .4rem;text-align:center;border-right:.5px solid var(--border-soft)}
 .flow-step:last-child{border-right:none}
-.flow-num{width:22px;height:22px;border-radius:50%;background:rgba(46,94,58,.1);border:.5px solid rgba(46,94,58,.3);color:var(--green);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin:0 auto 5px}
-.flow-txt{font-size:11px;color:#5a4f3c;line-height:1.5}
+.flow-num{width:22px;height:22px;border-radius:50%;background:rgba(27,90,160,.09);border:.5px solid rgba(27,90,160,.3);color:var(--green);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin:0 auto 5px}
+.flow-txt{font-size:11px;color:#4a5b6c;line-height:1.5}
 .form-g{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg.full{grid-column:1/-1}
 .fg label{font-size:12px;color:var(--text-body)}
 .fg label .req{color:var(--red)}
-.fg input,.fg select{background:var(--card-light);border:.5px solid #b5a888;border-radius:6px;padding:10px 12px;font-size:14px;color:var(--text-2);width:100%;font-family:inherit}
+.fg input,.fg select{background:var(--card-light);border:.5px solid #c3d0dd;border-radius:6px;padding:10px 12px;font-size:14px;color:var(--text-2);width:100%;font-family:inherit}
 .fg input:focus,.fg select:focus{outline:none;border-color:var(--green)}
 .fg input.err,.fg select.err{border-color:var(--red)}
-.group-box{grid-column:1/-1;background:rgba(46,122,70,.06);border:.5px solid rgba(46,122,70,.3);border-radius:8px;padding:1rem}
+.group-box{grid-column:1/-1;background:rgba(27,90,160,.05);border:.5px solid rgba(27,90,160,.3);border-radius:8px;padding:1rem}
 .gb-title{font-size:12px;font-weight:600;color:var(--green);margin-bottom:4px}
-.gb-hint{font-size:12px;color:#5a4f3c;line-height:1.7;margin-bottom:10px}
+.gb-hint{font-size:12px;color:#4a5b6c;line-height:1.7;margin-bottom:10px}
 .gb-hint strong{color:var(--green)}
 .gb-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.gb-input{background:var(--card-light);border:.5px solid #b5a888;border-radius:6px;padding:9px 12px;font-size:13px;color:var(--text-2);width:100%}
+.gb-input{background:var(--card-light);border:.5px solid #c3d0dd;border-radius:6px;padding:9px 12px;font-size:13px;color:var(--text-2);width:100%}
 .gb-input:focus{outline:none;border-color:var(--green)}
 .same-check{grid-column:1/-1;display:flex;flex-direction:row;align-items:center;gap:8px;padding:.2rem 0}
 .same-check input{width:16px;height:16px;accent-color:var(--green);margin:0;flex:none}
@@ -67,18 +67,18 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .mt-label{font-size:12px;color:var(--text-body)}
 .mt-opt{font-size:13px;color:var(--text-2);display:flex;align-items:center;gap:5px;cursor:pointer}
 .mt-opt input{accent-color:var(--green);margin:0}
-.notice-box{grid-column:1/-1;background:rgba(46,94,58,.06);border:.5px solid rgba(46,94,58,.25);border-radius:8px;padding:.95rem 1rem}
+.notice-box{grid-column:1/-1;background:rgba(27,90,160,.05);border:.5px solid rgba(27,90,160,.25);border-radius:8px;padding:.95rem 1rem}
 .notice-title{font-size:12px;font-weight:600;color:var(--green);margin-bottom:4px}
-.notice-text{font-size:12px;color:#5a4f3c;line-height:1.7}
+.notice-text{font-size:12px;color:#4a5b6c;line-height:1.7}
 .fnote{font-size:11px;color:var(--text-muted);line-height:1.65;grid-column:1/-1}
 .fnote a{color:var(--green)}
 .fsub{grid-column:1/-1;background:var(--green);color:#fff;border:none;border-radius:7px;padding:13px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit}
 .fsub:hover{background:#25492e}
 .fsub:disabled{opacity:.55;cursor:not-allowed}
 .msg{grid-column:1/-1;border-radius:8px;padding:.9rem 1rem;font-size:13px;line-height:1.7;display:none}
-.msg.ok{display:block;background:rgba(46,94,58,.08);border:.5px solid rgba(46,94,58,.35);color:var(--green)}
-.msg.fail{display:block;background:rgba(154,74,58,.08);border:.5px solid rgba(154,74,58,.35);color:var(--red)}
-footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.msg.ok{display:block;background:rgba(27,90,160,.07);border:.5px solid rgba(27,90,160,.35);color:var(--green)}
+.msg.fail{display:block;background:rgba(176,72,58,.07);border:.5px solid rgba(176,72,58,.35);color:var(--red)}
+footer{background:#0d2c4d;padding:1.9rem 1.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
 .fl{font-size:14px;font-weight:600;color:var(--card)}
 .fs{font-size:11px;color:var(--text-muted);margin-top:3px;letter-spacing:.08em;text-transform:uppercase}
 .fi2{font-size:12px;color:var(--text-muted);text-align:right;line-height:1.9}
@@ -140,6 +140,19 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
           <option value="小六">小學六年級</option>
         </select>
       </div>
+      <div class="fg">
+        <label for="shirtSize">衣服尺寸 <span class="req">*</span></label>
+        <select id="shirtSize" name="shirtSize" required>
+          <option value="">請選擇</option>
+          <option value="120cm">120 cm</option>
+          <option value="130cm">130 cm</option>
+          <option value="140cm">140 cm</option>
+          <option value="150cm">150 cm</option>
+          <option value="160cm">160 cm</option>
+          <option value="成人S">成人 S</option>
+          <option value="成人M">成人 M</option>
+        </select>
+      </div>
       <div class="fg full">
         <label for="email">信箱 <span class="req">*</span>　<span style="color:var(--text-faint);font-weight:400">報名確認信與後續通知寄送至此</span></label>
         <input type="email" id="email" name="email" placeholder="email@example.com" required>
@@ -175,6 +188,7 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
           <option value="團報">5 人以上團報</option>
           <option value="清大教職員">清大教職員</option>
         </select>
+        <span style="font-size:11px;color:var(--text-muted);margin-top:3px">2026/11/30（含）前完成報名，不限身份自動適用早鳥優惠價</span>
       </div>
       <div class="group-box" id="groupBox" style="display:none">
         <div class="gb-title">團報學員名單</div>
@@ -280,7 +294,7 @@ form.addEventListener('submit', async (e) => {
   // ---- 前端驗證 ----
   let valid = true;
   const requiredText = ['studentName','age','email','emgName','emgPhone','payerName','payerPhone','payerEmail'];
-  const requiredSelect = ['session','gender','grade'];
+  const requiredSelect = ['session','gender','grade','shirtSize'];
   [...requiredText, ...requiredSelect].forEach(id => {
     const el = document.getElementById(id);
     el.classList.remove('err');
@@ -318,6 +332,7 @@ form.addEventListener('submit', async (e) => {
     gender: document.getElementById('gender').value,
     age: document.getElementById('age').value,
     grade: document.getElementById('grade').value,
+    shirtSize: document.getElementById('shirtSize').value,
     email: document.getElementById('email').value.trim(),
     emgName: document.getElementById('emgName').value.trim(),
     emgPhone: document.getElementById('emgPhone').value.replace(/[-\s]/g,''),

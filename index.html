@@ -8,29 +8,29 @@
 <meta name="description" content="2027 寒假清華大學足球冬令營，國小三到六年級專屬，專業教練帶領五天全天密集訓練。1/25–1/29，名額 25 人。">
 <style>
 :root{
-  --bg:#e2d9c7;
-  --bg-alt:#d8cdb6;
-  --card:#ece5d6;
-  --card-light:#f2ecdf;
-  --border:#c9bda5;
-  --border-soft:#d5cab2;
-  --text:#26231d;
-  --text-2:#2b2822;
-  --text-body:#6e614c;
-  --text-muted:#8a7a5e;
-  --text-faint:#9a8c70;
-  --green:#2e7a46;
-  --green-deep:#1f5c33;
+  --bg:#ffffff;
+  --bg-alt:#f2f6fa;
+  --card:#fbfcfe;
+  --card-light:#f2f6fa;
+  --border:#d9e2ec;
+  --border-soft:#e4ebf2;
+  --text:#1c2733;
+  --text-2:#22303f;
+  --text-body:#5a6b7c;
+  --text-muted:#7b8a99;
+  --text-faint:#9aa7b3;
+  --green:#1b5aa0;
+  --green-deep:#123a63;
   --amber:#e08b1f;
   --amber-light:#f2b45c;
   --orange:#a06a2c;
-  --red:#9a4a3a;
+  --red:#b0483a;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text)}
 /* ===== Nav ===== */
-.nav{position:sticky;top:0;z-index:100;background:rgba(226,217,199,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);box-shadow:0 2px 12px rgba(43,40,34,.06);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);box-shadow:0 2px 12px rgba(18,58,99,.05);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:56px}
 .nav-logo{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:900;color:var(--text-2);text-decoration:none;white-space:nowrap;letter-spacing:.03em}
 .nav-logo span{color:var(--text-muted);font-size:10px;font-weight:400;margin-left:8px;letter-spacing:.08em;text-transform:uppercase}
 .nav-links{display:flex;gap:1.4rem}
@@ -40,16 +40,16 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .nav-cta:hover{background:#25492e}
 /* ===== Hero ===== */
 .top-banner{width:100%;border-bottom:.5px solid var(--border)}
-.top-banner img{display:block;width:100%;height:clamp(133px,23vw,253px);object-fit:cover;object-position:center top;filter:saturate(.88) brightness(.96)}
-.banner-placeholder{width:100%;height:clamp(133px,23vw,253px);background:var(--card);border-bottom:1px dashed var(--border);display:flex;align-items:center;justify-content:center}
+.top-banner img{display:block;width:100%;height:clamp(180px,30vw,340px);object-fit:cover;object-position:center top;filter:saturate(.88) brightness(.96)}
+.banner-placeholder{width:100%;height:clamp(180px,30vw,340px);background:var(--card);border-bottom:1px dashed var(--border);display:flex;align-items:center;justify-content:center}
 .banner-placeholder span{font-size:13px;color:var(--text-faint)}
-.hero{padding:4rem 1.75rem 4.5rem;text-align:center;border-bottom:.5px solid var(--border);position:relative;overflow:hidden}
-.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 60% at 50% 0%,rgba(46,122,70,.13) 0%,transparent 70%),radial-gradient(ellipse 45% 45% at 85% 90%,rgba(224,139,31,.1) 0%,transparent 60%);pointer-events:none}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(46,122,70,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(46,122,70,.05) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
+.hero{padding:2.5rem 1.75rem 4.5rem;text-align:center;border-bottom:.5px solid var(--border);position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 60% at 50% 0%,rgba(27,90,160,.12) 0%,transparent 70%),radial-gradient(ellipse 45% 45% at 85% 90%,rgba(224,139,31,.1) 0%,transparent 60%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(27,90,160,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(27,90,160,.045) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
 .soccer-ball{font-size:3.2rem;margin-bottom:1rem;animation:float 3s ease-in-out infinite;position:relative;z-index:1}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .hero>*{position:relative;z-index:1}
-.hero-badge{display:inline-block;background:rgba(46,122,70,.1);border:1px solid rgba(46,122,70,.35);color:var(--green);font-size:.8rem;font-weight:700;letter-spacing:.15em;padding:.4rem 1.3rem;border-radius:20px;margin-bottom:1.6rem;text-transform:uppercase}
+.hero-badge{display:inline-block;background:rgba(27,90,160,.09);border:1px solid rgba(27,90,160,.35);color:var(--green);font-size:.8rem;font-weight:700;letter-spacing:.15em;padding:.4rem 1.3rem;border-radius:20px;margin-bottom:1.6rem;text-transform:uppercase}
 .hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2.5rem,7.5vw,4.2rem);font-weight:900;line-height:1.15;margin-bottom:1.1rem;letter-spacing:.03em}
 .hero h1 em{color:var(--green);font-style:normal}
 .hero-sub{font-size:16px;color:var(--text-body);line-height:1.8;max-width:440px;margin:0 auto 2.2rem}
@@ -60,11 +60,11 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .hmv{font-size:14px;font-weight:500;color:var(--text-2)}
 .hero-btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
 .btn-green{display:inline-block;background:var(--green);color:#fff;border:none;border-radius:8px;padding:.9rem 2.4rem;font-size:1rem;font-weight:700;letter-spacing:.05em;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
-.btn-green:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(46,122,70,.3)}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(27,90,160,.3)}
 .btn-green:hover{background:#25492e}
 .btn-out{display:inline-block;background:transparent;color:#5a4f3c;border:.5px solid #b5a888;border-radius:7px;padding:12px 24px;font-size:14px;cursor:pointer;text-decoration:none}
 .btn-out:hover{background:var(--card)}
-.divider{text-align:center;padding:.65rem;font-size:11px;color:var(--text-faint);letter-spacing:.07em;text-transform:uppercase;background:var(--bg-alt);border-bottom:.5px solid var(--border)}
+.divider{text-align:center;padding:.65rem;font-size:11px;color:#6b87a3;letter-spacing:.07em;text-transform:uppercase;background:#e8eef5;border-bottom:.5px solid var(--border)}
 /* ===== Sections ===== */
 .sec{padding:5rem 1.75rem;border-bottom:.5px solid var(--border)}
 .sec.alt{background:var(--bg-alt)}
@@ -78,12 +78,12 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .fc:nth-child(2)::before{background:var(--amber)}
 .fc:nth-child(3)::before{background:var(--green-deep)}
 .fc:nth-child(4)::before{background:var(--amber-light)}
-.fc:hover{transform:translateY(-4px);border-color:var(--green);box-shadow:0 12px 28px rgba(43,40,34,.12)}
+.fc:hover{transform:translateY(-4px);border-color:var(--green);box-shadow:0 12px 28px rgba(18,58,99,.1)}
 .ft{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2);margin-bottom:5px}
 .fd{font-size:13px;color:var(--text-body);line-height:1.65}
 .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:1.7rem}
 .dc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.1rem;transition:transform .2s,border-color .2s}
-.dc:hover{transform:translateY(-3px);border-color:var(--amber);box-shadow:0 10px 22px rgba(43,40,34,.1)}
+.dc:hover{transform:translateY(-3px);border-color:var(--amber);box-shadow:0 10px 22px rgba(18,58,99,.08)}
 .dtag{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
 .dn{font-family:'Noto Serif TC',serif;font-size:1.05rem;font-weight:700;color:var(--text-2);margin-bottom:5px}
 .di{font-size:13px;color:var(--text-body);line-height:1.7}
@@ -101,20 +101,20 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .tl-desc{font-size:13px;color:var(--text-body);margin-top:2px;line-height:1.6}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:1.7rem}
 .cc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.4rem;display:flex;gap:1.1rem;transition:transform .2s,border-color .2s}
-.cc:hover{transform:translateY(-4px);border-color:var(--amber);box-shadow:0 12px 28px rgba(43,40,34,.12)}
+.cc:hover{transform:translateY(-4px);border-color:var(--amber);box-shadow:0 12px 28px rgba(18,58,99,.1)}
 .cav{width:76px;height:76px;border-radius:50%;flex-shrink:0;background:rgba(46,94,58,.09);border:.5px solid rgba(46,94,58,.25);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--green);font-weight:600;overflow:hidden}
 .cav img{width:100%;height:100%;object-fit:cover}
 .cn{font-size:16px;font-weight:600;color:var(--text-2);margin-bottom:2px}
 .cr{font-size:12px;color:var(--green);margin-bottom:5px}
 .cb{font-size:13px;color:var(--text-body);line-height:1.65}
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:1.7rem}
-.g-tile{aspect-ratio:4/3;background:linear-gradient(135deg,var(--card),rgba(46,122,70,.05));border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.g-tile{aspect-ratio:4/3;background:linear-gradient(135deg,var(--card),rgba(27,90,160,.045));border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center}
 .g-tile span{font-size:12px;color:var(--text-faint)}
 .g-tile img{width:100%;height:100%;object-fit:cover;border-radius:10px}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:1.7rem}
 .pc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.35rem;transition:transform .2s,border-color .2s}
-.pc:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(43,40,34,.1)}
-.pc.hi{border:2px solid var(--green);background:linear-gradient(135deg,rgba(46,122,70,.06),rgba(224,139,31,.05))}
+.pc:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(18,58,99,.08)}
+.pc.hi{border:2px solid var(--green);background:linear-gradient(135deg,rgba(27,90,160,.05),rgba(224,139,31,.05))}
 .ptag{display:inline-block;background:rgba(46,94,58,.1);color:var(--green);font-size:10px;font-weight:500;letter-spacing:.06em;padding:3px 10px;border-radius:99px;margin-bottom:.7rem;text-transform:uppercase}
 .pdesc{font-size:13px;color:var(--text-body);margin-bottom:5px}
 .pnum{font-family:'Noto Serif TC',serif;font-size:2.1rem;font-weight:900;color:var(--text-2)}
@@ -126,7 +126,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .refund-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
 .ri{background:var(--card-light);border:.5px solid var(--border-soft);border-radius:8px;padding:.8rem;text-align:center}
 .ri-when{font-size:12px;color:var(--text-muted);margin-bottom:3px}
-.ri-amt{font-size:16px;font-weight:600;color:var(--green)}
+.ri-amt{font-size:16px;font-weight:600;color:#1e7a46}
 .ri-amt.low{color:var(--orange)}
 .ri-amt.zero{color:var(--red)}
 .refund-note{font-size:11px;color:var(--text-faint);margin-top:.85rem;line-height:1.65}
@@ -135,11 +135,17 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .faq-q{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2);margin-bottom:6px}
 .faq-a{font-size:14px;color:var(--text-body);line-height:1.75}
 /* ===== CTA band ===== */
-.cta-band{padding:3.5rem 1.75rem;text-align:center;border-bottom:.5px solid var(--border);background:var(--bg-alt)}
+.cta-band{padding:4rem 1.75rem;text-align:center;background:linear-gradient(135deg,#123a63 0%,#1b5aa0 100%);position:relative;overflow:hidden}
+.cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 20%,rgba(242,180,92,.15) 0%,transparent 60%);pointer-events:none}
+.cta-band>*{position:relative}
+.cta-band .st{color:#fff}
+.cta-band p{color:#b8cde4}
+.cta-band .btn-green{background:var(--amber);color:#1c2733;font-weight:700}
+.cta-band .btn-green:hover{box-shadow:0 8px 20px rgba(224,139,31,.4)}
 .cta-band .st{margin-bottom:.5rem}
 .cta-band p{font-size:14px;color:var(--text-body);margin-bottom:1.6rem}
 /* ===== Footer ===== */
-footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+footer{background:#0d2c4d;padding:1.9rem 1.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
 .fl{font-size:14px;font-weight:600;color:var(--card)}
 .fs{font-size:11px;color:var(--text-muted);margin-top:3px;letter-spacing:.08em;text-transform:uppercase}
 .fi2{font-size:12px;color:var(--text-muted);text-align:right;line-height:1.9}
@@ -158,10 +164,6 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
 @media (max-width:640px){
   .nav{padding:0 1rem}
   .nav-links{display:none}
-  .hero-meta{flex-wrap:wrap}
-  .hmi{flex:1 1 50%;border-bottom:.5px solid var(--border-soft)}
-  .hmi:nth-child(5){flex:1 1 100%;border-bottom:none;border-right:none}
-  .hmi:nth-child(2),.hmi:nth-child(4){border-right:none}
   footer{flex-direction:column;text-align:center}
   .fi2{text-align:center}
 }
@@ -194,8 +196,6 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     <div class="hmi"><div class="hml">日期</div><div class="hmv">1/25 – 1/29</div></div>
     <div class="hmi"><div class="hml">對象</div><div class="hmv">國小 3–6 年級</div></div>
     <div class="hmi"><div class="hml">地點</div><div class="hmv">國立清華大學<span style="display:block;font-size:10px;color:var(--green);font-weight:700;margin-top:1px">室內場地</span></div></div>
-    <div class="hmi"><div class="hml">名額</div><div class="hmv">25 人</div></div>
-    <div class="hmi"><div class="hml">報名截止</div><div class="hmv">1/17（日）</div></div>
   </div>
   <div class="hero-btns">
     <a class="btn-green" href="signup.html">立即報名 →</a>
@@ -212,9 +212,9 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
     </div>
     <div class="fgrid">
       <div class="fc reveal"><div class="ft">零基礎友善</div><div class="fd">從最基本的觸球開始教起，第一次踢球也能安心參加</div></div>
-      <div class="fc reveal d1"><div class="ft">小班制</div><div class="fd">上限 25 人，每位學員都能獲得關注</div></div>
+      <div class="fc reveal d1"><div class="ft">小班制</div><div class="fd">小班教學，每位學員都能獲得關注</div></div>
       <div class="fc reveal d2"><div class="ft">全程室內</div><div class="fd">室內場地不受天候影響，颳風下雨照常上課</div></div>
-      <div class="fc reveal d3"><div class="ft">結業紀念</div><div class="fd">精緻證書、電子合照、紀念小物</div></div>
+      <div class="fc reveal d3"><div class="ft">營隊紀念衣</div><div class="fd">每位學員專屬紀念衣，開營發放、一起訓練</div></div>
     </div>
   </div>
 </section>
@@ -230,7 +230,7 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
       <div class="dc reveal d1"><div class="dtag">Day 2 · 週二</div><div class="dn">傳球接球</div><div class="di">短傳訓練<br>移動配合<br>小組練習</div></div>
       <div class="dc reveal d2"><div class="dtag">Day 3 · 週三</div><div class="dn">射門守門</div><div class="di">射門姿勢<br>守門基礎<br>攻守輪換</div></div>
       <div class="dc reveal d3"><div class="dtag">Day 4 · 週四</div><div class="dn">戰術配合</div><div class="di">陣型介紹<br>跑位概念<br>團隊練習</div></div>
-      <div class="dc reveal d4"><div class="dtag">Day 5 · 週五</div><div class="dn">綜合練習與結業</div><div class="di">綜合演練<br>頒發證書<br>大合照</div></div>
+      <div class="dc reveal d4"><div class="dtag">Day 5 · 週五</div><div class="dn">綜合練習與結業</div><div class="di">綜合演練<br>成果回顧<br>大合照</div></div>
     </div>
   </div>
 </section>
@@ -305,8 +305,8 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
       <div class="sl">收費方案</div>
     </div>
     <div class="pgrid">
-      <div class="pc hi reveal"><div class="ptag">優惠價</div><div class="pdesc">團體 5 人 / 清大教職員</div><div class="pnum">$6,600 <span class="punit">/ 人</span></div><div class="pnote">符合資格者報名即享，無需額外申請</div></div>
-      <div class="pc reveal d1"><div class="ph-spacer"></div><div class="pdesc">一般報名</div><div class="pnum">$7,200 <span class="punit">/ 人</span></div><div class="pnote">個人報名，無需任何條件</div></div>
+      <div class="pc hi reveal"><div class="ptag">優惠價</div><div class="pdesc">早鳥（11/30 前報名）/ 團體 5 人 / 清大教職員</div><div class="pnum">$7,000 <span class="punit">/ 人</span></div><div class="pnote">三種資格擇一適用即享優惠價，不可疊加</div></div>
+      <div class="pc reveal d1"><div class="ph-spacer"></div><div class="pdesc">一般報名</div><div class="pnum">$7,600 <span class="punit">/ 人</span></div><div class="pnote">個人報名，無需任何條件</div></div>
       <div class="pc reveal d2"><div class="ph-spacer"></div><div class="pdesc">開班門檻</div><div class="pnum">12 <span class="punit">人</span></div><div class="pnote">確認開班後才會寄送繳費通知，未達門檻不會收取任何費用</div></div>
     </div>
     <div class="refund-box reveal">
@@ -332,14 +332,14 @@ footer{background:var(--text-2);padding:1.9rem 1.75rem;display:flex;justify-cont
       <div class="faq-i reveal"><div class="faq-q">需要自備足球裝備嗎？</div><div class="faq-a">建議穿著運動服與室內運動鞋，護脛請自備。球具由營隊提供，無需自帶。</div></div>
       <div class="faq-i reveal"><div class="faq-q">完全沒有足球基礎可以參加嗎？</div><div class="faq-a">可以。課程從零開始設計，適合初學到有基礎的國小三到六年級學員。</div></div>
       <div class="faq-i reveal"><div class="faq-q">報名後何時繳費？</div><div class="faq-a">報名送出即完成登記，並收到報名確認信。達開班門檻並確認開班後，才會以 email 寄送繳費通知。</div></div>
-      <div class="faq-i reveal"><div class="faq-q">額滿後如何候補？</div><div class="faq-a">報名超過 25 人後自動列入候補名單。有名額釋出時，我們將以 email 通知候補者。</div></div>
+      <div class="faq-i reveal"><div class="faq-q">額滿後如何候補？</div><div class="faq-a">名額額滿後，後續報名將自動列入候補名單。有名額釋出時，我們將以 email 通知候補者。</div></div>
     </div>
   </div>
 </section>
 <section class="cta-band">
   <div class="reveal">
     <div class="st">準備好讓孩子上場了嗎？</div>
-    <p>名額 25 人，報名截止 2027/1/17（日），額滿候補。</p>
+    <p>報名截止 2027/1/17（日），額滿候補。</p>
     <a class="btn-green" href="signup.html">前往報名 →</a>
   </div>
 </section>
