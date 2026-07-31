@@ -19,10 +19,10 @@
   --text-body:#5a6b7c;
   --text-muted:#7b8a99;
   --text-faint:#9aa7b3;
-  --green:#1b5aa0;
-  --green-deep:#123a63;
-  --amber:#e08b1f;
-  --amber-light:#f2b45c;
+  --green:#1560b8;
+  --green-deep:#0f3f7d;
+  --amber:#f0930f;
+  --amber-light:#f7b955;
   --orange:#a06a2c;
   --red:#b0483a;
 }
@@ -39,23 +39,18 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .nav-cta{font-size:13px;font-weight:500;background:var(--green);color:#fff;border:none;border-radius:6px;padding:8px 18px;cursor:pointer;text-decoration:none;white-space:nowrap}
 .nav-cta:hover{background:#25492e}
 /* ===== Hero ===== */
-.top-banner{width:100%;border-bottom:.5px solid var(--border)}
-.top-banner img{display:block;width:100%;height:clamp(180px,30vw,340px);object-fit:cover;object-position:center top;filter:saturate(.88) brightness(.96)}
-.banner-placeholder{width:100%;height:clamp(180px,30vw,340px);background:var(--card);border-bottom:1px dashed var(--border);display:flex;align-items:center;justify-content:center}
-.banner-placeholder span{font-size:13px;color:var(--text-faint)}
-.hero{padding:2.5rem 1.75rem 4.75rem;text-align:center;border-bottom:none;position:relative;overflow:hidden;background:linear-gradient(180deg,#0d2c4d 0%,#123a63 38%,#2f6cb0 75%,#6aa5dd 100%)}
+.hero{padding:2.5rem 1.75rem 4.75rem;text-align:center;border-bottom:none;position:relative;overflow:hidden;background:linear-gradient(180deg,#0a2e57 0%,#0f4183 38%,#2470c9 75%,#5ba4f0 100%)}
 .hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 75% 60% at 50% 0%,rgba(106,165,221,.25) 0%,transparent 70%),radial-gradient(ellipse 45% 45% at 88% 92%,rgba(242,180,92,.18) 0%,transparent 60%);pointer-events:none}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
-.pitch-circle{position:absolute;border:2px solid rgba(255,255,255,.08);border-radius:50%;pointer-events:none}
-.pc-l{width:340px;height:340px;left:-170px;top:50%;transform:translateY(-50%)}
-.pc-r{width:420px;height:420px;right:-210px;top:-120px}
-.soccer-ball{font-size:3.2rem;margin-bottom:1rem;animation:float 3s ease-in-out infinite;position:relative;z-index:1}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero-figure{position:relative;z-index:1;max-width:560px;margin:0 auto 1.6rem}
+.hero-figure img{display:block;width:100%;filter:drop-shadow(0 18px 30px rgba(4,18,36,.45))}
+.hero-figure::after{content:'';position:absolute;left:12%;right:12%;bottom:-14px;height:26px;background:radial-gradient(ellipse 50% 50% at 50% 50%,rgba(4,18,36,.4),transparent 70%);z-index:-1}
 .hero>*{position:relative;z-index:1}
 .hero-badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);color:#f2b45c;font-size:.8rem;font-weight:700;letter-spacing:.15em;padding:.42rem 1.4rem;border-radius:20px;margin-bottom:1.6rem;text-transform:uppercase}
 .hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2.5rem,7.5vw,4.2rem);font-weight:900;line-height:1.15;margin-bottom:1.1rem;letter-spacing:.03em;color:#fff}
 .hero h1 em{color:#f2b45c;font-style:normal;position:relative;display:inline-block}
-.hero h1 em::after{content:'';position:absolute;left:-2%;right:-2%;bottom:.08em;height:.22em;background:rgba(224,139,31,.35);z-index:0;border-radius:3px;transform:rotate(-1deg)}
+.hero h1 em::after{content:'';position:absolute;left:-2%;right:-2%;bottom:.08em;height:.22em;background:rgba(240,147,15,.4);z-index:0;border-radius:3px;transform:rotate(-1deg)}
 .hero-sub{font-size:16px;color:#b8cde4;line-height:1.8;max-width:440px;margin:0 auto 2.1rem}
 .hero-meta{display:flex;justify-content:center;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);backdrop-filter:blur(6px);border-radius:14px;overflow:hidden;max-width:580px;margin:0 auto 2.4rem}
 .hmi{flex:1;padding:1rem .5rem;text-align:center;border-right:.5px solid rgba(255,255,255,.12)}
@@ -64,7 +59,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .hmv{font-size:14px;font-weight:500;color:#fff}
 .hero-btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
 .hero .btn-green{background:var(--amber);color:#1c2733}
-.hero .btn-green:hover{box-shadow:0 8px 20px rgba(224,139,31,.4)}
+.hero .btn-green:hover{box-shadow:0 8px 20px rgba(240,147,15,.45)}
 .btn-green{display:inline-block;background:var(--green);color:#fff;border:none;border-radius:8px;padding:.9rem 2.4rem;font-size:1rem;font-weight:700;letter-spacing:.05em;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
 .btn-green:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(27,90,160,.3)}
 .btn-green:hover{background:#25492e}
@@ -74,7 +69,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 /* ===== Sections ===== */
 .sec{padding:5rem 1.75rem;border-bottom:.5px solid var(--border)}
 .sec.alt{background:var(--bg-alt)}
-.sec.dark{background:linear-gradient(160deg,#0d2c4d 0%,#123a63 55%,#17497e 100%);border-bottom:none}
+.sec.dark{background:linear-gradient(160deg,#0a2e57 0%,#0f4183 55%,#1a55a3 100%);border-bottom:none}
 .sec.dark .sl{color:var(--amber-light)}
 .sec.dark .st{color:#fff}
 .sec.dark .ss{color:#a9c3dd}
@@ -82,7 +77,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .sec.dark .tl-name{color:#fff}
 .sec.dark .tl-desc{color:#a9c3dd}
 .sec.dark .tl-item::before{background:rgba(255,255,255,.18)}
-.sec.dark .tl-dot{border-color:#123a63;box-shadow:0 0 0 1px #6aa5dd;background:#6aa5dd}
+.sec.dark .tl-dot{border-color:#0f4183;box-shadow:0 0 0 1px #6aa5dd;background:#6aa5dd}
 .sec.dark .tl-dot.rest{background:var(--amber);box-shadow:0 0 0 1px var(--amber)}
 .sec.dark .tl-dot.end{background:#8aa3bc;box-shadow:0 0 0 1px #8aa3bc}
 .sec-inner{max-width:920px;margin:0 auto}
@@ -157,17 +152,17 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .faq-q{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2)}
 .faq-a{font-size:14px;color:var(--text-body);line-height:1.75}
 /* ===== CTA band ===== */
-.cta-band{padding:4rem 1.75rem;text-align:center;background:linear-gradient(135deg,#123a63 0%,#1b5aa0 100%);position:relative;overflow:hidden}
+.cta-band{padding:4rem 1.75rem;text-align:center;background:linear-gradient(135deg,#0f4183 0%,#1e63bd 100%);position:relative;overflow:hidden}
 .cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 20%,rgba(242,180,92,.15) 0%,transparent 60%);pointer-events:none}
 .cta-band>*{position:relative}
 .cta-band .st{color:#fff}
 .cta-band p{color:#b8cde4}
 .cta-band .btn-green{background:var(--amber);color:#1c2733;font-weight:700}
-.cta-band .btn-green:hover{box-shadow:0 8px 20px rgba(224,139,31,.4)}
+.cta-band .btn-green:hover{box-shadow:0 8px 20px rgba(240,147,15,.45)}
 .cta-band .st{margin-bottom:.5rem}
 .cta-band p{font-size:14px;color:var(--text-body);margin-bottom:1.6rem}
 /* ===== Footer ===== */
-footer{background:#0d2c4d;padding:1.9rem 1.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
 .fl{font-size:14px;font-weight:600;color:var(--card)}
 .fs{font-size:11px;color:var(--text-muted);margin-top:3px;letter-spacing:.08em;text-transform:uppercase}
 .fi2{font-size:12px;color:var(--text-muted);text-align:right;line-height:1.9}
@@ -205,15 +200,12 @@ footer{background:#0d2c4d;padding:1.9rem 1.75rem;display:flex;justify-content:sp
   </div>
   <a class="nav-cta" href="signup.html">立即報名</a>
 </nav>
-<div class="top-banner">
-  <img src="images/banner.jpg" alt="孩子們在球場上奔跑">
-</div>
 <section class="hero" id="top">
   <div class="hero-glow"></div>
   <div class="hero-grid"></div>
-  <div class="pitch-circle pc-l"></div>
-  <div class="pitch-circle pc-r"></div>
-  <div class="soccer-ball">⚽</div>
+  <div class="hero-figure">
+    <img src="images/hero-kids.png" alt="孩子們在球場上踢球">
+  </div>
   <div class="hero-badge">NTHU Football Winter Camp 2027</div>
   <h1>Stay Young <em>追足夢想</em></h1>
   <p class="hero-sub">專業教練帶領，讓孩子在球場上找到自己。</p>
