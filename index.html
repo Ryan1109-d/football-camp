@@ -90,6 +90,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .fc:nth-child(2)::before{background:var(--amber)}
 .fc:nth-child(3)::before{background:var(--green-deep)}
 .fc:nth-child(4)::before{background:var(--amber-light)}
+.fc:nth-child(5)::before{background:var(--green-deep)}
 .fc:hover{transform:translateY(-4px);border-color:var(--green);box-shadow:0 12px 28px rgba(18,58,99,.1)}
 .ft{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2);margin-bottom:5px}
 .fd{font-size:13px;color:var(--text-body);line-height:1.65}
@@ -232,6 +233,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="fc reveal d1"><div class="ft">小班制</div><div class="fd">小班教學，每位學員都能獲得關注</div></div>
       <div class="fc reveal d2"><div class="ft">全程室內</div><div class="fd">室內場地不受天候影響，颳風下雨照常上課</div></div>
       <div class="fc reveal d3"><div class="ft">營隊紀念衣</div><div class="fd">每位學員專屬紀念衣，開營發放、一起訓練</div></div>
+      <div class="fc reveal d4"><div class="ft">彈性接送</div><div class="fd">最早 08:00 送達、最晚 18:00 接回，配合上下班時間</div></div>
     </div>
   </div>
 </section>
@@ -243,7 +245,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
     </div>
     <div class="fgrid">
       <div class="fc reveal"><div class="ft">專屬紀念衣</div><div class="fd">報名填尺寸，開營發放，穿著隊服一起訓練</div></div>
-      <div class="fc reveal d1"><div class="ft">每日照片分享</div><div class="fd">每天訓練花絮即時發到家長群組，掌握孩子狀況</div></div>
+      <div class="fc reveal d1"><div class="ft">活動瞬間紀錄</div><div class="fd">教練捕捉每日訓練精彩瞬間，即時分享至家長群組</div></div>
       <div class="fc reveal d2"><div class="ft">完整每日課表</div><div class="fd">五天課表循序漸進，每日訓練重點清楚明確</div></div>
       <div class="fc reveal d3"><div class="ft">專業師資</div><div class="fd">具足球專業背景的教練團隊全程帶隊</div></div>
       <div class="fc reveal d4"><div class="ft">家長群組聯繫</div><div class="fd">專屬群組即時溝通，行前提醒、每日回報不漏接</div></div>
@@ -275,6 +277,11 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
     </div>
     <div class="timeline">
       <div class="tl-item reveal">
+        <div class="tl-time">08:00 起</div>
+        <div class="tl-dot rest"></div>
+        <div class="tl-body"><div class="tl-name">提早送達</div><div class="tl-desc">08:00 起即可送達，教練協助看顧</div></div>
+      </div>
+      <div class="tl-item reveal">
         <div class="tl-time">08:30</div>
         <div class="tl-dot"></div>
         <div class="tl-body"><div class="tl-name">開放報到</div><div class="tl-desc">家長送達、簽到、換裝準備</div></div>
@@ -298,6 +305,11 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
         <div class="tl-time">17:00</div>
         <div class="tl-dot end"></div>
         <div class="tl-body"><div class="tl-name">放學</div><div class="tl-desc">家長接回，教練群組分享今日花絮</div></div>
+      </div>
+      <div class="tl-item reveal d4">
+        <div class="tl-time">– 18:00</div>
+        <div class="tl-dot rest"></div>
+        <div class="tl-body"><div class="tl-name">延後接回</div><div class="tl-desc">可協助看顧至 18:00</div></div>
       </div>
     </div>
   </div>
@@ -360,7 +372,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="st">常見問題</div>
     </div>
     <div class="faq-list">
-      <div class="faq-i reveal"><button class="faq-q" type="button">每日上課時間？<span class="faq-arrow">＋</span></button><div class="faq-a">上午 09:00–12:00、午休 12:00–14:00、下午 14:00–17:00。每日 08:30 起開放報到。</div></div>
+      <div class="faq-i reveal"><button class="faq-q" type="button">每日上課時間？<span class="faq-arrow">＋</span></button><div class="faq-a">上午 09:00–12:00、午休 12:00–14:00、下午 14:00–17:00。每日 08:30 起開放報到；如有需要，最早 08:00 可送達、放學後可協助看顧至 18:00。</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">需要自備足球裝備嗎？<span class="faq-arrow">＋</span></button><div class="faq-a">建議穿著運動服與室內運動鞋，護脛請自備。球具由營隊提供，無需自帶。</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">完全沒有足球基礎可以參加嗎？<span class="faq-arrow">＋</span></button><div class="faq-a">可以。課程從零開始設計，從最基本的觸球教起，適合初學到有基礎的國小三到六年級學員。</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">報名後何時繳費？<span class="faq-arrow">＋</span></button><div class="faq-a">報名送出即完成登記，並收到報名確認信。達開班門檻並確認開班後，才會以 email 寄送繳費通知。確認開班前不收取任何費用。</div></div>
