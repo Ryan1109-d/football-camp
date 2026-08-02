@@ -62,7 +62,6 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .hero .btn-green:hover{box-shadow:0 8px 20px rgba(240,147,15,.45)}
 .btn-green{display:inline-block;background:var(--green);color:#fff;border:none;border-radius:8px;padding:.9rem 2.4rem;font-size:1rem;font-weight:700;letter-spacing:.05em;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
 .btn-green:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(27,90,160,.3)}
-.btn-green:hover{background:#25492e}
 .btn-out{display:inline-block;background:transparent;color:#cfe0f2;border:1px solid rgba(255,255,255,.35);border-radius:7px;padding:12px 24px;font-size:14px;cursor:pointer;text-decoration:none}
 .btn-out:hover{background:rgba(255,255,255,.1)}
 .divider{text-align:center;padding:.65rem;font-size:11px;color:#6b87a3;letter-spacing:.07em;text-transform:uppercase;background:#e8eef5;border-bottom:.5px solid var(--border)}
@@ -124,6 +123,10 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .g-tile{aspect-ratio:4/3;background:linear-gradient(135deg,var(--card),rgba(27,90,160,.045));border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center}
 .g-tile span{font-size:12px;color:var(--text-faint)}
 .g-tile img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.venue-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:1.7rem}
+.venue-grid .g-tile{aspect-ratio:16/10;border:none}
+.venue-grid .g-tile.wide{grid-column:1/-1;aspect-ratio:21/9}
+.venue-grid .g-tile img{border-radius:12px;box-shadow:0 8px 24px rgba(18,58,99,.1)}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:1.7rem}
 .pc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.35rem;transition:transform .2s,border-color .2s}
 .pc:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(18,58,99,.08)}
@@ -161,7 +164,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .cta-band .btn-green{background:var(--amber);color:#1c2733;font-weight:700}
 .cta-band .btn-green:hover{box-shadow:0 8px 20px rgba(240,147,15,.45)}
 .cta-band .st{margin-bottom:.5rem}
-.cta-band p{font-size:14px;color:var(--text-body);margin-bottom:1.6rem}
+.cta-band p{font-size:14px;margin-bottom:1.6rem}
 /* ===== Footer ===== */
 footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
 .fl{font-size:14px;font-weight:600;color:var(--card)}
@@ -242,10 +245,10 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
     <div class="reveal">
       <div class="sl">場地介紹</div>
       <div class="st">訓練場地</div>
-      <p class="ss">課程於清華大學南大校區的室內場地進行——正是我們羽球夏令營現正使用的同一場地，實際營隊營運中，不受天候影響，颳風下雨照常上課。</p>
+      <p class="ss">課程於清華大學南大校區的室內場地進行，空間寬敞、設備完善，不受天候影響，颳風下雨照常上課。</p>
     </div>
-    <div class="gallery-grid">
-      <div class="g-tile reveal"><img src="https://res.cloudinary.com/du9nntlc0/image/upload/v1778724468/venue_indoor1_pntblf.jpg" alt="室內場地"></div>
+    <div class="venue-grid">
+      <div class="g-tile wide reveal"><img src="https://res.cloudinary.com/du9nntlc0/image/upload/v1778724468/venue_indoor1_pntblf.jpg" alt="室內場地"></div>
       <div class="g-tile reveal d1"><img src="https://res.cloudinary.com/du9nntlc0/image/upload/v1778724467/venue_campus_bwfyha.jpg" alt="清大南大校區環境"></div>
       <div class="g-tile reveal d2"><img src="https://res.cloudinary.com/du9nntlc0/image/upload/v1778724466/venue_map_zonyhx.jpg" alt="場地位置地圖"></div>
     </div>
