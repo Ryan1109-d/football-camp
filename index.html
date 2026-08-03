@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>清華大學足球冬令營 2027｜Stay Young</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-<meta name="description" content="2027 寒假清華大學足球冬令營，國小三到六年級專屬，專業教練帶領五天全天密集訓練。1/25–1/29，名額 25 人。">
+<meta name="description" content="2027 寒假清華大學足球冬令營，國小三到六年級專屬，專業教練帶領五天全天訓練。1/25–1/29 開課，報名截止 1/17。">
 <style>
 :root{
   --bg:#ffffff;
@@ -174,6 +174,13 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
 .fs{font-size:11px;color:var(--text-muted);margin-top:3px;letter-spacing:.08em;text-transform:uppercase}
 .fi2{font-size:12px;color:var(--text-muted);text-align:right;line-height:1.9}
 .fi2 a{color:var(--text-muted);text-decoration:none}
+/* ===== Mobile bottom CTA ===== */
+.mobile-cta{display:none}
+@media (max-width:640px){
+  .mobile-cta{display:block;position:fixed;left:0;right:0;bottom:0;z-index:200;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:.5px solid var(--border);box-shadow:0 -4px 16px rgba(18,58,99,.08)}
+  .mc-btn{display:block;text-align:center;background:var(--amber);color:#1c2733;font-weight:700;font-size:1rem;letter-spacing:.05em;border-radius:10px;padding:.85rem;text-decoration:none}
+  body{padding-bottom:70px}
+}
 /* ===== Scroll reveal ===== */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -220,25 +227,25 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
   <div class="hero-meta">
     <div class="hmi"><div class="hml">日期</div><div class="hmv">1/25 – 1/29</div></div>
     <div class="hmi"><div class="hml">對象</div><div class="hmv">國小 3–6 年級</div></div>
-    <div class="hmi"><div class="hml">地點</div><div class="hmv">清華大學南大校區<span style="display:block;font-size:10px;color:#f2b45c;font-weight:700;margin-top:1px">室內場地</span></div></div>
+    <div class="hmi"><div class="hml">地點</div><div class="hmv">清華大學南大校區<span style="display:block;font-size:10px;color:#f2b45c;font-weight:700;margin-top:1px">室內外場地</span></div></div>
   </div>
   <div class="hero-btns">
     <a class="btn-green" href="signup.html">立即報名 →</a>
     <a class="btn-out" href="#about">了解課程</a>
   </div>
 </section>
-<div class="divider">— Stay Young · 全程室內場地 · 專業教練 —</div>
+<div class="divider">— Stay Young · 室內外雙場地 · 專業教練 —</div>
 <section class="sec" id="about">
   <div class="sec-inner">
     <div class="reveal">
       <div class="sl">營隊介紹</div>
       <div class="st">五天全天，紮實訓練</div>
-      <p class="ss">無論是第一次踢球的零基礎孩子，還是已有基礎想更進一步的小球員，課程由專業教練循序漸進設計，五天看得見進步。</p>
+      <p class="ss">營隊團隊累計服務超過百位學員。無論是第一次踢球的零基礎孩子，還是已有基礎想更進一步的小球員，課程由專業教練循序漸進設計，五天看得見進步。</p>
     </div>
     <div class="fgrid">
       <div class="fc reveal"><div class="ft">零基礎友善</div><div class="fd">從最基本的觸球開始教起，第一次踢球也能安心參加</div></div>
       <div class="fc reveal d1"><div class="ft">小班制</div><div class="fd">小班教學，每位學員都能獲得關注</div></div>
-      <div class="fc reveal d2"><div class="ft">全程室內</div><div class="fd">室內場地不受天候影響，颳風下雨照常上課</div></div>
+      <div class="fc reveal d2"><div class="ft">雨天不停課</div><div class="fd">室內場地搭配室外操場，遇雨改全程室內照常上課</div></div>
       <div class="fc reveal d3"><div class="ft">營隊紀念衣</div><div class="fd">每位學員專屬紀念衣，開營發放、一起訓練</div></div>
       <div class="fc reveal d4"><div class="ft">彈性接送</div><div class="fd">最早 08:00 送達、最晚 18:00 接回，配合上下班時間</div></div>
     </div>
@@ -249,7 +256,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
     <div class="reveal">
       <div class="sl">場地介紹</div>
       <div class="st">訓練場地</div>
-      <p class="ss">課程於清華大學南大校區的室內場地進行，空間寬敞、設備完善，不受天候影響，颳風下雨照常上課。</p>
+      <p class="ss">課程於清華大學南大校區體健大樓五樓室內場地與室外操場搭配進行，空間寬敞、設備完善；遇雨改為全程室內，照常上課。</p>
     </div>
     <div class="venue-grid">
       <figure class="venue-item wide reveal">
@@ -364,8 +371,8 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="sl">收費方案</div>
     </div>
     <div class="pgrid">
-      <div class="pc hi reveal"><div class="ptag">優惠價</div><div class="pdesc">早鳥（11/30 前報名）/ 團體 5 人 / 清大教職員</div><div class="pnum">$7,000 <span class="punit">/ 人</span></div><div class="pnote">三種資格擇一適用即享優惠價，不可疊加</div></div>
-      <div class="pc reveal d1"><div class="ph-spacer"></div><div class="pdesc">一般報名</div><div class="pnum">$7,600 <span class="punit">/ 人</span></div><div class="pnote">個人報名，無需任何條件</div></div>
+      <div class="pc hi reveal"><div class="ptag">優惠價</div><div class="pdesc">早鳥（11/30 前報名）/ 團體 5 人 / 清大教職員</div><div class="pnum">$7,200 <span class="punit">/ 人</span></div><div class="pnote">三種資格擇一適用即享優惠價，不可疊加</div></div>
+      <div class="pc reveal d1"><div class="ph-spacer"></div><div class="pdesc">一般報名</div><div class="pnum">$7,800 <span class="punit">/ 人</span></div><div class="pnote">個人報名，無需任何條件</div></div>
       <div class="pc reveal d2"><div class="ph-spacer"></div><div class="pdesc">開班門檻</div><div class="pnum">12 <span class="punit">人</span></div><div class="pnote">確認開班後才會寄送繳費通知，未達門檻不會收取任何費用</div></div>
     </div>
     <div class="refund-box reveal">
@@ -397,7 +404,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="faq-i reveal"><button class="faq-q" type="button">團報優惠怎麼使用？<span class="faq-arrow">＋</span></button><div class="faq-a">五人（含）以上即符合團報優惠資格。報名時選擇團報並填寫同行學員名單，每位學員皆需各自填寫一份報名表。</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">紀念衣什麼時候拿到？<span class="faq-arrow">＋</span></button><div class="faq-a">報名時填寫衣服尺寸，開營當天發放，讓孩子穿著隊服一起訓練。</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">家長如何掌握孩子上課狀況？<span class="faq-arrow">＋</span></button><div class="faq-a">開課前會建立家長群組，每天發布訓練重點與照片花絮，行前提醒與各項通知也會在群組同步。</div></div>
-      <div class="faq-i reveal"><button class="faq-q" type="button">下雨或寒流會停課嗎？<span class="faq-arrow">＋</span></button><div class="faq-a">課程全程於室內場地進行，不受天候影響，颳風下雨照常上課。如遇天災，依新竹市政府停班停課公告辦理。</div></div>
+      <div class="faq-i reveal"><button class="faq-q" type="button">下雨或寒流會停課嗎？<span class="faq-arrow">＋</span></button><div class="faq-a">不會。課程以室內場地搭配室外操場進行，遇雨改為全程室內照常上課。如遇天災，依新竹市政府停班停課公告辦理。</div></div>
     </div>
   </div>
 </section>
@@ -418,6 +425,9 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
     聯繫我們：stayyoung985@gmail.com
   </div>
 </footer>
+<div class="mobile-cta">
+  <a href="signup.html" class="mc-btn">立即報名 →</a>
+</div>
 <script>
 // 滾動浮現：進出視窗都重播
 const io = new IntersectionObserver((entries) => {
