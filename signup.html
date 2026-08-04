@@ -53,6 +53,9 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .gb-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .gb-input{background:var(--card-light);border:.5px solid #c3d0dd;border-radius:6px;padding:9px 12px;font-size:13px;color:var(--text-2);width:100%}
 .gb-input:focus{outline:none;border-color:var(--green)}
+.pc-row{display:flex;flex-direction:row;align-items:center;gap:22px;flex-wrap:wrap;margin-top:4px}
+.pc-opt{display:inline-flex;flex-direction:row;align-items:center;gap:6px;font-size:13px;color:var(--text-2);cursor:pointer;white-space:nowrap;margin:0}
+.pc-opt input{width:15px;height:15px;accent-color:var(--green);margin:0;flex:none}
 .same-check{grid-column:1/-1;display:flex;flex-direction:row;align-items:center;gap:8px;padding:.2rem 0}
 .same-check input{width:16px;height:16px;accent-color:var(--green);margin:0;flex:none}
 .same-check label{font-size:13px;color:var(--text-2);cursor:pointer;margin:0}
@@ -153,10 +156,6 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
           <option value="成人M">成人 M</option>
         </select>
       </div>
-      <div class="fg full">
-        <label for="email">信箱 <span class="req">*</span>　<span style="color:var(--text-faint);font-weight:400">報名確認信與後續通知寄送至此</span></label>
-        <input type="email" id="email" name="email" placeholder="email@example.com" required>
-      </div>
       <div class="fg">
         <label for="emgName">緊急聯絡人 <span class="req">*</span></label>
         <input type="text" id="emgName" name="emgName" placeholder="王小明" required>
@@ -164,6 +163,10 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="fg">
         <label for="emgPhone">緊急聯絡人電話 <span class="req">*</span></label>
         <input type="tel" id="emgPhone" name="emgPhone" placeholder="0912345678" required>
+      </div>
+      <div class="fg full">
+        <label for="email">信箱 <span class="req">*</span>　<span style="color:var(--text-faint);font-weight:400">報名確認信與後續通知寄送至此</span></label>
+        <input type="email" id="email" name="email" placeholder="email@example.com" required>
       </div>
       <div class="same-check">
         <input type="checkbox" id="sameAsEmg">
@@ -229,9 +232,9 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       </div>
       <div class="fg full">
         <label>照片使用同意 <span class="req">*</span>　<span style="color:var(--text-faint);font-weight:400">營隊每日拍攝訓練花絮分享至家長群組，讓家長掌握孩子上課狀況</span></label>
-        <div style="display:flex;gap:18px;margin-top:2px">
-          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-2);cursor:pointer"><input type="radio" name="photoConsent" value="同意" checked style="accent-color:var(--green)">同意</label>
-          <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-2);cursor:pointer"><input type="radio" name="photoConsent" value="不同意" style="accent-color:var(--green)">不同意（拍攝時將迴避）</label>
+        <div class="pc-row">
+          <label class="pc-opt"><input type="radio" name="photoConsent" value="同意" checked>同意</label>
+          <label class="pc-opt"><input type="radio" name="photoConsent" value="不同意">不同意（拍攝時將迴避）</label>
         </div>
       </div>
       <p class="fnote">本表單蒐集之個人資料僅用於本營隊報名聯繫、保險投保及活動安全管理，不作其他用途。</p>
