@@ -28,7 +28,10 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text)}
+body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--text);line-break:strict;overflow-wrap:break-word}
+h1,.st,.ft,.dn,.tl-name,.faq-q{text-wrap:balance}
+.fd,.di,.tl-desc,.faq-a,.pnote,.refund-note{text-wrap:pretty}
+.hero-sub{text-wrap:pretty}
 /* ===== Nav ===== */
 .nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:.5px solid var(--border);box-shadow:0 2px 12px rgba(18,58,99,.05);padding:0 1.75rem;display:flex;align-items:center;justify-content:space-between;height:56px}
 .nav-logo{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:900;color:var(--text-2);text-decoration:none;white-space:nowrap;letter-spacing:.03em}
@@ -58,12 +61,12 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(2.5rem,7.5vw,4.2rem);font-weight:900;line-height:1.15;margin-bottom:1.1rem;letter-spacing:.03em;color:#fff}
 .hero h1 em{color:#f2b45c;font-style:normal;position:relative;display:inline-block}
 .hero h1 em::after{content:'';position:absolute;left:-2%;right:-2%;bottom:.08em;height:.22em;background:rgba(240,147,15,.4);z-index:0;border-radius:3px;transform:rotate(-1deg)}
-.hero-sub{font-size:16px;color:#b8cde4;line-height:1.8;max-width:440px;margin:0 auto 2.1rem}
+.hero-sub{font-size:16px;color:#b8cde4;line-height:1.8;max-width:460px;margin:0 auto 2.1rem;text-wrap:pretty}
 .hero-meta{display:flex;justify-content:center;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);backdrop-filter:blur(6px);border-radius:14px;overflow:hidden;max-width:580px;margin:0 auto 2.4rem}
 .hmi{flex:1;padding:1rem .5rem;text-align:center;border-right:.5px solid rgba(255,255,255,.12)}
 .hmi:last-child{border-right:none}
 .hml{font-size:11px;color:#8fb0d4;letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px}
-.hmv{font-size:14px;font-weight:500;color:#fff}
+.hmv{font-size:14px;font-weight:500;color:#fff;white-space:nowrap}
 .hero-btns{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
 .hero .btn-green{background:var(--amber);color:#1c2733}
 .hero .btn-green:hover{box-shadow:0 8px 20px rgba(240,147,15,.45)}
@@ -89,8 +92,9 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .sec-inner{max-width:920px;margin:0 auto}
 .sl{font-size:.8rem;color:var(--amber);font-weight:700;letter-spacing:.25em;text-transform:uppercase;margin-bottom:.75rem}
 .st{font-family:'Noto Serif TC',serif;font-size:clamp(1.7rem,3.8vw,2.4rem);font-weight:900;margin-bottom:.9rem;line-height:1.25;letter-spacing:.04em}
-.ss{font-size:15px;color:var(--text-body);line-height:1.85;max-width:520px}
-.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:1.7rem}
+.ss{font-size:15px;color:var(--text-body);line-height:1.85;max-width:680px;text-wrap:pretty}
+.ss .cl{display:inline-block}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:1.7rem}
 .fc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.4rem;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
 .fc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green)}
 .fc:nth-child(2)::before{background:var(--amber)}
@@ -98,26 +102,26 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .fc:nth-child(4)::before{background:var(--amber-light)}
 .fc:nth-child(5)::before{background:var(--green-deep)}
 .fc:hover{transform:translateY(-4px);border-color:var(--green);box-shadow:0 12px 28px rgba(18,58,99,.1)}
-.ft{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2);margin-bottom:5px}
-.fd{font-size:13px;color:var(--text-body);line-height:1.65}
-.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:1.7rem}
+.ft{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2);margin-bottom:5px;white-space:nowrap}
+.fd{font-size:13px;color:var(--text-body);line-height:1.65;text-wrap:pretty}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:10px;margin-top:1.7rem}
 .dc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.1rem;transition:transform .2s,border-color .2s}
 .dc:hover{transform:translateY(-3px);border-color:var(--amber);box-shadow:0 10px 22px rgba(18,58,99,.08)}
 .dtag{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
-.dn{font-family:'Noto Serif TC',serif;font-size:1.05rem;font-weight:700;color:var(--text-2);margin-bottom:5px}
+.dn{font-family:'Noto Serif TC',serif;font-size:1.05rem;font-weight:700;color:var(--text-2);margin-bottom:5px;white-space:nowrap}
 .di{font-size:13px;color:var(--text-body);line-height:1.7}
 .timeline{margin-top:2rem;max-width:620px}
 .tl-item{display:flex;align-items:flex-start;gap:1rem;padding:.85rem 0;position:relative}
-.tl-item::before{content:'';position:absolute;left:calc(110px + .5rem + 5px);top:0;bottom:0;width:1px;background:var(--border)}
+.tl-item::before{content:'';position:absolute;left:calc(118px + .5rem + 5px);top:0;bottom:0;width:1px;background:var(--border)}
 .tl-item:first-child::before{top:50%}
 .tl-item:last-child::before{bottom:50%}
-.tl-time{width:116px;flex-shrink:0;font-size:14px;font-weight:600;color:var(--text-2);text-align:right;padding-top:1px}
+.tl-time{width:124px;flex-shrink:0;font-size:14px;font-weight:600;color:var(--text-2);text-align:right;padding-top:1px;white-space:nowrap}
 .tl-dot{width:11px;height:11px;border-radius:50%;background:var(--green);border:2px solid var(--card-light);box-shadow:0 0 0 1px var(--green);flex-shrink:0;margin-top:4px;position:relative;z-index:1}
 .tl-dot.rest{background:var(--orange);box-shadow:0 0 0 1px var(--orange)}
 .tl-dot.end{background:var(--text-muted);box-shadow:0 0 0 1px var(--text-muted)}
 .tl-body{padding-top:0}
 .tl-name{font-size:16px;font-weight:600;color:var(--text-2)}
-.tl-desc{font-size:13px;color:var(--text-body);margin-top:2px;line-height:1.6}
+.tl-desc{font-size:13px;color:var(--text-body);margin-top:2px;line-height:1.6;text-wrap:pretty}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:1.7rem}
 .cc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.4rem;display:flex;gap:1.1rem;transition:transform .2s,border-color .2s}
 .cc:hover{transform:translateY(-4px);border-color:var(--amber);box-shadow:0 12px 28px rgba(18,58,99,.1)}
@@ -130,12 +134,12 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .g-tile{aspect-ratio:4/3;background:linear-gradient(135deg,var(--card),rgba(27,90,160,.045));border:1px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center}
 .g-tile span{font-size:12px;color:var(--text-faint)}
 .g-tile img{width:100%;height:100%;object-fit:cover;border-radius:10px}
-.venue-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:1.7rem}
+.venue-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:1.7rem;justify-content:center;align-items:start}
 .venue-item{margin:0}
 .venue-item.wide{grid-column:1/-1}
-.venue-item .g-tile{aspect-ratio:16/10;border:none;display:block;text-decoration:none}
+.venue-item .g-tile{aspect-ratio:16/10;border:none;display:block;text-decoration:none;width:100%}
 .venue-item.wide .g-tile{aspect-ratio:21/9}
-.venue-item .g-tile img{border-radius:12px;box-shadow:0 8px 24px rgba(18,58,99,.1)}
+.venue-item .g-tile img{border-radius:12px;box-shadow:0 8px 24px rgba(18,58,99,.1);width:100%;height:100%;object-fit:cover}
 .v-cap{font-size:12.5px;color:var(--text-muted);text-align:center;margin-top:8px;letter-spacing:.04em}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:1.7rem}
 .pc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.35rem;transition:transform .2s,border-color .2s}
@@ -143,7 +147,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .pc.hi{border:2px solid var(--green);background:linear-gradient(135deg,rgba(27,90,160,.05),rgba(224,139,31,.05))}
 .ptag{display:inline-block;background:rgba(46,94,58,.1);color:var(--green);font-size:10px;font-weight:500;letter-spacing:.06em;padding:3px 10px;border-radius:99px;margin-bottom:.7rem;text-transform:uppercase}
 .pdesc{font-size:13px;color:var(--text-body);margin-bottom:5px}
-.pnum{font-family:'Noto Serif TC',serif;font-size:2.1rem;font-weight:900;color:var(--text-2)}
+.pnum{font-family:'Noto Serif TC',serif;font-size:2.1rem;font-weight:900;color:var(--text-2);white-space:nowrap}
 .punit{font-size:13px;color:var(--text-faint);font-weight:400}
 .pnote{font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.6}
 .ph-spacer{height:25px}
@@ -151,8 +155,8 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .refund-title{font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:.85rem}
 .refund-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
 .ri{background:var(--card-light);border:.5px solid var(--border-soft);border-radius:8px;padding:.8rem;text-align:center}
-.ri-when{font-size:12px;color:var(--text-muted);margin-bottom:3px}
-.ri-amt{font-size:16px;font-weight:600;color:#1e7a46}
+.ri-when{font-size:12px;color:var(--text-muted);margin-bottom:3px;white-space:nowrap}
+.ri-amt{font-size:16px;font-weight:600;color:#1e7a46;white-space:nowrap}
 .ri-amt.low{color:var(--orange)}
 .ri-amt.zero{color:var(--red)}
 .refund-note{font-size:11px;color:var(--text-faint);margin-top:.85rem;line-height:1.65}
@@ -164,7 +168,7 @@ body{font-family:'Noto Sans TC',-apple-system,"PingFang TC","Microsoft JhengHei"
 .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0}
 .faq-i.open .faq-a{max-height:420px;padding-bottom:1.05rem}
 .faq-q{font-family:'Noto Serif TC',serif;font-size:1.1rem;font-weight:700;color:var(--text-2)}
-.faq-a{font-size:14px;color:var(--text-body);line-height:1.75}
+.faq-a{font-size:14px;color:var(--text-body);line-height:1.75;text-wrap:pretty}
 /* ===== CTA band ===== */
 .cta-band{padding:4rem 1.75rem;text-align:center;background:linear-gradient(135deg,#0f4183 0%,#1e63bd 100%);position:relative;overflow:hidden}
 .cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 20%,rgba(242,180,92,.15) 0%,transparent 60%),linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:auto,56px 56px,56px 56px;pointer-events:none}
@@ -201,6 +205,8 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
 /* ===== Mobile ===== */
 @media (max-width:640px){
   .nav{padding:0 1rem}
+  .ft,.dn,.hmv{white-space:normal}
+  .venue-grid{grid-template-columns:1fr}
   .hero-figure{max-width:400px}
   .nav-links{display:none}
   .sy-text{display:none}
@@ -256,7 +262,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
     <div class="reveal">
       <div class="sl">營隊介紹</div>
       <div class="st">五天全天，紮實訓練</div>
-      <p class="ss">營隊團隊累計服務超過百位學員。無論是第一次踢球的零基礎孩子，還是已有基礎想更進一步的小球員，課程由專業教練循序漸進設計，五天看得見進步。</p>
+      <p class="ss"><span class="cl">營隊團隊累計服務超過百位學員。</span><span class="cl">無論是第一次踢球的零基礎孩子，</span><span class="cl">還是已有基礎想更進一步的小球員，</span><span class="cl">課程由專業教練循序漸進設計，</span><span class="cl">五天看得見進步。</span></p>
     </div>
     <div class="fgrid">
       <div class="fc reveal"><div class="ft">零基礎友善</div><div class="fd">從最基本的觸球開始教起，第一次踢球也能安心參加</div></div>
@@ -272,7 +278,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
     <div class="reveal">
       <div class="sl">場地介紹</div>
       <div class="st">訓練場地</div>
-      <p class="ss">課程於清華大學南大校區體健大樓五樓室內場地與室外操場搭配進行，空間寬敞、設備完善；遇雨改為全程室內，照常上課。</p>
+      <p class="ss"><span class="cl">課程於清華大學南大校區體健大樓五樓</span><span class="cl">室內場地與室外操場搭配進行，</span><span class="cl">空間寬敞、設備完善；</span><span class="cl">遇雨改為全程室內，照常上課。</span></p>
     </div>
     <div class="venue-grid">
       <figure class="venue-item wide reveal">
@@ -295,7 +301,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
     <div class="reveal">
       <div class="sl">課程內容</div>
       <div class="st">每日訓練重點</div>
-      <p class="ss">五天由個人技術走向團隊配合，每日皆含動態熱身、分段訓練、驗收小賽，並由營隊準備每日點心。實際課程內容以教練現場安排為主。</p>
+      <p class="ss"><span class="cl">五天由個人技術走向團隊配合，</span><span class="cl">每日皆含動態熱身、分段訓練、驗收小賽，</span><span class="cl">並由營隊準備每日點心。</span><span class="cl">實際課程內容以教練現場安排為主。</span></p>
     </div>
     <div class="dgrid">
       <div class="dc reveal"><div class="dtag">Day 1</div><div class="dn">球感與盤帶</div><div class="di">腳底踩球・球感建立<br>帶球控制練習<br>3v3 迷你賽</div></div>
@@ -311,7 +317,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
     <div class="reveal">
       <div class="sl">每日時程</div>
       <div class="st">流程安排</div>
-      <p class="ss">充足的訓練、完整的休息。中午兩小時午餐與午休，讓孩子下午保持最好的狀態。</p>
+      <p class="ss"><span class="cl">充足的訓練、完整的休息。</span><span class="cl">中午兩小時午餐與午休，</span><span class="cl">讓孩子下午保持最好的狀態。</span></p>
     </div>
     <div class="timeline">
       <div class="tl-item reveal">
