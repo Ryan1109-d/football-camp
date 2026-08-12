@@ -2,7 +2,7 @@
  * 清華大學足球冬令營 2027 — Google Apps Script 後端
  *
  * 部署步驟：
- * 1. Google Sheet 第一列欄位標題（共 15 欄，與下方 appendRow 順序一致）：
+ * 1. Google Sheet 第一列欄位標題（共 19 欄，與下方 appendRow 順序一致）：
  *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 午餐 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意
  * 2. Sheet 上方選 擴充功能 → Apps Script，貼上本檔案全部內容
  * 3. 修改下方 CONFIG 的 SHEET_ID（網址中 /d/ 和 /edit 之間那串）
@@ -34,6 +34,19 @@ const COL = {
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
+    // ── 防濫用 1：honeypot（機器人會填、真人看不到）──
+    // 靜默丟棄：回傳與正常送出相同的成功格式，但不寫入、不寄信
+    if (data.website && String(data.website).trim() !== '') {
+      return jsonResponse({ status: 'ok', waitlist: false });
+    }
+    // ── 防濫用 2：限流（同一 email 10 分鐘內僅能送出一次）──
+    const cache = CacheService.getScriptCache();
+    const rateKey = 'rl_' + String(data.email || '').toLowerCase().trim();
+    if (cache.get(rateKey)) {
+      return jsonResponse({ status: 'error',
+        message: '您剛剛已送出過報名，請稍候幾分鐘再試，或直接來信確認報名狀態。' });
+    }
+    cache.put(rateKey, '1', 600);
     // ---- 基本驗證 ----
     const required = ['session', 'studentName', 'gender', 'age', 'grade', 'email',
                       'emgName', 'emgPhone', 'payerName', 'payerPhone', 'payerEmail',
@@ -155,4 +168,22 @@ function jsonResponse(obj) {
  */
 function doGet(e) {
   return jsonResponse({ status: 'ok', message: 'API alive' });
+}
+
+// ══════════════════════════════════════════
+// 每日自動備份
+// 安裝：Apps Script 左側「觸發條件」→ 新增觸發條件
+//   函式 dailyBackup／時間驅動／日計時器／23:00–00:00
+// ══════════════════════════════════════════
+function dailyBackup() {
+  const src = SpreadsheetApp.openById(CONFIG.SHEET_ID);
+  const stamp = Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyyMMdd');
+  const copy = src.copy('【備份】足球冬令營報名_' + stamp);
+  // 只保留最近 14 份備份，其餘丟進垃圾桶
+  const it = DriveApp.searchFiles('title contains "【備份】足球冬令營報名_"');
+  const list = [];
+  while (it.hasNext()) list.push(it.next());
+  list.sort((a, b) => b.getDateCreated() - a.getDateCreated());
+  list.slice(14).forEach(f => f.setTrashed(true));
+  return copy.getId();
 }

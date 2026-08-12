@@ -76,6 +76,7 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .mt-label{font-size:12px;color:var(--text-body)}
 .mt-opt{font-size:13px;color:var(--text-2);display:flex;align-items:center;gap:5px;cursor:pointer}
 .mt-opt input{accent-color:var(--green);margin:0}
+.hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
 .notice-box{grid-column:1/-1;background:rgba(27,90,160,.05);border:.5px solid rgba(27,90,160,.25);border-radius:8px;padding:.95rem 1rem}
 .notice-title{font-size:12px;font-weight:600;color:var(--green);margin-bottom:4px}
 .notice-text{font-size:12px;color:#4a5b6c;line-height:1.7}
@@ -127,6 +128,10 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="flow-step"><div class="flow-num">4</div><div class="flow-txt">收到行前信<br>準備開課</div></div>
     </div>
     <form class="form-g" id="signupForm" novalidate>
+      <div class="hp-field" aria-hidden="true">
+        <label for="website">網站</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
       <div class="fg full">
         <label for="session">報名梯次 <span class="req">*</span></label>
         <select id="session" name="session" required>
@@ -379,6 +384,7 @@ form.addEventListener('submit', async (e) => {
     })(),
     notes: document.getElementById('notes').value.trim() || '—',
     photoConsent: document.querySelector('input[name="photoConsent"]:checked').value,
+    website: document.getElementById('website').value,
     groupMembers: ['gm1','gm2','gm3','gm4','gm5'].map(id => document.getElementById(id).value.trim()).filter(Boolean).join('、') || '—',
     submittedAt: new Date().toISOString()
   };
@@ -402,12 +408,11 @@ form.addEventListener('submit', async (e) => {
       window.location.href = 'index.html';
       return;
     } else {
-      throw new Error(result.message || '送出失敗');
+      alert('送出失敗：' + (result.message || '請稍後再試，或直接來信 stayyoung985@gmail.com 報名。'));
+      return;
     }
   } catch (err) {
-    alert(err.message === '此學員已使用相同信箱報名過'
-      ? '送出失敗：此學員已使用相同信箱報名過。'
-      : '送出失敗，請稍後再試，或直接來信 stayyoung985@gmail.com 報名。');
+    alert('送出失敗，請稍後再試，或直接來信 stayyoung985@gmail.com 報名。');
   } finally {
     btn.disabled = false;
     btn.textContent = '送出報名 →';
