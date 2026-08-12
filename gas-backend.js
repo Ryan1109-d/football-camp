@@ -39,14 +39,19 @@ function doPost(e) {
     if (data.website && String(data.website).trim() !== '') {
       return jsonResponse({ status: 'ok', waitlist: false });
     }
-    // ── 防濫用 2：限流（同一 email 10 分鐘內僅能送出一次）──
+    // ── 防濫用 2：重複送出保護 ──
+    // key = 信箱＋學員姓名＋梯次，因此同一家長用同一信箱替不同孩子報名不受影響；
+    // 記錄時機在「寫入成功之後」，因此任何送出失敗都不會佔用冷卻時間。
     const cache = CacheService.getScriptCache();
-    const rateKey = 'rl_' + String(data.email || '').toLowerCase().trim();
+    const rateKey = 'rl_' + [
+      String(data.email || '').toLowerCase().trim(),
+      String(data.studentName || '').trim(),
+      String(data.session || '').trim()
+    ].join('|');
     if (cache.get(rateKey)) {
       return jsonResponse({ status: 'error',
-        message: '您剛剛已送出過報名，請稍候幾分鐘再試，或直接來信確認報名狀態。' });
+        message: '這筆報名剛剛已經送出成功了，請稍候幾分鐘再試，或直接來信確認報名狀態。' });
     }
-    cache.put(rateKey, '1', 600);
     // ---- 基本驗證 ----
     const required = ['session', 'studentName', 'gender', 'age', 'grade', 'email',
                       'emgName', 'emgPhone', 'payerName', 'payerPhone', 'payerEmail',
@@ -95,6 +100,8 @@ function doPost(e) {
       data.notes || '—',
       data.photoConsent || '同意'
     ]);
+    // ---- 寫入成功，此時才記錄冷卻（避免失敗的送出佔用時間）----
+    cache.put(rateKey, '1', 600);
     // ---- 寄信 ----
     if (isWaitlist) {
       sendWaitlistEmail(data);
