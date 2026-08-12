@@ -2,8 +2,8 @@
  * 清華大學足球冬令營 2027 — Google Apps Script 後端
  *
  * 部署步驟：
- * 1. Google Sheet 第一列欄位標題（共 19 欄，與下方 appendRow 順序一致）：
- *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 午餐 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意
+ * 1. Google Sheet 第一列欄位標題（共 24 欄，與下方 appendRow 順序一致）：
+ *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 午餐 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意 | 健康狀況 | 健康說明 | 緊急醫療授權 | 繳費通知 | 系統訊息
  * 2. Sheet 上方選 擴充功能 → Apps Script，貼上本檔案全部內容
  * 3. 修改下方 CONFIG 的 SHEET_ID（網址中 /d/ 和 /edit 之間那串）
  * 4. 部署 → 新增部署作業 → 類型選「網頁應用程式」
@@ -16,7 +16,7 @@
  * - 第 26 位起     → 狀態「候補」，寄候補通知信
  */
 const CONFIG = {
-  SHEET_ID: '1bIKlVNhUEBhvMjn3AMXphhKFShkGfrYBhAU-9f4uKVk',       // TODO: 換成實際 Sheet ID
+  SHEET_ID: 'YOUR_SHEET_ID_HERE',       // TODO: 換成實際 Sheet ID（只在 Apps Script 填，不要 commit）
   SHEET_NAME: '報名名單',                 // 分頁名稱
   CAPACITY: 25,                          // 正取名額
   CAMP_NAME: '清華大學足球冬令營 2027',
@@ -40,19 +40,38 @@ const COL = {
   TIME: 0, SESSION: 1, STUDENT: 2, GENDER: 3, AGE: 4, GRADE: 5,
   EMAIL: 6, EMG_NAME: 7, EMG_PHONE: 8,
   PAYER_NAME: 9, PAYER_PHONE: 10, PAYER_EMAIL: 11,
-  DISCOUNT: 12, LUNCH: 13, STATUS: 14
+  DISCOUNT: 12, LUNCH: 13, STATUS: 14,
+  GROUP: 15, SHIRT: 16, NOTES: 17, PHOTO: 18,
+  HEALTH: 19, HEALTH_DETAIL: 20, MEDICAL: 21
 };
+const NOTICE_COL = 23;   // 繳費通知（1-based）
+const SYSMSG_COL = 24;   // 系統訊息（1-based）
+
+/** 給 Sheet 儲存格用：前置單引號讓 Sheets 視為純文字，防公式注入 */
+function safeCell(v, maxLen) {
+  var s = String(v == null ? '' : v).replace(/[\u0000-\u001F\u007F]/g, ' ').trim();
+  if (maxLen && s.length > maxLen) s = s.slice(0, maxLen);
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+  return s;
+}
+/** 給 email 內文用：拿掉換行與控制字元，限長，防信件標頭注入 */
+function safeText(v, maxLen) {
+  var s = String(v == null ? '' : v).replace(/[\r\n\u0000-\u001F\u007F]+/g, ' ').trim();
+  return (maxLen && s.length > maxLen) ? s.slice(0, maxLen) : s;
+}
 function doPost(e) {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(10000)) {
+    return jsonResponse({ status: 'error', message: '系統忙碌中，請稍後再送出一次' });
+  }
   try {
     const data = JSON.parse(e.postData.contents);
     // ── 防濫用 1：honeypot（機器人會填、真人看不到）──
-    // 靜默丟棄：回傳與正常送出相同的成功格式，但不寫入、不寄信
     if (data.website && String(data.website).trim() !== '') {
       return jsonResponse({ status: 'ok', waitlist: false });
     }
     // ── 防濫用 2：重複送出保護 ──
-    // key = 信箱＋學員姓名＋梯次，因此同一家長用同一信箱替不同孩子報名不受影響；
-    // 記錄時機在「寫入成功之後」，因此任何送出失敗都不會佔用冷卻時間。
+    // key = 信箱＋學員姓名＋梯次；記錄時機在寫入成功之後，失敗的送出不佔冷卻時間。
     const cache = CacheService.getScriptCache();
     const rateKey = 'rl_' + [
       String(data.email || '').toLowerCase().trim(),
@@ -66,62 +85,94 @@ function doPost(e) {
     // ---- 基本驗證 ----
     const required = ['session', 'studentName', 'gender', 'age', 'grade', 'email',
                       'emgName', 'emgPhone', 'payerName', 'payerPhone', 'payerEmail',
-                      'discount', 'lunch', 'shirtSize'];
+                      'discount', 'lunch', 'shirtSize', 'healthStatus', 'photoConsent'];
     for (const key of required) {
       if (!data[key] || String(data[key]).trim() === '') {
         return jsonResponse({ status: 'error', message: '缺少必填欄位：' + key });
       }
     }
+    if (String(data.healthStatus).trim() === '有特殊狀況' &&
+        (!data.healthDetail || String(data.healthDetail).trim() === '')) {
+      return jsonResponse({ status: 'error', message: '請填寫健康狀況說明' });
+    }
+    if (!data.medicalConsent) {
+      return jsonResponse({ status: 'error', message: '請勾選緊急醫療授權' });
+    }
+    // ---- 信箱格式驗證（前端驗證對直接打 API 無效，後端必須自己驗）----
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+    if (!EMAIL_RE.test(String(data.email).trim())) {
+      return jsonResponse({ status: 'error', message: '信箱格式有誤，請確認後再送出' });
+    }
+    if (!EMAIL_RE.test(String(data.payerEmail).trim())) {
+      return jsonResponse({ status: 'error', message: '繳款人信箱格式有誤，請確認後再送出' });
+    }
+    // ---- 淨化（比對與寫入都用這組值）----
+    const clean = {
+      session:      safeCell(data.session, 40),
+      studentName:  safeCell(data.studentName, 20),
+      gender:       safeCell(data.gender, 20),
+      age:          safeCell(data.age, 20),
+      grade:        safeCell(data.grade, 20),
+      email:        safeCell(data.email, 254),
+      emgName:      safeCell(data.emgName, 20),
+      emgPhone:     safeCell(data.emgPhone, 15),
+      payerName:    safeCell(data.payerName, 20),
+      payerPhone:   safeCell(data.payerPhone, 15),
+      payerEmail:   safeCell(data.payerEmail, 254),
+      discount:     safeCell(data.discount, 20),
+      lunch:        safeCell(data.lunch, 30),
+      groupMembers: safeCell(data.groupMembers, 200) || '—',
+      shirtSize:    safeCell(data.shirtSize, 20),
+      notes:        safeCell(data.notes, 200) || '—',
+      photoConsent: safeCell(data.photoConsent, 10),
+      health:       safeCell(data.healthStatus, 20),
+      healthDetail: safeCell(data.healthDetail, 200) || '—',
+      medical:      data.medicalConsent ? '同意' : ''
+    };
     const sheet = SpreadsheetApp.openById(CONFIG.SHEET_ID).getSheetByName(CONFIG.SHEET_NAME);
-    // ---- 重複報名檢查（同收信信箱 + 同學員姓名 + 同梯次）----
     const rows = sheet.getDataRange().getValues();
+    // ---- 重複報名檢查（用淨化後的值比對）----
     for (let i = 1; i < rows.length; i++) {
-      if (rows[i][COL.EMAIL] === data.email &&
-          rows[i][COL.STUDENT] === data.studentName &&
-          rows[i][COL.SESSION] === data.session) {
+      if (String(rows[i][COL.EMAIL]).trim() === clean.email &&
+          String(rows[i][COL.STUDENT]).trim() === clean.studentName &&
+          String(rows[i][COL.SESSION]).trim() === clean.session) {
         return jsonResponse({ status: 'error', message: '此學員已使用相同信箱報名過' });
       }
     }
-    // ---- 判斷正取或候補（以同梯次人數計算）----
+    // ---- 判斷正取或候補（只計算「正取」，取消者不佔名額）----
     let sessionCount = 0;
     for (let i = 1; i < rows.length; i++) {
-      if (rows[i][COL.SESSION] === data.session) sessionCount++;
+      const st = String(rows[i][COL.STATUS]).trim();
+      if (String(rows[i][COL.SESSION]).trim() === clean.session && st === '正取') sessionCount++;
     }
     const isWaitlist = sessionCount >= CONFIG.CAPACITY;
     const status = isWaitlist ? '候補' : '正取';
-    // ---- 寫入 Sheet（順序 = 欄位標題順序）----
+    // ---- 寫入 Sheet（順序 = 欄位標題順序，共 24 欄）----
     sheet.appendRow([
       new Date(),
-      data.session,
-      data.studentName,
-      data.gender,
-      data.age,
-      data.grade,
-      data.email,
-      data.emgName,
-      data.emgPhone,
-      data.payerName,
-      data.payerPhone,
-      data.payerEmail,
-      data.discount,
-      data.lunch,
+      clean.session, clean.studentName, clean.gender, clean.age, clean.grade,
+      clean.email, clean.emgName, clean.emgPhone,
+      clean.payerName, clean.payerPhone, clean.payerEmail,
+      clean.discount, clean.lunch,
       status,
-      data.groupMembers || '—',
-      data.shirtSize,
-      data.notes || '—',
-      data.photoConsent || '同意'
+      clean.groupMembers, clean.shirtSize, clean.notes, clean.photoConsent,
+      clean.health, clean.healthDetail, clean.medical,
+      '', ''   // 繳費通知、系統訊息（留空，由後續流程填入）
     ]);
-    // ---- 寫入成功，此時才記錄冷卻（避免失敗的送出佔用時間）----
+    // ---- 寫入成功，此時才記錄冷卻 ----
     cache.put(rateKey, '1', 600);
-    // ---- 寄信 ----
-    if (isWaitlist) {
-      sendWaitlistEmail(data);
-    } else {
-      sendConfirmEmail(data);
+    // ---- 寄信：失敗不得讓家長看到「送出失敗」（資料已經寫進去了）----
+    try {
+      if (isWaitlist) { sendWaitlistEmail(data); } else { sendConfirmEmail(data); }
+    } catch (mailErr) {
+      sheet.getRange(sheet.getLastRow(), SYSMSG_COL)
+           .setValue('寄信失敗：' + safeCell(mailErr.message, 200));
     }
     return jsonResponse({ status: 'ok', waitlist: isWaitlist });
   } catch (err) {
     return jsonResponse({ status: 'error', message: err.message });
+  } finally {
+    lock.releaseLock();
   }
 }
 /** 報名確認信（正取） */
@@ -129,15 +180,15 @@ function sendConfirmEmail(data) {
   const subject = `【${CONFIG.CAMP_NAME}】報名確認信`;
   const body =
 `您好：
-已收到 ${data.studentName} 的報名資料，報名登記完成！
+已收到 ${safeText(data.studentName,20)} 的報名資料，報名登記完成！
 ── 報名資訊 ──
 營隊：${CONFIG.CAMP_NAME}
-梯次：${data.session}
+梯次：${safeText(data.session,40)}
 時間：${CONFIG.CAMP_TIME}
-學員：${data.studentName}（${data.grade}，${data.gender}，${data.age} 歲）
-緊急聯絡人：${data.emgName}（${data.emgPhone}）
-優惠身份：${data.discount}
-午餐：${data.lunch}\n衣服尺寸：${data.shirtSize}${data.notes && data.notes !== '—' ? '\n備註：' + data.notes : ''}
+學員：${safeText(data.studentName,20)}（${safeText(data.grade,20)}，${safeText(data.gender,20)}，${safeText(data.age,20)} 歲）
+緊急聯絡人：${safeText(data.emgName,20)}（${safeText(data.emgPhone,15)}）
+優惠身份：${safeText(data.discount,20)}
+午餐：${safeText(data.lunch,30)}\n衣服尺寸：${safeText(data.shirtSize,20)}${String(data.healthStatus).trim() === '有特殊狀況' ? '\n健康狀況：' + safeText(data.healthDetail,200) : ''}${data.notes && data.notes !== '—' ? '\n備註：' + safeText(data.notes,200) : ''}
 ── 接下來的流程 ──
 1. 報名人數達開班標準並確認開班後，我們會寄送「繳費通知」至繳款人信箱
 2. 完成繳費後即確認錄取
@@ -159,7 +210,7 @@ function sendWaitlistEmail(data) {
   const subject = `【${CONFIG.CAMP_NAME}】候補登記通知`;
   const body =
 `您好：
-感謝您為 ${data.studentName} 報名 ${CONFIG.CAMP_NAME}（${data.session}）。
+感謝您為 ${safeText(data.studentName,20)} 報名 ${CONFIG.CAMP_NAME}（${safeText(data.session,40)}）。
 目前正取名額已滿，您的報名已列入「候補名單」。
 若有名額釋出，我們將立即以 email 通知您，屆時再依信中說明完成報名程序即可。
 候補期間不會收取任何費用。
@@ -194,13 +245,16 @@ function doGet(e) {
 //   函式 dailyBackup／時間驅動／日計時器／23:00–00:00
 // ══════════════════════════════════════════
 function dailyBackup() {
-  const src = SpreadsheetApp.openById(CONFIG.SHEET_ID);
+  const FOLDER_NAME = 'StayYoung 報名備份';
+  const it = DriveApp.getFoldersByName(FOLDER_NAME);
+  const folder = it.hasNext() ? it.next() : DriveApp.createFolder(FOLDER_NAME);
+  const src = DriveApp.getFileById(CONFIG.SHEET_ID);
   const stamp = Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyyMMdd');
-  const copy = src.copy('【備份】足球冬令營報名_' + stamp);
-  // 只保留最近 14 份備份，其餘丟進垃圾桶
-  const it = DriveApp.searchFiles('title contains "【備份】足球冬令營報名_"');
+  const copy = src.makeCopy('【備份】足球冬令營報名_' + stamp, folder);
+  // 只保留最近 14 份，搜尋範圍限定該資料夾
+  const files = folder.getFiles();
   const list = [];
-  while (it.hasNext()) list.push(it.next());
+  while (files.hasNext()) list.push(files.next());
   list.sort((a, b) => b.getDateCreated() - a.getDateCreated());
   list.slice(14).forEach(f => f.setTrashed(true));
   return copy.getId();
@@ -208,9 +262,8 @@ function dailyBackup() {
 
 // ══════════════════════════════════════════
 // 繳費通知信
-// NOTICE_COL：Sheet 第 20 欄（第一列標題請加「繳費通知」）
+// NOTICE_COL / SYSMSG_COL 定義於檔案上方
 // ══════════════════════════════════════════
-const NOTICE_COL = 20;
 
 /** 收款資訊是否還是測試值 */
 function paymentIsPlaceholder() {
@@ -311,11 +364,43 @@ function sendPaymentNotice() {
       name: 'Stay Young 清華大學足球冬令營'
     };
     const notifyEmail = String(r[COL.EMAIL] || '').trim();
-    if (notifyEmail && notifyEmail !== payerEmail) opts.cc = notifyEmail;
+    if (notifyEmail && notifyEmail !== payerEmail) opts.bcc = notifyEmail;
     MailApp.sendEmail(opts);
     sheet.getRange(i + 1, NOTICE_COL)
          .setValue(Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy/MM/dd HH:mm'));
     sent++;
   }
   return '已寄送 ' + sent + ' 封，略過 ' + skipped + ' 筆。';
+}
+
+// ══════════════════════════════════════════
+// 取消開班通知（未達開班門檻時手動執行）
+// 用法：函式下拉選 sendCancelNotice，先在下面改好梯次名稱再執行
+// ══════════════════════════════════════════
+function sendCancelNotice(sessionName) {
+  if (!sessionName) throw new Error('請傳入梯次名稱，例如 sendCancelNotice("第一梯 2027/1/25–1/29")');
+  const sheet = SpreadsheetApp.openById(CONFIG.SHEET_ID).getSheetByName(CONFIG.SHEET_NAME);
+  const rows = sheet.getDataRange().getValues();
+  let sent = 0;
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][COL.SESSION]).trim() !== String(sessionName).trim()) continue;
+    if (String(rows[i][COL.STATUS]).trim() === '已取消通知') continue;
+    MailApp.sendEmail({
+      to: rows[i][COL.EMAIL],
+      subject: '【' + CONFIG.CAMP_NAME + '】' + sessionName + ' 未達開班人數通知',
+      body:
+'您好：\n\n' +
+'感謝您為 ' + rows[i][COL.STUDENT] + ' 報名 ' + CONFIG.CAMP_NAME + '（' + sessionName + '）。\n\n' +
+'很遺憾，本梯次報名人數未達開班標準，經評估後將不予開班，在此向您致上最深的歉意。\n\n' +
+'由於本營隊採「確認開班後才收費」的方式，您並未被收取任何費用，無需辦理退費手續。\n\n' +
+'若後續有加開梯次或其他營隊資訊，我們會第一時間通知您。\n' +
+'造成您的不便，我們深感抱歉。\n\n' +
+'Stay Young 運動團隊\n' + CONFIG.REPLY_EMAIL,
+      replyTo: CONFIG.REPLY_EMAIL,
+      name: 'Stay Young 運動團隊'
+    });
+    sheet.getRange(i + 1, COL.STATUS + 1).setValue('已取消通知');
+    sent++;
+  }
+  return sent + ' 封已寄出';
 }
