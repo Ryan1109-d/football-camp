@@ -50,7 +50,7 @@
   --text:#1c2733;
   --text-2:#22303f;
   --text-body:#5a6b7c;
-  --text-muted:#7b8a99;
+  --text-muted:#5f7182;
   --text-faint:#9aa7b3;
   --green:#1560b8;
   --red:#b0483a;
@@ -164,8 +164,8 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
     </div>
     <form class="form-g" id="signupForm" novalidate>
       <div class="hp-field" aria-hidden="true">
-        <label for="website">網站</label>
-        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+        <label for="contact_pref_2">聯絡偏好</label>
+        <input type="text" id="contact_pref_2" name="contact_pref_2" tabindex="-1" autocomplete="off">
       </div>
       <div class="fg full">
         <label for="session">報名梯次 <span class="req">*</span></label>
@@ -299,25 +299,34 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
         <input type="text" id="notes" name="notes" placeholder="其他希望教練留意的事項（選填）">
       </div>
       <div class="fg full">
-        <label>照片使用同意 <span class="req">*</span>　<span style="color:var(--text-faint);font-weight:400">營隊每日拍攝訓練花絮分享至家長群組，讓家長掌握孩子上課狀況</span></label>
+        <label>照片使用同意 <span class="req">*</span></label>
         <div class="pc-row">
-          <label class="pc-opt"><input type="radio" name="photoConsent" value="同意">同意</label>
-          <label class="pc-opt"><input type="radio" name="photoConsent" value="不同意">不同意（拍攝時將迴避）</label>
+          <label class="pc-opt"><input type="radio" name="photoConsent" value="同意" required>同意分享至家長群組</label>
+          <label class="pc-opt"><input type="radio" name="photoConsent" value="不同意">不同意</label>
         </div>
       </div>
       <div class="fg full">
         <label class="same-check" style="display:flex;align-items:center;gap:8px;cursor:pointer;margin:0">
-          <input type="checkbox" id="medicalConsent" name="medicalConsent">
+          <input type="checkbox" id="medicalConsent" name="medicalConsent" required>
           <span>學員於活動中發生緊急傷病時，同意營隊人員先行採取必要之急救或送醫措施，並同時聯繫家長 <span class="req">*</span></span>
         </label>
       </div>
-      <p class="fnote">本表單蒐集之個人資料僅用於本營隊報名聯繫、保險投保及活動安全管理，不作其他用途。</p>
+      <div class="fg full">
+        <label class="same-check" style="display:flex;align-items:center;gap:8px;cursor:pointer;margin:0">
+          <input type="checkbox" id="guardianConsent" name="guardianConsent" required>
+          <span>本人為學員之法定代理人，或已取得法定代理人同意，得以代為完成本報名程序 <span class="req">*</span></span>
+        </label>
+      </div>
+      <div style="background:rgba(106,165,221,.06);border:1px solid rgba(106,165,221,.15);border-radius:10px;padding:1rem;font-size:0.85rem;line-height:1.8;color:var(--text-muted);margin:1rem 0">
+        <strong style="color:white">本表單蒐集之個人資料，</strong><br>
+        僅用於本營隊報名、聯繫、保險投保及活動安全管理，活動結束後六個月內刪除，不作其他用途。
+      </div>
       <div class="notice-box">
         <div class="notice-title">報名後流程說明</div>
         <div class="notice-text">送出報名後，您會先收到「報名確認信」。待報名人數達開班標準並確認開班後，我們才會寄送「繳費通知」，屆時再完成繳費即可。開班前不會收取任何費用。</div>
       </div>
       <p class="fnote">報名截止：2027/1/10（日）。額滿後自動進入候補名單，有名額釋出時以 email 通知。退費規則詳見<a href="index.html#pricing">首頁收費方案區</a>。</p>
-      <div class="msg" id="formMsg"></div>
+      <div class="msg" id="formMsg" role="status" aria-live="polite"></div>
       <button type="submit" class="fsub" id="submitBtn">送出報名 →</button>
     </form>
   </div>
@@ -336,6 +345,8 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
 // TODO: 部署 Google Apps Script 後，把 Web App URL 貼到這裡
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbysnL15vEWDnkWhnviaGPQI47YyXOsVarPdfUJFt2ZWSDW2aIrUdI4nZJCgVwlBKp2b/exec';
 const form = document.getElementById('signupForm');
+// 無障礙：必填欄位補 aria-required（表單為 novalidate，required 僅作語意標記）
+document.querySelectorAll('#signupForm [required]').forEach(el => el.setAttribute('aria-required', 'true'));
 const btn = document.getElementById('submitBtn');
 const msgBox = document.getElementById('formMsg');
 // 繳款人同緊急聯絡人
@@ -396,8 +407,7 @@ form.addEventListener('submit', async (e) => {
     el.classList.remove('err');
     if (!el.value || !String(el.value).trim()) { el.classList.add('err'); valid = false; }
   });
-  const age = document.getElementById('age');
-  if (age.value && (Number(age.value) < 7 || Number(age.value) > 13)) { age.classList.add('err'); valid = false; }
+  // 年齡不做範圍驗證：年級與實際年齡常有落差，寧可人工事後過濾也不程式擋人
   [['emgPhone', isPhone], ['payerPhone', isPhone], ['email', isEmail], ['payerEmail', isEmail]].forEach(([id, fn]) => {
     const el = document.getElementById(id);
     if (el.value.trim() && !fn(el.value)) { el.classList.add('err'); valid = false; }
@@ -424,6 +434,12 @@ form.addEventListener('submit', async (e) => {
   // 緊急醫療授權必勾
   if (!document.getElementById('medicalConsent').checked) {
     msgBox.textContent = '請勾選緊急醫療授權。';
+    msgBox.classList.add('fail');
+    return;
+  }
+  // 法定代理人聲明必勾
+  if (!document.getElementById('guardianConsent').checked) {
+    msgBox.textContent = '請勾選法定代理人聲明。';
     msgBox.classList.add('fail');
     return;
   }
@@ -472,7 +488,8 @@ form.addEventListener('submit', async (e) => {
     healthStatus: document.querySelector('input[name="healthStatus"]:checked').value,
     healthDetail: document.getElementById('healthDetail').value.trim() || '—',
     medicalConsent: document.getElementById('medicalConsent').checked,
-    website: document.getElementById('website').value,
+    guardianConsent: document.getElementById('guardianConsent').checked,
+    contact_pref_2: document.getElementById('contact_pref_2').value,
     groupMembers: ['gm1','gm2','gm3','gm4','gm5'].map(id => document.getElementById(id).value.trim()).filter(Boolean).join('、') || '—',
     submittedAt: new Date().toISOString()
   };

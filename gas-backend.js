@@ -2,8 +2,8 @@
  * 清華大學足球冬令營 2027 — Google Apps Script 後端
  *
  * 部署步驟：
- * 1. Google Sheet 第一列欄位標題（共 24 欄，與下方 appendRow 順序一致）：
- *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 午餐 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意 | 健康狀況 | 健康說明 | 緊急醫療授權 | 繳費通知 | 系統訊息
+ * 1. Google Sheet 第一列欄位標題（共 25 欄，與下方 appendRow 順序一致）：
+ *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 午餐 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意 | 健康狀況 | 健康說明 | 緊急醫療授權 | 法定代理人聲明 | 繳費通知 | 系統訊息
  * 2. Sheet 上方選 擴充功能 → Apps Script，貼上本檔案全部內容
  * 3. 修改下方 CONFIG 的 SHEET_ID（網址中 /d/ 和 /edit 之間那串）
  * 4. 部署 → 新增部署作業 → 類型選「網頁應用程式」
@@ -42,10 +42,10 @@ const COL = {
   PAYER_NAME: 9, PAYER_PHONE: 10, PAYER_EMAIL: 11,
   DISCOUNT: 12, LUNCH: 13, STATUS: 14,
   GROUP: 15, SHIRT: 16, NOTES: 17, PHOTO: 18,
-  HEALTH: 19, HEALTH_DETAIL: 20, MEDICAL: 21
+  HEALTH: 19, HEALTH_DETAIL: 20, MEDICAL: 21, GUARDIAN: 22
 };
-const NOTICE_COL = 23;   // 繳費通知（1-based）
-const SYSMSG_COL = 24;   // 系統訊息（1-based）
+const NOTICE_COL = 24;   // 繳費通知（1-based）
+const SYSMSG_COL = 25;   // 系統訊息（1-based）
 
 /** 給 Sheet 儲存格用：前置單引號讓 Sheets 視為純文字，防公式注入 */
 function safeCell(v, maxLen) {
@@ -67,7 +67,7 @@ function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     // ── 防濫用 1：honeypot（機器人會填、真人看不到）──
-    if (data.website && String(data.website).trim() !== '') {
+    if (data.contact_pref_2 && String(data.contact_pref_2).trim() !== '') {
       return jsonResponse({ status: 'ok', waitlist: false });
     }
     // ── 防濫用 2：重複送出保護 ──
@@ -98,6 +98,9 @@ function doPost(e) {
     if (!data.medicalConsent) {
       return jsonResponse({ status: 'error', message: '請勾選緊急醫療授權' });
     }
+    if (!data.guardianConsent) {
+      return jsonResponse({ status: 'error', message: '請勾選法定代理人聲明' });
+    }
     // ---- 信箱格式驗證（前端驗證對直接打 API 無效，後端必須自己驗）----
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
     if (!EMAIL_RE.test(String(data.email).trim())) {
@@ -105,6 +108,14 @@ function doPost(e) {
     }
     if (!EMAIL_RE.test(String(data.payerEmail).trim())) {
       return jsonResponse({ status: 'error', message: '繳款人信箱格式有誤，請確認後再送出' });
+    }
+    // ---- 電話格式驗證 ----
+    const PHONE_RE = /^0\d{1,3}-?\d{6,8}$/;
+    if (!PHONE_RE.test(String(data.emgPhone).trim())) {
+      return jsonResponse({ status: 'error', message: '緊急聯絡人電話格式有誤，請確認後再送出' });
+    }
+    if (!PHONE_RE.test(String(data.payerPhone).trim())) {
+      return jsonResponse({ status: 'error', message: '繳款人電話格式有誤，請確認後再送出' });
     }
     // ---- 淨化（比對與寫入都用這組值）----
     const clean = {
@@ -127,7 +138,8 @@ function doPost(e) {
       photoConsent: safeCell(data.photoConsent, 10),
       health:       safeCell(data.healthStatus, 20),
       healthDetail: safeCell(data.healthDetail, 200) || '—',
-      medical:      data.medicalConsent ? '同意' : ''
+      medical:      data.medicalConsent ? '同意' : '',
+      guardian:     data.guardianConsent ? '同意' : ''
     };
     const sheet = SpreadsheetApp.openById(CONFIG.SHEET_ID).getSheetByName(CONFIG.SHEET_NAME);
     const rows = sheet.getDataRange().getValues();
@@ -139,6 +151,15 @@ function doPost(e) {
         return jsonResponse({ status: 'error', message: '此學員已使用相同信箱報名過' });
       }
     }
+    // ---- 報名關閉時間檢查：1/25 開課，前一天截止 ----
+    const CAMP_START = new Date('2027-01-25T00:00:00+08:00');
+    // 關閉點 = 開課日前一天 23:59:59（開課日零時的前一秒）。
+    // 注意：不可寫成 -24h，那會變成 1/24 00:00:00，等於整個 1/24 都不能報名。
+    const CLOSE_TIME = new Date(CAMP_START.getTime() - 1000);
+    const now = new Date();
+    if (now > CLOSE_TIME) {
+      return jsonResponse({ status: 'error', message: '很抱歉，本梯次報名已截止。如有候補需求請直接來信 stayyoung985@gmail.com' });
+    }
     // ---- 判斷正取或候補（只計算「正取」，取消者不佔名額）----
     let sessionCount = 0;
     for (let i = 1; i < rows.length; i++) {
@@ -147,7 +168,7 @@ function doPost(e) {
     }
     const isWaitlist = sessionCount >= CONFIG.CAPACITY;
     const status = isWaitlist ? '候補' : '正取';
-    // ---- 寫入 Sheet（順序 = 欄位標題順序，共 24 欄）----
+    // ---- 寫入 Sheet（順序 = 欄位標題順序，共 25 欄）----
     sheet.appendRow([
       new Date(),
       clean.session, clean.studentName, clean.gender, clean.age, clean.grade,
@@ -156,7 +177,7 @@ function doPost(e) {
       clean.discount, clean.lunch,
       status,
       clean.groupMembers, clean.shirtSize, clean.notes, clean.photoConsent,
-      clean.health, clean.healthDetail, clean.medical,
+      clean.health, clean.healthDetail, clean.medical, clean.guardian,
       '', ''   // 繳費通知、系統訊息（留空，由後續流程填入）
     ]);
     // ---- 寫入成功，此時才記錄冷卻 ----

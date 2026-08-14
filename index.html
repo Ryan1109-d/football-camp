@@ -67,7 +67,7 @@
   --text:#1c2733;
   --text-2:#22303f;
   --text-body:#5a6b7c;
-  --text-muted:#7b8a99;
+  --text-muted:#5f7182;
   --text-faint:#9aa7b3;
   --green:#1560b8;
   --green-deep:#0f3f7d;
@@ -513,7 +513,14 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
 // 滾動浮現：進出視窗都重播
 const io = new IntersectionObserver((entries) => {
   entries.forEach(e => {
-    e.target.classList.toggle('visible', e.isIntersecting);
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      e.target.addEventListener('transitionend', () => {
+        e.target.classList.remove('reveal', 'visible');
+        e.target.style.opacity = '';
+        e.target.style.transform = '';
+      }, { once: true });
+    }
   });
 }, { threshold: 0.15 });
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
@@ -538,10 +545,17 @@ function closeLightbox() {
 }
 lb.addEventListener('click', closeLightbox);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
-// FAQ 手風琴
-document.querySelectorAll('.faq-q').forEach(btn => {
+// FAQ 手風琴（含 aria-expanded 狀態同步，讓螢幕閱讀器知道展開與否）
+document.querySelectorAll('.faq-q').forEach((btn, i) => {
+  const panel = btn.nextElementSibling;
+  btn.setAttribute('aria-expanded', 'false');
+  if (panel) {
+    if (!panel.id) panel.id = 'faq-a-' + i;
+    btn.setAttribute('aria-controls', panel.id);
+  }
   btn.addEventListener('click', () => {
-    btn.parentElement.classList.toggle('open');
+    const open = btn.parentElement.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 });
 </script>
