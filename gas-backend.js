@@ -29,9 +29,9 @@ const CONFIG = {
   //    sendPaymentNotice() 會拒絕寄給家長，只寄預覽給自己。
   //    要正式啟用時，把三個值換成真實資料（不要 commit 進 repo）。
   PAYMENT: {
-    BANK: '（測試）台灣銀行 004',
-    ACCOUNT_NAME: '（測試）戶名尚未設定',
-    ACCOUNT_NO: '（測試）0000000000000',
+    BANK: '國泰世華銀行 013',
+    ACCOUNT_NAME: '（測試）戶名尚未設定',   // ⚠️ 換成真實戶名後才會開始寄繳費通知
+    ACCOUNT_NO: '699522993691',
     DEADLINE_DAYS: 7
   }
 };
@@ -293,7 +293,12 @@ function paymentIsPlaceholder() {
     .some(v => String(v).indexOf('（測試）') === 0);
 }
 
-/** 依報名時間、優惠身份、午餐計算應繳金額 */
+/**
+ * 依報名時間與優惠身份計算應轉帳金額。
+ * ⚠️ 午餐費「不」併入轉帳總額：本營隊金流走學校、學校依總額抽成，
+ *    併進去會連午餐費一起被抽。午餐一律開課第一天現金交給教練，
+ *    與 signup.html／index.html FAQ 的說法一致。羽球營的金流不經學校，作法不同。
+ */
 function calcAmount(row) {
   const regTime = row[COL.TIME];
   const early = (regTime instanceof Date) &&
@@ -301,8 +306,8 @@ function calcAmount(row) {
   const d = String(row[COL.DISCOUNT] || '');
   const discounted = early || d === '團報' || d === '清大教職員';
   const base = discounted ? 7500 : 7800;
-  const meal = String(row[COL.LUNCH] || '').indexOf('代訂') >= 0 ? 500 : 0;
-  return { base: base, meal: meal, total: base + meal,
+  const mealCash = String(row[COL.LUNCH] || '').indexOf('代訂') >= 0 ? 500 : 0;
+  return { base: base, mealCash: mealCash, total: base,
            label: discounted ? (early ? '早鳥優惠價' : '優惠價') : '一般報名價' };
 }
 
@@ -319,9 +324,9 @@ ${CONFIG.CAMP_NAME} 已達開班標準，確定開班！
 
 ── 費用明細 ──
 梯次：${session}
-營隊費用：NT$ ${amt.base}（${amt.label}）${amt.meal ? '\n代訂午餐：NT$ ' + amt.meal + '（五天）' : ''}
-應繳總額：NT$ ${amt.total}
-
+營隊費用：NT$ ${amt.base}（${amt.label}）
+應轉帳總額：NT$ ${amt.total}
+${amt.mealCash ? '\n※ 您另有選擇代訂午餐 NT$ ' + amt.mealCash + '（五天）。\n　 午餐費「不含」在上方轉帳金額內，請於開課第一天直接交給教練。\n' : ''}
 ── 轉帳資訊 ──
 銀行：${p.BANK}
 戶名：${p.ACCOUNT_NAME}
@@ -343,7 +348,7 @@ ${CONFIG.REPLY_EMAIL}`;
  * 隨時可以安全執行。
  */
 function previewPaymentNotice() {
-  const amt = { base: 7500, meal: 500, total: 8000, label: '早鳥優惠價' };
+  const amt = { base: 7500, mealCash: 500, total: 7500, label: '早鳥優惠價' };
   const body = buildPaymentBody('王小華（範例）', '第一梯 2027/1/25–1/29', amt);
   MailApp.sendEmail({
     to: CONFIG.REPLY_EMAIL,
