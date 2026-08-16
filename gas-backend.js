@@ -24,7 +24,7 @@ const CONFIG = {
   CAMP_TIME: '每日 09:00–17:00（08:30 起開放報到，12:00–14:00 午休）',
   REPLY_EMAIL: 'stayyoung985@gmail.com',
   // 早鳥截止（含當日）。此日期前完成報名者，不限身份適用優惠價
-  EARLY_BIRD_DEADLINE: '2026-11-30T23:59:59+08:00',
+  EARLY_BIRD_DEADLINE: '2026-11-20T23:59:59+08:00',
   // ⚠️ 收款資訊：以下為測試值。只要任何一項還是「（測試）」開頭，
   //    sendPaymentNotice() 會拒絕寄給家長，只寄預覽給自己。
   //    要正式啟用時，把三個值換成真實資料（不要 commit 進 repo）。
