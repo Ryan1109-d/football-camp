@@ -2,8 +2,11 @@
  * 清華大學足球冬令營 2027 — Google Apps Script 後端
  *
  * 部署步驟：
- * 1. Google Sheet 第一列欄位標題（共 25 欄，與下方 appendRow 順序一致）：
- *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 午餐 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意 | 健康狀況 | 健康說明 | 緊急醫療授權 | 法定代理人聲明 | 繳費通知 | 系統訊息
+ * 1. Google Sheet 第一列欄位標題（共 26 欄，與下方 appendRow 順序一致）：
+ *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 推薦人 | 午餐 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意 | 健康狀況 | 健康說明 | 緊急醫療授權 | 法定代理人聲明 | 繳費通知 | 系統訊息
+ *
+ *    ⚠️ 2026-08-17 新增第 14 欄「推薦人」。若 Sheet 已有報名資料，
+ *       請用「插入 1 欄」而不是直接改標題，否則第 14 欄之後的既有資料會全部錯位。
  * 2. Sheet 上方選 擴充功能 → Apps Script，貼上本檔案全部內容
  * 3. 修改下方 CONFIG 的 SHEET_ID（網址中 /d/ 和 /edit 之間那串）
  * 4. 部署 → 新增部署作業 → 類型選「網頁應用程式」
@@ -25,6 +28,11 @@ const CONFIG = {
   REPLY_EMAIL: 'stayyoung985@gmail.com',
   // 早鳥截止（含當日）。此日期前完成報名者，不限身份適用優惠價
   EARLY_BIRD_DEADLINE: '2026-11-20T23:59:59+08:00',
+  // 定價（2026-08-17 起）。兩道折扣互相獨立、可以疊加，各減 STEP：
+  //   ① 優惠身份：早鳥 / 團報 / 清大教職員（三擇一，彼此不疊加）
+  //   ② 推薦人：報名表填了推薦人姓名
+  //   8200 → 7700（單一）→ 7200（兩者皆有）
+  PRICE: { BASE: 8200, STEP: 500 },
   // ⚠️ 收款資訊：以下為測試值。只要任何一項還是「（測試）」開頭，
   //    sendPaymentNotice() 會拒絕寄給家長，只寄預覽給自己。
   //    要正式啟用時，把三個值換成真實資料（不要 commit 進 repo）。
@@ -40,12 +48,12 @@ const COL = {
   TIME: 0, SESSION: 1, STUDENT: 2, GENDER: 3, AGE: 4, GRADE: 5,
   EMAIL: 6, EMG_NAME: 7, EMG_PHONE: 8,
   PAYER_NAME: 9, PAYER_PHONE: 10, PAYER_EMAIL: 11,
-  DISCOUNT: 12, LUNCH: 13, STATUS: 14,
-  GROUP: 15, SHIRT: 16, NOTES: 17, PHOTO: 18,
-  HEALTH: 19, HEALTH_DETAIL: 20, MEDICAL: 21, GUARDIAN: 22
+  DISCOUNT: 12, REFERRER: 13, LUNCH: 14, STATUS: 15,
+  GROUP: 16, SHIRT: 17, NOTES: 18, PHOTO: 19,
+  HEALTH: 20, HEALTH_DETAIL: 21, MEDICAL: 22, GUARDIAN: 23
 };
-const NOTICE_COL = 24;   // 繳費通知（1-based）
-const SYSMSG_COL = 25;   // 系統訊息（1-based）
+const NOTICE_COL = 25;   // 繳費通知（1-based）
+const SYSMSG_COL = 26;   // 系統訊息（1-based）
 
 /** 給 Sheet 儲存格用：前置單引號讓 Sheets 視為純文字，防公式注入 */
 function safeCell(v, maxLen) {
@@ -131,6 +139,8 @@ function doPost(e) {
       payerPhone:   safeCell(data.payerPhone, 15),
       payerEmail:   safeCell(data.payerEmail, 254),
       discount:     safeCell(data.discount, 20),
+      // 推薦人為選填。空值一律寫「—」，calcAmount 以此判定不適用推薦優惠。
+      referrer:     safeCell(data.referrer, 20) || '—',
       lunch:        safeCell(data.lunch, 30),
       groupMembers: safeCell(data.groupMembers, 200) || '—',
       shirtSize:    safeCell(data.shirtSize, 20),
@@ -168,13 +178,13 @@ function doPost(e) {
     }
     const isWaitlist = sessionCount >= CONFIG.CAPACITY;
     const status = isWaitlist ? '候補' : '正取';
-    // ---- 寫入 Sheet（順序 = 欄位標題順序，共 25 欄）----
+    // ---- 寫入 Sheet（順序 = 欄位標題順序，共 26 欄）----
     sheet.appendRow([
       new Date(),
       clean.session, clean.studentName, clean.gender, clean.age, clean.grade,
       clean.email, clean.emgName, clean.emgPhone,
       clean.payerName, clean.payerPhone, clean.payerEmail,
-      clean.discount, clean.lunch,
+      clean.discount, clean.referrer, clean.lunch,
       status,
       clean.groupMembers, clean.shirtSize, clean.notes, clean.photoConsent,
       clean.health, clean.healthDetail, clean.medical, clean.guardian,
@@ -323,21 +333,41 @@ function paymentIsPlaceholder() {
 }
 
 /**
- * 依報名時間與優惠身份計算應轉帳金額。
+ * 依報名時間、優惠身份與推薦人計算應轉帳金額。
+ *
  * ⚠️ 午餐費「不」併入轉帳總額：本營隊金流走學校、學校依總額抽成，
  *    併進去會連午餐費一起被抽。午餐一律開課第一天現金交給教練，
  *    與 signup.html／index.html FAQ 的說法一致。羽球營的金流不經學校，作法不同。
+ *
+ * ⚠️ 推薦人「不自動查證」，只看欄位有沒有填。足球營的繳費單是手動寄送，
+ *    寄之前人工核對推薦人是否真的也報名了；若查證不成立，直接把 Sheet 上
+ *    該格清成「—」再重跑，金額就會回到未折扣的價格。
  */
 function calcAmount(row) {
   const regTime = row[COL.TIME];
   const early = (regTime instanceof Date) &&
                 regTime <= new Date(CONFIG.EARLY_BIRD_DEADLINE);
   const d = String(row[COL.DISCOUNT] || '');
-  const discounted = early || d === '團報' || d === '清大教職員';
-  const base = discounted ? 7500 : 7800;
+  const hasStatus = early || d === '團報' || d === '清大教職員';
+  const ref = String(row[COL.REFERRER] || '').trim();
+  const hasReferrer = ref !== '' && ref !== '—';
+
+  const steps = (hasStatus ? 1 : 0) + (hasReferrer ? 1 : 0);
+  const base = CONFIG.PRICE.BASE - steps * CONFIG.PRICE.STEP;
+
+  const breakdown = [];
+  if (hasStatus) {
+    breakdown.push((early ? '早鳥優惠' : '優惠身份（' + d + '）') +
+                   '　−NT$ ' + CONFIG.PRICE.STEP);
+  }
+  if (hasReferrer) {
+    breakdown.push('推薦人優惠（' + ref + '）　−NT$ ' + CONFIG.PRICE.STEP);
+  }
+
   const mealCash = String(row[COL.LUNCH] || '').indexOf('代訂') >= 0 ? 500 : 0;
-  return { base: base, mealCash: mealCash, total: base,
-           label: discounted ? (early ? '早鳥優惠價' : '優惠價') : '一般報名價' };
+  return { listPrice: CONFIG.PRICE.BASE, base: base, mealCash: mealCash, total: base,
+           hasReferrer: hasReferrer, referrer: ref, breakdown: breakdown,
+           label: breakdown.length ? '已套用優惠' : '一般報名價' };
 }
 
 /** 組繳費通知信內容 */
@@ -353,8 +383,8 @@ ${CONFIG.CAMP_NAME} 已達開班標準，確定開班！
 
 ── 費用明細 ──
 梯次：${session}
-營隊費用：NT$ ${amt.base}（${amt.label}）
-應轉帳總額：NT$ ${amt.total}
+原價：NT$ ${amt.listPrice}
+${amt.breakdown.length ? amt.breakdown.map(x => '　' + x).join('\n') + '\n' : ''}應轉帳總額：NT$ ${amt.total}
 ${amt.mealCash ? '\n※ 您另有選擇代訂午餐 NT$ ' + amt.mealCash + '（五天）。\n　 午餐費「不含」在上方轉帳金額內，請於開課第一天直接交給教練。\n' : ''}
 ── 轉帳資訊 ──
 銀行：${p.BANK}
@@ -377,7 +407,10 @@ ${CONFIG.REPLY_EMAIL}`;
  * 隨時可以安全執行。
  */
 function previewPaymentNotice() {
-  const amt = { base: 7500, mealCash: 500, total: 7500, label: '早鳥優惠價' };
+  const amt = { listPrice: CONFIG.PRICE.BASE, base: 7200, mealCash: 500, total: 7200,
+                hasReferrer: true, referrer: '陳小美（範例）',
+                breakdown: ['早鳥優惠　−NT$ 500', '推薦人優惠（陳小美（範例））　−NT$ 500'],
+                label: '已套用優惠' };
   const body = buildPaymentBody('王小華（範例）', '第一梯 2027/1/25–1/29', amt);
   MailApp.sendEmail({
     to: CONFIG.REPLY_EMAIL,
