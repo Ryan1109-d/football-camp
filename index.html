@@ -144,8 +144,16 @@ h1,.st,.ft,.dn,.tl-name,.faq-q{text-wrap:balance}
 .st{font-family:'Noto Serif TC',serif;font-size:clamp(1.7rem,3.8vw,2.4rem);font-weight:900;margin-bottom:.9rem;line-height:1.25;letter-spacing:.04em}
 .ss{font-size:15px;color:var(--text-body);line-height:1.85;max-width:680px;text-wrap:pretty}
 .ss .cl{display:inline-block}
-.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:1.7rem}
-.fc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.4rem;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+/* 五格特色：上三下二。用 6 欄格線讓每格佔 2 欄，第二列往內縮 1 欄即置中 */
+.fgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:1.7rem}
+.fc{grid-column:span 2;background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.9rem 1.7rem;min-height:158px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+.fc:nth-child(4){grid-column:2/4}
+.fc:nth-child(5){grid-column:4/6}
+@media (max-width:900px){
+  .fgrid{grid-template-columns:repeat(2,1fr)}
+  .fc,.fc:nth-child(4),.fc:nth-child(5){grid-column:auto}
+}
+@media (max-width:560px){.fgrid{grid-template-columns:1fr}}
 .fc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green)}
 .fc:nth-child(2)::before{background:var(--amber)}
 .fc:nth-child(3)::before{background:var(--green-deep)}
@@ -209,6 +217,9 @@ h1,.st,.ft,.dn,.tl-name,.faq-q{text-wrap:balance}
 .punit{font-size:13px;color:var(--text-faint);font-weight:400}
 .pnote{font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.6}
 .ph-spacer{height:25px}
+.referral-box{margin-top:1.4rem;background:linear-gradient(135deg,rgba(27,90,160,.06),rgba(224,139,31,.07));border:.5px solid rgba(224,139,31,.42);border-radius:10px;padding:1.25rem 1.4rem}
+.referral-title{font-family:'Noto Serif TC',serif;font-size:16px;font-weight:900;color:var(--green);margin-bottom:.5rem;letter-spacing:.02em}
+.referral-txt{font-size:13px;color:var(--text-body);line-height:1.85}
 .refund-box{margin-top:1.4rem;background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1.25rem 1.4rem}
 .refund-title{font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:.85rem}
 .refund-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
@@ -446,9 +457,13 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="sl">收費方案</div>
     </div>
     <div class="pgrid">
-      <div class="pc hi reveal"><div class="ptag">最低價</div><div class="pdesc">優惠身份 ＋ 推薦朋友</div><div class="pnum">$7,200 <span class="punit">/ 人</span></div><div class="pnote">早鳥（11/20 前報名）／團體 5 人／清大教職員 擇一享 −$500。<strong>再填寫推薦人，您和推薦人皆會得到 $500 的折扣</strong>。兩種優惠可疊加；只符合其中一項為 $7,700</div></div>
-      <div class="pc reveal d1"><div class="ph-spacer"></div><div class="pdesc">一般報名</div><div class="pnum">$8,200 <span class="punit">/ 人</span></div><div class="pnote">未使用任何優惠</div></div>
+      <div class="pc hi reveal"><div class="ptag">優惠價</div><div class="pdesc">早鳥（11/20 前報名）/ 團體 5 人 / 清大教職員</div><div class="pnum">$7,700 <span class="punit">/ 人</span></div><div class="pnote">三種資格擇一適用即享優惠價，不可疊加</div></div>
+      <div class="pc reveal d1"><div class="ph-spacer"></div><div class="pdesc">一般報名</div><div class="pnum">$8,200 <span class="punit">/ 人</span></div><div class="pnote">個人報名，無需任何條件</div></div>
       <div class="pc reveal d2"><div class="ph-spacer"></div><div class="pdesc">開班門檻</div><div class="pnum">12 <span class="punit">人</span></div><div class="pnote">確認開班後才會寄送繳費通知，未達門檻不會收取任何費用</div></div>
+    </div>
+    <div class="referral-box reveal">
+      <div class="referral-title">使用推薦人，再減 $500</div>
+      <p class="referral-txt">報名表填寫推薦人姓名，推薦人須為本營隊的報名者。經我們確認後，<b>您和推薦人皆會得到 $500 的折扣</b>。這道優惠<b>可以和上面的早鳥／團體／清大教職員疊加</b>——兩者都符合就是 <b>$7,200</b>。折扣會直接反映在繳費通知的金額上。</p>
     </div>
     <div class="refund-box reveal">
       <div class="refund-title">退費規則（繳費後）</div>
