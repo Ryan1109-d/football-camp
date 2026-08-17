@@ -80,6 +80,7 @@ https://nthu-football.stayyounglab.com ｜ 隸屬 [Stay Young](https://stayyoung
 |---|---|
 | `index.html` 教練區 | 第二位教練仍是「執行教練（待填）」＋字母 B 頭像 |
 | `index.html` | 仍掛 `noindex`，公開招生前要移除 |
+| Apps Script | repo 內的 `gas-backend.js` 已改為三層定價，但**尚未貼回 Apps Script**。在貼上之前，線上實際計價仍是舊價 |
 | 全站 | 未提及保險。若有投保責任險，需補上說明 |
 | 花絮區 | 已移除，等真實活動照再加回 |
 
