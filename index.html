@@ -217,9 +217,21 @@ h1,.st,.ft,.dn,.tl-name,.faq-q{text-wrap:balance}
 .punit{font-size:13px;color:var(--text-faint);font-weight:400}
 .pnote{font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.6}
 .ph-spacer{height:25px}
-.referral-box{margin-top:1.4rem;background:linear-gradient(135deg,rgba(27,90,160,.06),rgba(224,139,31,.07));border:.5px solid rgba(224,139,31,.42);border-radius:10px;padding:1.25rem 1.4rem}
-.referral-title{font-family:'Noto Serif TC',serif;font-size:16px;font-weight:900;color:var(--green);margin-bottom:.5rem;letter-spacing:.02em}
-.referral-txt{font-size:13px;color:var(--text-body);line-height:1.85}
+/* 推薦人優惠：主打賣點，做成深色強調帶 */
+.referral-hero{margin-top:1.5rem;position:relative;overflow:hidden;border-radius:14px;padding:1.9rem 1.8rem;background:linear-gradient(135deg,#0f3f7d 0%,#1560b8 58%,#2470c9 100%);color:#fff;box-shadow:0 14px 34px rgba(15,63,125,.26)}
+.referral-hero::after{content:'';position:absolute;top:-80px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(240,147,15,.3),transparent 68%);border-radius:50%;pointer-events:none}
+.rh-badge{display:inline-block;background:var(--amber);color:#1c2733;font-size:11px;font-weight:700;letter-spacing:.1em;padding:4px 12px;border-radius:99px;margin-bottom:.9rem;position:relative}
+.rh-head{font-family:'Noto Serif TC',serif;font-size:clamp(1.35rem,3.6vw,1.95rem);font-weight:900;line-height:1.45;letter-spacing:.02em;position:relative}
+.rh-amt{color:var(--amber-light)}
+.rh-sub{font-size:13.5px;color:#d6e4f5;line-height:1.85;margin-top:.7rem;position:relative}
+.rh-sub b{color:#fff}
+.rh-flow{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-top:1.25rem;position:relative}
+.rh-step{display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:.55rem .85rem;font-size:12.5px;color:#fff}
+.rh-n{width:18px;height:18px;border-radius:50%;background:var(--amber);color:#1c2733;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rh-arrow{color:rgba(255,255,255,.5);font-size:13px}
+.rh-note{font-size:12.5px;color:#c5d8ee;line-height:1.85;margin-top:1.05rem;padding-top:.9rem;border-top:1px solid rgba(255,255,255,.18);position:relative}
+.rh-note b{color:var(--amber-light)}
+@media(max-width:560px){.rh-arrow{display:none}.rh-step{width:100%}}
 .refund-box{margin-top:1.4rem;background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:1.25rem 1.4rem}
 .refund-title{font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:.85rem}
 .refund-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
@@ -461,9 +473,18 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="pc reveal d1"><div class="ph-spacer"></div><div class="pdesc">一般報名</div><div class="pnum">$8,200 <span class="punit">/ 人</span></div><div class="pnote">個人報名，無需任何條件</div></div>
       <div class="pc reveal d2"><div class="ph-spacer"></div><div class="pdesc">開班門檻</div><div class="pnum">12 <span class="punit">人</span></div><div class="pnote">確認開班後才會寄送繳費通知，未達門檻不會收取任何費用</div></div>
     </div>
-    <div class="referral-box reveal">
-      <div class="referral-title">使用推薦人，再減 $500</div>
-      <p class="referral-txt">報名表填寫推薦人姓名，推薦人須為本營隊的報名者。經我們確認後，<b>您和推薦人皆會得到 $500 的折扣</b>。這道優惠<b>可以和上面的早鳥／團體／清大教職員疊加</b>——兩者都符合就是 <b>$7,200</b>。折扣會直接反映在繳費通知的金額上。</p>
+    <div class="referral-hero reveal">
+      <span class="rh-badge">兩人同享 · 可疊加</span>
+      <div class="rh-head">推薦朋友一起報名，<span class="rh-amt">兩人各折 $500</span></div>
+      <p class="rh-sub">不是只有被推薦的人有折扣 —— <b>推薦人與被推薦人雙方都折 $500</b>，兩人合計省下 <b>$1,000</b>。</p>
+      <div class="rh-flow">
+        <div class="rh-step"><span class="rh-n">1</span>報名表填寫推薦人姓名</div>
+        <div class="rh-arrow">→</div>
+        <div class="rh-step"><span class="rh-n">2</span>我們核對雙方報名紀錄</div>
+        <div class="rh-arrow">→</div>
+        <div class="rh-step"><span class="rh-n">3</span>繳費通知直接折抵</div>
+      </div>
+      <p class="rh-note">推薦人須為本營隊的報名者。本項<b>可與早鳥／團體 5 人／清大教職員疊加</b>，兩者皆符合者為 <b>$7,200</b>（一般報名 $8,200）。</p>
     </div>
     <div class="refund-box reveal">
       <div class="refund-title">退費規則（繳費後）</div>

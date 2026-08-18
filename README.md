@@ -63,6 +63,7 @@ https://nthu-football.stayyounglab.com ｜ 隸屬 [Stay Young](https://stayyoung
 |---|---|
 | `doPost` | 接收報名，寫入 Sheet、判定正取／候補、寄確認信 |
 | `sendConfirmEmail` / `sendWaitlistEmail` | 報名確認信／候補通知信 |
+| `notifyOwner_` | 每筆新報名寄一封通知到 stayyoung985，主旨帶【足球】以免與羽球混淆。寄失敗不影響報名 |
 | `calcAmount` / `buildPaymentBody` | 依報名時間、優惠身份與推薦人算金額、組繳費通知內容。**推薦人不自動查證**，只看欄位有沒有填；查證不成立時把 Sheet 該格清成「—」再重跑即可 |
 | `previewPaymentNotice` | **預覽**繳費通知（不寄出），上線前先跑這個 |
 | `sendPaymentNotice` | 寄繳費通知 |
