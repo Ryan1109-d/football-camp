@@ -31,8 +31,8 @@ const CONFIG = {
   // 定價（2026-08-17 起）。兩道折扣互相獨立、可以疊加，各減 STEP：
   //   ① 優惠身份：早鳥 / 團報 / 清大教職員（三擇一，彼此不疊加）
   //   ② 推薦人：報名表填了推薦人姓名
-  //   8200 → 7700（單一）→ 7200（兩者皆有）
-  PRICE: { BASE: 8200, STEP: 500 },
+  //   8500 → 8000（單一）→ 7500（兩者皆有）
+  PRICE: { BASE: 8500, STEP: 500 },
   // 家長 LINE 社群邀請連結。⚠️ 真值只填在 Apps Script，不要 commit 進 public repo
   //    （這是可公開加入的邀請網址，落在公開 repo 等於任何人都能加進家長群）。
   //    維持佔位字串時，確認信會自動略過整段 LINE 說明，不會寄出壞掉的連結。
@@ -543,7 +543,7 @@ ${CONFIG.REPLY_EMAIL}`;
  * 隨時可以安全執行。
  */
 function previewPaymentNotice() {
-  const amt = { listPrice: CONFIG.PRICE.BASE, base: 7200, mealCash: 500, total: 7200,
+  const amt = { listPrice: CONFIG.PRICE.BASE, base: 7500, mealCash: 500, total: 7500,
                 hasReferrer: true, referrer: '陳小美（範例）',
                 breakdown: ['早鳥優惠　−NT$ 500', '推薦人優惠（陳小美（範例））　−NT$ 500'],
                 label: '已套用優惠' };
