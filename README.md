@@ -30,7 +30,7 @@ https://nthu-football.stayyounglab.com ｜ 隸屬 [Stay Young](https://stayyoung
 | 名額 | 正取 25 人（`CONFIG.CAPACITY`），第 26 位起自動候補 |
 | 開班門檻 | 12 人。未達門檻不寄繳費通知、不收任何費用 |
 | 報名截止 | 2027/1/10（日） |
-| 繳費期限 | 收到繳費通知後 7 天（`PAYMENT.DEADLINE_DAYS`） |
+| 繳費方式 | **由學校端寄送繳費通知與收款**，不使用本系統的 `sendPaymentNotice()`。`ACCOUNT_NAME` 刻意維持「（測試）」開頭讓防呆永遠成立，避免誤觸把個人帳戶寄給家長 |
 | 聯絡 | stayyoung985@gmail.com ／ 0979-032-572 |
 
 **退費**：開課 15 天前全額｜前 6–14 天 90%｜前 5 天內 70%｜開課後不退。
@@ -55,7 +55,8 @@ https://nthu-football.stayyounglab.com ｜ 隸屬 [Stay Young](https://stayyoung
 4. 部署為網頁應用程式（執行身分：我；存取權：所有人），複製 Web App URL 填進 `signup.html` 的 `GAS_URL`
 5. 函式下拉選 `installDailyBackupTrigger` → 執行，裝每日 23:00–00:00 備份。重複執行不會裝出兩個；`listTriggers` 可隨時查看
 
-> ⚠️ **重貼原始碼前先複製 Apps Script 上現有的 `SHEET_ID` 與 `PAYMENT.ACCOUNT_NAME`**。repo 這份兩者都是佔位字串，直接覆蓋會清掉設定，繳費通知會被防呆擋住。
+> ⚠️ **重貼原始碼前先複製 Apps Script 上現有的 `SHEET_ID` 與 `LINE_GROUP_URL`**。repo 這份兩者都是佔位字串。
+> `PAYMENT.ACCOUNT_NAME` 不需要填 —— 本營隊繳費走學校端。
 
 ## 主要函式
 

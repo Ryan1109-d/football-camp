@@ -37,12 +37,13 @@ const CONFIG = {
   //    （這是可公開加入的邀請網址，落在公開 repo 等於任何人都能加進家長群）。
   //    維持佔位字串時，確認信會自動略過整段 LINE 說明，不會寄出壞掉的連結。
   LINE_GROUP_URL: 'YOUR_LINE_GROUP_URL_HERE',
-  // ⚠️ 收款資訊：以下為測試值。只要任何一項還是「（測試）」開頭，
-  //    sendPaymentNotice() 會拒絕寄給家長，只寄預覽給自己。
-  //    要正式啟用時，把三個值換成真實資料（不要 commit 進 repo）。
+  // ⚠️ 本營隊的繳費「由學校端寄送與收款」，不使用本系統的繳費通知功能。
+  //    ACCOUNT_NAME 刻意維持「（測試）」開頭，讓 paymentIsPlaceholder() 一直成立，
+  //    sendPaymentNotice() 會直接中止，避免誤觸把個人帳戶寄給家長。
+  //    若之後改為自行收款，才把戶名換成真實姓名。
   PAYMENT: {
     BANK: '國泰世華銀行 013',
-    ACCOUNT_NAME: '（測試）戶名尚未設定',   // ⚠️ 換成真實戶名後才會開始寄繳費通知
+    ACCOUNT_NAME: '（測試）足球營繳費由學校辦理，本系統不寄繳費通知',
     ACCOUNT_NO: '699522993691',
     DEADLINE_DAYS: 7
   }
