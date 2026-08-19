@@ -79,7 +79,6 @@ https://nthu-football.stayyounglab.com ｜ 隸屬 [Stay Young](https://stayyoung
 
 | 位置 | 內容 |
 |---|---|
-| `index.html` | 仍掛 `noindex`，公開招生前要移除 |
 | Apps Script | repo 內的 `gas-backend.js` 已改為三層定價，但**尚未貼回 Apps Script**。在貼上之前，線上實際計價仍是舊價 |
 | 全站 | 未提及保險。若有投保責任險，需補上說明 |
 | 花絮區 | 已移除，等真實活動照再加回 |
