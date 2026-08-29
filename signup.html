@@ -191,6 +191,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
         <b>當天攜帶</b>　運動服、運動鞋、水壺，<b>護脛請自行準備</b>。足球與標誌錐等訓練用具由營隊備妥。<br>
         <b>彈性接送</b>　最早 08:00 送達、最晚 18:00 接回，延長時段由教練在場照管，不另收費。<br>
         <b>午餐與點心</b>　可代訂午餐，五天共 $500（葷素可選），第一天上課時交給教練；每天下午另備點心。<br>
+        <b>過敏與忌口</b>　點心是每個孩子都會吃到的，<b>不論有沒有代訂午餐都請填寫</b>，我們採買時會為孩子避開，不另外收費。<br>
         <b>紀念衫</b>　開營第一天發放。尺寸請把孩子現有的合身上衣平鋪測量，<b>不要量身體</b>。<br>
         <b>繳費方式</b>　本營隊的繳費單與收款由學校端統一辦理，請依學校通知完成繳費。<br>
         <b>團體報名</b>　每位學員皆須個別填寫本表單，並在團報名單列出同行成員。
@@ -345,6 +346,21 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
           </div>
         </label>
       </div>
+
+      <!-- 每天下午都有點心，所以不管有沒有代訂午餐，每個孩子都會吃到營隊準備的東西。
+           這一題因此獨立在午餐選項之外，一律要填。 -->
+      <div class="fg full">
+        <label>飲食禁忌或過敏 <span class="req">*</span>　<span style="color:var(--text-faint);font-weight:400">每天下午都有點心，不論是否代訂午餐都請填寫</span></label>
+        <div class="pc-row">
+          <label class="pc-opt"><input type="radio" name="dietRestrict" value="無">無</label>
+          <label class="pc-opt"><input type="radio" name="dietRestrict" value="有">有，請說明</label>
+        </div>
+      </div>
+      <div class="fg full" id="dietDetailWrap" style="display:none">
+        <label for="dietDetail">飲食禁忌說明 <span class="req">*</span></label>
+        <input type="text" id="dietDetail" name="dietDetail" placeholder="例如：花生過敏、海鮮過敏、不吃牛、奶蛋素">
+        <span style="font-size:11px;color:var(--text-muted);margin-top:3px">我們採買點心與代訂午餐時會為孩子避開，<strong>不另外收費</strong>。</span>
+      </div>
       </div>
 
       <div class="form-card">
@@ -461,6 +477,14 @@ document.querySelectorAll('input[name="healthStatus"]').forEach(r => {
       document.querySelector('input[name="healthStatus"]:checked').value === '有特殊狀況' ? 'flex' : 'none';
   });
 });
+// 飲食禁忌說明展開聯動
+document.querySelectorAll('input[name="dietRestrict"]').forEach(r => {
+  r.addEventListener('change', () => {
+    const picked = document.querySelector('input[name="dietRestrict"]:checked');
+    document.getElementById('dietDetailWrap').style.display =
+      (picked && picked.value === '有') ? 'flex' : 'none';
+  });
+});
 // 團報名單顯示聯動
 document.getElementById('discount').addEventListener('change', (e) => {
   document.getElementById('groupBox').style.display = e.target.value === '團報' ? 'block' : 'none';
@@ -470,6 +494,9 @@ const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   msgBox.className = 'msg';
+  // 每次送出先清掉上一輪的紅框。只清必填清單裡的欄位不夠——像健康狀況說明、
+  // 飲食禁忌說明這類條件式欄位不在清單內，補填之後紅框會一直留著。
+  document.querySelectorAll('#signupForm .err').forEach(el => el.classList.remove('err'));
   // ---- 前端驗證 ----
   let valid = true;
   const requiredText = ['studentName','age','email','emgName','emgPhone','payerName','payerPhone','payerEmail'];
@@ -515,6 +542,19 @@ form.addEventListener('submit', async (e) => {
     msgBox.classList.add('fail');
     return;
   }
+  // 飲食禁忌必選（每天都有點心，每個孩子都會吃到，所以一律要問）
+  const diet = document.querySelector('input[name="dietRestrict"]:checked');
+  if (!diet) {
+    msgBox.textContent = '請填寫飲食禁忌或過敏（沒有請選「無」）。';
+    msgBox.classList.add('fail');
+    return;
+  }
+  if (diet.value === '有' && !document.getElementById('dietDetail').value.trim()) {
+    document.getElementById('dietDetail').classList.add('err');
+    msgBox.textContent = '請說明飲食禁忌或過敏內容。';
+    msgBox.classList.add('fail');
+    return;
+  }
   // 代訂午餐必選葷素
   if (document.querySelector('input[name="lunch"]:checked').value === '代訂午餐' &&
       !document.querySelector('input[name="mealType"]:checked')) {
@@ -556,6 +596,9 @@ form.addEventListener('submit', async (e) => {
       const m = document.querySelector('input[name="mealType"]:checked');
       return `代訂午餐（${m ? m.value : ''}）`;
     })(),
+    diet: (diet.value === '有'
+             ? '有：' + document.getElementById('dietDetail').value.trim()
+             : '無'),
     notes: document.getElementById('notes').value.trim() || '—',
     photoConsent: document.querySelector('input[name="photoConsent"]:checked').value,
     healthStatus: document.querySelector('input[name="healthStatus"]:checked').value,
@@ -653,6 +696,7 @@ function showPreview(d) {
       row('梯次', esc(d.session)) + row('優惠身份', esc(d.discount)) +
       row('推薦人', d.referrer ? esc(d.referrer) : '未填') +
       row('午餐', esc(d.lunch)) +
+      row('飲食禁忌', esc(d.diet)) +
       (d.groupMembers && d.groupMembers !== '—' ? row('團報成員', esc(d.groupMembers)) : '') +
       row('健康狀況', esc(d.healthStatus) + (d.healthDetail && d.healthDetail !== '—' ? '：' + esc(d.healthDetail) : '')) +
       row('照片使用', esc(d.photoConsent)) +

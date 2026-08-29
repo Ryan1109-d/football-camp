@@ -58,17 +58,17 @@ const COL = {
   TIME: 0, SESSION: 1, STUDENT: 2, GENDER: 3, AGE: 4, GRADE: 5,
   EMAIL: 6, EMG_NAME: 7, EMG_PHONE: 8,
   PAYER_NAME: 9, PAYER_PHONE: 10, PAYER_EMAIL: 11,
-  DISCOUNT: 12, REFERRER: 13, LUNCH: 14, STATUS: 15,
-  GROUP: 16, SHIRT: 17, NOTES: 18, PHOTO: 19,
-  HEALTH: 20, HEALTH_DETAIL: 21, MEDICAL: 22, GUARDIAN: 23
+  DISCOUNT: 12, REFERRER: 13, LUNCH: 14, DIET: 15, STATUS: 16,
+  GROUP: 17, SHIRT: 18, NOTES: 19, PHOTO: 20,
+  HEALTH: 21, HEALTH_DETAIL: 22, MEDICAL: 23, GUARDIAN: 24
 };
-const NOTICE_COL = 25;   // 繳費通知（1-based）
-const SYSMSG_COL = 26;   // 系統訊息（1-based）
+const NOTICE_COL = 26;   // 繳費通知（1-based）
+const SYSMSG_COL = 27;   // 系統訊息（1-based）
 
 // 標題列應有的 26 欄，順序即寫入順序。checkSetup() 會拿它逐欄比對。
 const EXPECTED_HEADERS = [
   '報名時間','梯次','學員姓名','性別','年齡','年級','收信信箱','緊急聯絡人','緊急聯絡人電話',
-  '繳款人姓名','繳款人電話','繳款人信箱','優惠身份','推薦人','午餐','狀態','團報成員','衣服尺寸',
+  '繳款人姓名','繳款人電話','繳款人信箱','優惠身份','推薦人','午餐','飲食禁忌','狀態','團報成員','衣服尺寸',
   '備註','照片同意','健康狀況','健康說明','緊急醫療授權','法定代理人聲明','繳費通知','系統訊息'
 ];
 
@@ -173,7 +173,8 @@ function notifyOwner_(data, clean, status, seq) {
     '─────────────────\n' +
     '優惠身份：' + dash(clean.discount) + '\n' +
     '推薦人：' + safeText(ref, 20) + (ref !== '—' ? '　← 需人工核對是否也已報名' : '') + '\n' +
-    '午餐：' + dash(clean.lunch) + '\n' +
+    '午餐：' + dash(clean.lunch) +
+      (String(clean.diet).indexOf('有') === 0 ? '　⚠️ ' + safeText(clean.diet, 200) : '') + '\n' +
     '團報成員：' + dash(clean.groupMembers) + '\n' +
     '備註：' + dash(clean.notes) + '\n' +
     '─────────────────\n' +
@@ -238,7 +239,7 @@ function doPost(e) {
     // ---- 基本驗證 ----
     const required = ['session', 'studentName', 'gender', 'age', 'grade', 'email',
                       'emgName', 'emgPhone', 'payerName', 'payerPhone', 'payerEmail',
-                      'discount', 'lunch', 'shirtSize', 'healthStatus', 'photoConsent'];
+                      'discount', 'lunch', 'diet', 'shirtSize', 'healthStatus', 'photoConsent'];
     for (const key of required) {
       if (!data[key] || String(data[key]).trim() === '') {
         return jsonResponse({ status: 'error', message: '缺少必填欄位：' + key });
@@ -287,6 +288,7 @@ function doPost(e) {
       // 推薦人為選填。空值一律寫「—」，calcAmount 以此判定不適用推薦優惠。
       referrer:     safeCell(data.referrer, 20) || '—',
       lunch:        safeCell(data.lunch, 30),
+      diet:         safeCell(data.diet, 200) || '無',
       groupMembers: safeCell(data.groupMembers, 200) || '—',
       shirtSize:    safeCell(data.shirtSize, 20),
       notes:        safeCell(data.notes, 200) || '—',
@@ -330,7 +332,7 @@ function doPost(e) {
       clean.session, clean.studentName, clean.gender, clean.age, clean.grade,
       clean.email, clean.emgName, clean.emgPhone,
       clean.payerName, clean.payerPhone, clean.payerEmail,
-      clean.discount, clean.referrer, clean.lunch,
+      clean.discount, clean.referrer, clean.lunch, clean.diet,
       status,
       clean.groupMembers, clean.shirtSize, clean.notes, clean.photoConsent,
       clean.health, clean.healthDetail, clean.medical, clean.guardian,
@@ -383,7 +385,8 @@ function sendConfirmEmail(data) {
 學員：${safeText(data.studentName,20)}（${safeText(data.grade,20)}，${safeText(data.gender,20)}，${safeText(data.age,20)} 歲）
 緊急聯絡人：${safeText(data.emgName,20)}（${safeText(data.emgPhone,15)}）
 優惠身份：${safeText(data.discount,20)}
-午餐：${safeText(data.lunch,30)}\n衣服尺寸：${safeText(data.shirtSize,20)}${String(data.healthStatus).trim() === '有特殊狀況' ? '\n健康狀況：' + safeText(data.healthDetail,200) : ''}${data.notes && data.notes !== '—' ? '\n備註：' + safeText(data.notes,200) : ''}
+午餐：${safeText(data.lunch,30)}
+飲食禁忌：${safeText(data.diet,200)}\n衣服尺寸：${safeText(data.shirtSize,20)}${String(data.healthStatus).trim() === '有特殊狀況' ? '\n健康狀況：' + safeText(data.healthDetail,200) : ''}${data.notes && data.notes !== '—' ? '\n備註：' + safeText(data.notes,200) : ''}
 ── 接下來的流程 ──
 1. 報名人數達開班標準並確認開班後，我們會寄送「繳費通知」至繳款人信箱
 2. 完成繳費後即確認錄取
