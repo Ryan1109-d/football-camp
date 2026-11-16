@@ -187,7 +187,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
     <div class="notice-box" style="margin-bottom:1.8rem">
       <div class="notice-title">📋 報名前請注意</div>
       <div class="notice-text">
-        <b>活動地點</b>　清華大學南大校區（體健大樓五樓室內場地＋室外操場搭配），請提前確認前往方式。遇雨改為全程室內，照常上課。<br>
+        <b>活動地點</b>　清華大學南大校區 室外操場（新竹市東區南大路 521 號），請提前確認前往方式。遇雨會調整到室內場地，照常上課。<br>
         <b>當天攜帶</b>　運動服、運動鞋、水壺，<b>護脛請自行準備</b>。足球與標誌錐等訓練用具由營隊備妥。<br>
         <b>彈性接送</b>　最早 08:00 送達、最晚 18:00 接回，延長時段由教練在場照管，不另收費。<br>
         <b>午餐與點心</b>　可代訂午餐，五天共 $500（葷素可選），第一天上課時交給教練；每天下午另備點心。<br>
@@ -306,7 +306,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
           <option value="團報">5 人以上團報</option>
           <option value="清大教職員">清大教職員</option>
         </select>
-        <span style="font-size:11px;color:var(--text-muted);margin-top:3px">2026/11/20（含）前完成報名，不限身份自動適用早鳥優惠價。以上三種身份擇一適用，彼此不可疊加。</span>
+        <span style="font-size:11px;color:var(--text-muted);margin-top:3px" id="discountNote">2026/11/20（含）前完成報名，不限身份自動適用早鳥優惠價。以上三種身份擇一適用，彼此不可疊加。</span>
       </div>
       <div class="fg full">
         <label for="referrer">推薦人姓名（選填）</label>
@@ -452,6 +452,14 @@ if (!REGISTRATION_OPEN) {
     '\u5982\u6709\u4efb\u4f55\u554f\u984c\uff0c\u6b61\u8fce\u4f86\u4fe1\uff1a<strong>stayyoung985@gmail.com</strong></div>';
   form.parentNode.insertBefore(n, form);
 }
+
+// 早鳥截止後自動收掉早鳥字樣（僅影響顯示；費用試算與後端各自依時間判定）
+(function () {
+  const EARLY_END = new Date('2026-11-20T23:59:59+08:00');
+  if (new Date() <= EARLY_END) return;
+  const dn = document.getElementById('discountNote');
+  if (dn) dn.textContent = '早鳥已截止。剩餘兩種身份擇一適用，彼此不可疊加：5 人以上團報／清大教職員。';
+})();
 
 // 無障礙：必填欄位補 aria-required（表單為 novalidate，required 僅作語意標記）
 document.querySelectorAll('#signupForm [required]').forEach(el => el.setAttribute('aria-required', 'true'));
