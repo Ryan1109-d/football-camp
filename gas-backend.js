@@ -3,7 +3,7 @@
  *
  * 部署步驟：
  * 1. Google Sheet 第一列欄位標題（共 26 欄，與下方 appendRow 順序一致）：
- *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 推薦人 | 午餐 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意 | 健康狀況 | 健康說明 | 緊急醫療授權 | 法定代理人聲明 | 繳費通知 | 系統訊息
+ *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 推薦人 | 午餐 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意 | 健康狀況 | 健康說明 | 緊急醫療授權 | 法定代理人聲明 | 繳費通知 | 行前通知 | 系統訊息
  *
  *    ⚠️ 2026-08-17 新增第 14 欄「推薦人」。若 Sheet 已有報名資料，
  *       請用「插入 1 欄」而不是直接改標題，否則第 14 欄之後的既有資料會全部錯位。
@@ -62,14 +62,15 @@ const COL = {
   GROUP: 17, SHIRT: 18, NOTES: 19, PHOTO: 20,
   HEALTH: 21, HEALTH_DETAIL: 22, MEDICAL: 23, GUARDIAN: 24
 };
-const NOTICE_COL = 26;   // 繳費通知（1-based）
-const SYSMSG_COL = 27;   // 系統訊息（1-based）
+const NOTICE_COL  = 26;   // 繳費通知（1-based）
+const PRECAMP_COL = 27;   // 行前通知（1-based）
+const SYSMSG_COL  = 28;   // 系統訊息（1-based）
 
 // 標題列應有的 26 欄，順序即寫入順序。checkSetup() 會拿它逐欄比對。
 const EXPECTED_HEADERS = [
   '報名時間','梯次','學員姓名','性別','年齡','年級','收信信箱','緊急聯絡人','緊急聯絡人電話',
   '繳款人姓名','繳款人電話','繳款人信箱','優惠身份','推薦人','午餐','飲食禁忌','狀態','團報成員','衣服尺寸',
-  '備註','照片同意','健康狀況','健康說明','緊急醫療授權','法定代理人聲明','繳費通知','系統訊息'
+  '備註','照片同意','健康狀況','健康說明','緊急醫療授權','法定代理人聲明','繳費通知','行前通知','系統訊息'
 ];
 
 /**
@@ -336,7 +337,7 @@ function doPost(e) {
       status,
       clean.groupMembers, clean.shirtSize, clean.notes, clean.photoConsent,
       clean.health, clean.healthDetail, clean.medical, clean.guardian,
-      '', ''   // 繳費通知、系統訊息（留空，由後續流程填入）
+      '', '', ''   // 繳費通知、行前通知、系統訊息（留空，由後續流程填入）
     ]);
     const tWrite = Date.now();
     // ---- 寫入成功，此時才記錄冷卻與流量計數 ----
@@ -842,6 +843,140 @@ function sendPaymentNotice() {
     sent++;
   }
   return '已寄送 ' + sent + ' 封，略過 ' + skipped + ' 筆。';
+}
+
+// ══════════════════════════════════════════
+// 行前通知信（開課前 3 天手動執行，不設自動觸發）
+//
+//   previewPreCampNotice()  只寄一封預覽給自己，不寫 Sheet，永遠安全
+//   sendPreCampNotice()     寄給「正取」且「行前通知」欄為空者，回填時間戳
+//
+// ⚠️ 本營隊的錢由學校收，系統不知道誰繳了，所以寄送對象就是「正取」。
+//    寄之前請自行對照學校的繳費名單；要排除某個人，先把那一列的狀態改掉。
+// ══════════════════════════════════════════
+
+/**
+ * 報到位置的補充說明（例如「請從側門進入，沿指標走到體健大樓」）。
+ * 留空字串時，信裡整行省略 —— 不要留「待填」之類的字樣寄出去。
+ */
+const PRECAMP_ENTRY_NOTE = '';
+
+/** 行前信的 LINE 區塊。沿用 lineSection() 的判斷：沒填真值就整段省略。 */
+function preCampLineSection_() {
+  const url = String(CONFIG.LINE_GROUP_URL || '').trim();
+  if (!url || url.indexOf('http') !== 0) return '';
+  return '\n■ 家長 LINE 群組\n' +
+         '每天課後會分享訓練重點與照片，還沒加入請點：\n' + url + '\n';
+}
+
+/**
+ * 組行前通知信內容。純粹吃一列資料，不碰 Sheet、不寄信，方便單獨驗證。
+ * 回傳 { subject, body }
+ */
+function buildPreCampMail(row) {
+  const student = safeText(row[COL.STUDENT], 20);
+  const payer   = safeText(row[COL.PAYER_NAME], 20) || '家長';
+  const lunch   = String(row[COL.LUNCH] || '');
+  const ordered = lunch.indexOf('代訂') >= 0;
+
+  const entryNote = String(PRECAMP_ENTRY_NOTE || '').trim();
+
+  const body =
+payer + ' 您好：\n' +
+'\n' +
+student + ' 的清大足球冬令營即將開始，以下是開營前需要知道的事。\n' +
+'\n' +
+'■ 日期與時間\n' +
+'2027/1/25（一）– 1/29（五），共五天\n' +
+'08:00 起可提早送達｜08:30 開放報到｜17:00 放學｜最晚 18:00 接回\n' +
+'延長時段由教練在場看顧，不另收費。\n' +
+'\n' +
+'■ 報到地點\n' +
+'清華大學南大校區 體健大樓五樓（新竹市東區南大路 521 號）\n' +
+(entryNote ? entryNote + '\n' : '') +
+'遇雨照常上課，全程改在室內進行。\n' +
+'\n' +
+'■ 請幫孩子準備\n' +
+'・好活動的運動服（寒流請加外套，可穿脫）\n' +
+'・室內運動鞋\n' +
+'・護脛（請自備）\n' +
+'・水壺\n' +
+'足球與訓練器材由營隊準備。\n' +
+'\n' +
+'■ 第一天請記得\n' +
+(ordered ? '・請將五天午餐費 500 元現金交給教練\n' : '') +
+'・營隊紀念衣於第一天發放\n' +
+'・孩子如果有身體狀況或過敏，跟報名時填的不同，請報到時直接告訴教練\n' +
+preCampLineSection_() +
+'\n' +
+'■ 停課與請假\n' +
+'颱風、天災依新竹市政府停班停課公告辦理。\n' +
+'臨時請假請在當天 08:30 前告知。\n' +
+'\n' +
+'如有任何問題，請回信或來電 0979-032-572。\n' +
+'期待在球場見到 ' + student + '！\n' +
+'\n' +
+'Stay Young 運動團隊｜清華大學足球冬令營';
+
+  return { subject: '【清大足球冬令營】行前通知｜1/25（一）開營，請先看這封', body: body };
+}
+
+/** 預覽：拿第一位「正取」的資料組信，只寄給自己。不寫 Sheet。 */
+function previewPreCampNotice() {
+  const rows = getSheet_().getDataRange().getValues();
+  let sample = null;
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][COL.STATUS]).trim() === '正取') { sample = rows[i]; break; }
+  }
+  if (!sample) throw new Error('目前沒有狀態為「正取」的報名，無法產生預覽。');
+  const mail = buildPreCampMail(sample);
+  const to = Session.getEffectiveUser().getEmail();
+  MailApp.sendEmail({
+    to: to,
+    subject: '【預覽】' + mail.subject,
+    body: '這是預覽，只寄給你自己，Sheet 沒有被寫入任何資料。\n' +
+          '取樣對象：' + safeText(sample[COL.STUDENT], 20) + '\n' +
+          '───────────\n\n' + mail.body,
+    replyTo: CONFIG.REPLY_EMAIL,
+    name: 'Stay Young 清華大學足球冬令營'
+  });
+  return '預覽信已寄至 ' + to;
+}
+
+/** 正式寄送：挑「正取」且尚未寄過行前通知的人，寄到收信信箱並回填時間戳。重跑不重寄。 */
+function sendPreCampNotice() {
+  const sheet = getSheet_();
+  const rows = sheet.getDataRange().getValues();
+  let sent = 0, skipped = 0, failed = 0;
+  for (let i = 1; i < rows.length; i++) {
+    const r = rows[i];
+    if (String(r[COL.STATUS]).trim() !== '正取') { skipped++; continue; }
+    if (String(r[PRECAMP_COL - 1] || '').trim() !== '') { skipped++; continue; }
+    const to = String(r[COL.EMAIL] || '').trim();
+    if (!to) { skipped++; continue; }
+    const mail = buildPreCampMail(r);
+    try {
+      MailApp.sendEmail({
+        to: to,
+        subject: mail.subject,
+        body: mail.body,
+        replyTo: CONFIG.REPLY_EMAIL,
+        name: 'Stay Young 清華大學足球冬令營'
+      });
+    } catch (err) {
+      // 寄失敗就不回填，下次重跑會再試一次
+      Logger.log('行前通知寄送失敗（第 ' + (i + 1) + ' 列）：' + err);
+      failed++;
+      continue;
+    }
+    sheet.getRange(i + 1, PRECAMP_COL)
+         .setValue(Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy/MM/dd HH:mm'));
+    sent++;
+  }
+  const msg = '行前通知：已寄 ' + sent + ' 封，略過 ' + skipped + ' 筆' +
+              (failed ? '，失敗 ' + failed + ' 筆（詳見執行記錄，未回填，重跑會再試）' : '') + '。';
+  Logger.log(msg);
+  return msg;
 }
 
 // ══════════════════════════════════════════
