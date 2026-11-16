@@ -158,14 +158,12 @@ h1,.st,.ft,.dn,.tl-name,.faq-q{text-wrap:balance}
 .st{font-family:'Noto Serif TC',serif;font-size:clamp(1.7rem,3.8vw,2.4rem);font-weight:900;margin-bottom:.9rem;line-height:1.25;letter-spacing:.04em}
 .ss{font-size:15px;color:var(--text-body);line-height:1.85;max-width:680px;text-wrap:pretty}
 .ss .cl{display:inline-block}
-/* 五格特色：上三下二。用 6 欄格線讓每格佔 2 欄，第二列往內縮 1 欄即置中 */
+/* 特色卡：6 欄格線、每格佔 2 欄 → 每列 3 張。卡片數為 3 的倍數時自然對齊 */
 .fgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:1.7rem}
 .fc{grid-column:span 2;background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.9rem 1.7rem;min-height:158px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
-.fc:nth-child(4){grid-column:2/4}
-.fc:nth-child(5){grid-column:4/6}
 @media (max-width:900px){
   .fgrid{grid-template-columns:repeat(2,1fr)}
-  .fc,.fc:nth-child(4),.fc:nth-child(5){grid-column:auto}
+  .fc{grid-column:auto}
 }
 @media (max-width:560px){.fgrid{grid-template-columns:1fr}}
 .fc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green)}
