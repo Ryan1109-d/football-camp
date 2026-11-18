@@ -2,8 +2,13 @@
  * 清華大學足球冬令營 2027 — Google Apps Script 後端
  *
  * 部署步驟：
- * 1. Google Sheet 第一列欄位標題（共 26 欄，與下方 appendRow 順序一致）：
- *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 推薦人 | 午餐 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意 | 健康狀況 | 健康說明 | 緊急醫療授權 | 法定代理人聲明 | 繳費通知 | 行前通知 | 系統訊息
+ * 1. Google Sheet 第一列欄位標題（共 32 欄，與下方 appendRow 順序一致）：
+ *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 推薦人 | 午餐 | 飲食禁忌 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意 | 健康狀況 | 健康說明 | 緊急醫療授權 | 法定代理人聲明 | 繳費通知 | 行前通知 | 系統訊息 | 特約公司 | 員工識別號 | 員工姓名 | 公司信箱
+ *
+ *    ⚠️ 2026-11-18 新增最後四欄（特約公司／員工識別號／員工姓名／公司信箱）。
+ *       刻意加在「最右邊」而不是插在優惠身份後面：既有資料不會位移，
+ *       點名表／金流等分頁若有參照本表的欄位也不會跑掉。
+ *       欄位不足時 ensureColumns_() 會自己補欄補標題，不需要人工先插欄。
  *
  *    ⚠️ 2026-08-17 新增第 14 欄「推薦人」。若 Sheet 已有報名資料，
  *       請用「插入 1 欄」而不是直接改標題，否則第 14 欄之後的既有資料會全部錯位。
@@ -29,7 +34,7 @@ const CONFIG = {
   // 早鳥截止（含當日）。此日期前完成報名者，不限身份適用優惠價
   EARLY_BIRD_DEADLINE: '2026-11-20T23:59:59+08:00',
   // 定價（2026-08-17 起）。兩道折扣互相獨立、可以疊加，各減 STEP：
-  //   ① 優惠身份：早鳥 / 團報 / 清大教職員（三擇一，彼此不疊加）
+  //   ① 優惠身份：早鳥 / 團報 / 清大教職員 / 特約企業員工（四擇一，彼此不疊加）
   //   ② 推薦人：報名表填了推薦人姓名
   //   8500 → 8000（單一）→ 7500（兩者皆有）
   PRICE: { BASE: 8500, STEP: 500 },
@@ -60,18 +65,66 @@ const COL = {
   PAYER_NAME: 9, PAYER_PHONE: 10, PAYER_EMAIL: 11,
   DISCOUNT: 12, REFERRER: 13, LUNCH: 14, DIET: 15, STATUS: 16,
   GROUP: 17, SHIRT: 18, NOTES: 19, PHOTO: 20,
-  HEALTH: 21, HEALTH_DETAIL: 22, MEDICAL: 23, GUARDIAN: 24
+  HEALTH: 21, HEALTH_DETAIL: 22, MEDICAL: 23, GUARDIAN: 24,
+  // 特約合作企業（2026-11-18 新增，接在系統訊息之後）
+  PARTNER: 28, EMP_ID: 29, EMP_NAME: 30, EMP_EMAIL: 31
 };
 const NOTICE_COL  = 26;   // 繳費通知（1-based）
 const PRECAMP_COL = 27;   // 行前通知（1-based）
 const SYSMSG_COL  = 28;   // 系統訊息（1-based）
 
-// 標題列應有的 28 欄，順序即寫入順序。checkSetup() 會拿它逐欄比對。
+// 標題列應有的 32 欄，順序即寫入順序。checkSetup() 會拿它逐欄比對。
 const EXPECTED_HEADERS = [
   '報名時間','梯次','學員姓名','性別','年齡','年級','收信信箱','緊急聯絡人','緊急聯絡人電話',
   '繳款人姓名','繳款人電話','繳款人信箱','優惠身份','推薦人','午餐','飲食禁忌','狀態','團報成員','衣服尺寸',
-  '備註','照片同意','健康狀況','健康說明','緊急醫療授權','法定代理人聲明','繳費通知','行前通知','系統訊息'
+  '備註','照片同意','健康狀況','健康說明','緊急醫療授權','法定代理人聲明','繳費通知','行前通知','系統訊息',
+  '特約公司','員工識別號','員工姓名','公司信箱'
 ];
+
+/**
+ * 確保 Sheet 欄數與 EXPECTED_HEADERS 一致。
+ *
+ * 只做一件事：**在最右邊補欄、補標題**。永遠不插中間、不改既有標題、不刪欄，
+ * 所以既有報名資料不會位移，其他分頁對本表的參照也不會跑掉。
+ * 前面的標題與 EXPECTED_HEADERS 不一致時直接丟錯 —— 那代表有人動過欄位順序，
+ * 這種情況要人工確認，不能讓程式自己猜著修。
+ */
+function ensureColumns_(sheet) {
+  const need = EXPECTED_HEADERS.length;
+  const maxCols = sheet.getMaxColumns();
+  if (maxCols < need) sheet.insertColumnsAfter(maxCols, need - maxCols);
+  const lastCol = sheet.getLastColumn();
+  const headers = lastCol ? sheet.getRange(1, 1, 1, lastCol).getValues()[0] : [];
+  for (let i = 0; i < headers.length && i < need; i++) {
+    const h = String(headers[i]).trim();
+    if (h && h !== EXPECTED_HEADERS[i]) {
+      throw new Error('標題列第 ' + (i + 1) + ' 欄是「' + h + '」，應為「' + EXPECTED_HEADERS[i] +
+                      '」。欄位順序被動過，請先人工確認 Sheet，程式不會自動修。');
+    }
+  }
+  if (headers.length < need) {
+    const add = EXPECTED_HEADERS.slice(headers.length);
+    sheet.getRange(1, headers.length + 1, 1, add.length).setValues([add]);
+  }
+}
+
+
+/**
+ * 把剛寫入那一列的電話欄改成純文字並重寫一次。
+ *
+ * appendRow 走的是「使用者輸入」那套解析：'0912345678' 會被當成數字存成
+ * 912345678，開頭的 0 就不見了 —— 之後照 Sheet 打電話會少一碼，
+ * 保險名冊也會抄到錯號碼。所以寫完立刻把這幾格設成純文字格式再寫回去。
+ * 2026-11-18 由 11/18 那筆真實報名（934020456）發現。
+ */
+function writePhonesAsText_(sheet, row, clean) {
+  [
+    [COL.EMG_PHONE + 1, clean.emgPhone],
+    [COL.PAYER_PHONE + 1, clean.payerPhone]
+  ].forEach(function (c) {
+    sheet.getRange(row, c[0]).setNumberFormat('@').setValue(String(c[1]));
+  });
+}
 
 /**
  * 取得報名分頁。找不到時丟出「講得出原因」的錯誤，
@@ -173,6 +226,13 @@ function notifyOwner_(data, clean, status, seq) {
     '繳款人：' + dash(clean.payerName) + '（' + dash(clean.payerPhone) + '）\n' +
     '─────────────────\n' +
     '優惠身份：' + dash(clean.discount) + '\n' +
+    (clean.partnerCell && clean.partnerCell !== '—'
+      ? '特約：' + clean.partnerCell +
+        (clean.empEmail !== '—' ? '｜信箱 ' + safeText(clean.empEmailCell, 254) : '') +
+        (clean.empName !== '—' ? '｜姓名 ' + safeText(clean.empName, 20) : '') +
+        (clean.empId !== '—' ? '｜識別號 ' + safeText(clean.empId, 30) : '') +
+        '　← 需人工核對\n'
+      : '') +
     '推薦人：' + safeText(ref, 20) + (ref !== '—' ? '　← 需人工核對是否也已報名' : '') + '\n' +
     '午餐：' + dash(clean.lunch) +
       (String(clean.diet).indexOf('有') === 0 ? '　⚠️ ' + safeText(clean.diet, 200) : '') + '\n' +
@@ -272,6 +332,23 @@ function doPost(e) {
     if (!PHONE_RE.test(String(data.payerPhone).trim())) {
       return jsonResponse({ status: 'error', message: '繳款人電話格式有誤，請確認後再送出' });
     }
+    // ---- 特約企業優惠驗證（前端擋得住一般使用者，直接打 API 的要後端自己擋）----
+    if (String(data.discount || '').trim() === '特約企業員工') {
+      if (!/^P\d{2,3}$/.test(String(data.partner || '').trim())) {
+        return jsonResponse({ status: 'error', message: '請選擇特約公司' });
+      }
+      const anyVerify = ['empId', 'empName', 'empEmail'].some(function (k) {
+        const v = String(data[k] || '').trim();
+        return v !== '' && v !== '—';
+      });
+      if (!anyVerify) {
+        return jsonResponse({ status: 'error', message: '特約企業優惠需要核對員工身分，請至少填寫一項' });
+      }
+      const em = String(data.empEmail || '').trim();
+      if (em && em !== '—' && !EMAIL_RE.test(em)) {
+        return jsonResponse({ status: 'error', message: '公司信箱格式有誤，請確認後再送出' });
+      }
+    }
     // ---- 淨化（比對與寫入都用這組值）----
     const clean = {
       session:      safeCell(data.session, 40),
@@ -297,9 +374,25 @@ function doPost(e) {
       health:       safeCell(data.healthStatus, 20),
       healthDetail: safeCell(data.healthDetail, 200) || '—',
       medical:      data.medicalConsent ? '同意' : '',
-      guardian:     data.guardianConsent ? '同意' : ''
+      guardian:     data.guardianConsent ? '同意' : '',
+      // 特約合作企業。後端刻意不存公司對照表（多一家公司才不用重新部署）：
+      // partner 是前端 PARTNERS 的編號，partnerName 只當顯示字串用。
+      partner:      safeCell(data.partner, 10) || '—',
+      partnerName:  safeCell(data.partnerName, 40) || '—',
+      empId:        safeCell(data.empId, 30) || '—',
+      empName:      safeCell(data.empName, 20) || '—',
+      empEmail:     safeCell(data.empEmail, 254) || '—'
     };
+    // 特約公司欄：「名稱（編號）」。編號才是對得回去的那個值，名稱只是給人看的
+    clean.partnerCell = clean.partner === '—'
+      ? '—'
+      : clean.partnerName + '（' + clean.partner + '）';
+    // 網域不符由前端判定（公司網域表在前端），這裡只負責把警示標進 Sheet
+    clean.empEmailCell = (clean.empEmail !== '—' && data.partnerDomainOk === false)
+      ? clean.empEmail + '　⚠️網域不符'
+      : clean.empEmail;
     const sheet = getSheet_();
+    ensureColumns_(sheet);   // 欄位不足自動補在最右邊，否則 appendRow 會因欄數不符整筆失敗
     const rows = sheet.getDataRange().getValues();
     const tRead = Date.now();
     // ---- 重複報名檢查（用淨化後的值比對）----
@@ -327,7 +420,7 @@ function doPost(e) {
     }
     const isWaitlist = sessionCount >= CONFIG.CAPACITY;
     const status = isWaitlist ? '候補' : '正取';
-    // ---- 寫入 Sheet（順序 = 欄位標題順序，共 26 欄）----
+    // ---- 寫入 Sheet（順序 = 欄位標題順序，共 32 欄）----
     sheet.appendRow([
       new Date(),
       clean.session, clean.studentName, clean.gender, clean.age, clean.grade,
@@ -337,8 +430,11 @@ function doPost(e) {
       status,
       clean.groupMembers, clean.shirtSize, clean.notes, clean.photoConsent,
       clean.health, clean.healthDetail, clean.medical, clean.guardian,
-      '', '', ''   // 繳費通知、行前通知、系統訊息（留空，由後續流程填入）
+      '', '', '',  // 繳費通知、行前通知、系統訊息（留空，由後續流程填入）
+      clean.partnerCell, clean.empId, clean.empName, clean.empEmailCell
     ]);
+    // Sheets 會吃掉電話開頭的 0，寫完立刻把那幾格改成純文字再寫回去
+    writePhonesAsText_(sheet, sheet.getLastRow(), clean);
     const tWrite = Date.now();
     // ---- 寫入成功，此時才記錄冷卻與流量計數 ----
     cache.put(rateKey, '1', 600);
@@ -385,7 +481,7 @@ function sendConfirmEmail(data) {
 時間：${CONFIG.CAMP_TIME}
 學員：${safeText(data.studentName,20)}（${safeText(data.grade,20)}，${safeText(data.gender,20)}，${safeText(data.age,20)} 歲）
 緊急聯絡人：${safeText(data.emgName,20)}（${safeText(data.emgPhone,15)}）
-優惠身份：${safeText(data.discount,20)}
+優惠身份：${safeText(data.discount,20)}${data.partnerName && data.partnerName !== '—' ? '（' + safeText(data.partnerName,40) + '）' : ''}
 午餐：${safeText(data.lunch,30)}
 飲食禁忌：${safeText(data.diet,200)}\n衣服尺寸：${safeText(data.shirtSize,20)}${String(data.healthStatus).trim() === '有特殊狀況' ? '\n健康狀況：' + safeText(data.healthDetail,200) : ''}${data.notes && data.notes !== '—' ? '\n備註：' + safeText(data.notes,200) : ''}
 ── 接下來的流程 ──
@@ -832,7 +928,7 @@ function calcAmount(row) {
   const early = (regTime instanceof Date) &&
                 regTime <= new Date(CONFIG.EARLY_BIRD_DEADLINE);
   const d = String(row[COL.DISCOUNT] || '');
-  const hasStatus = early || d === '團報' || d === '清大教職員';
+  const hasStatus = early || d === '團報' || d === '清大教職員' || d === '特約企業員工';
   const ref = String(row[COL.REFERRER] || '').trim();
   const hasReferrer = ref !== '' && ref !== '—';
 

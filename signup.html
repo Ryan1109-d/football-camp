@@ -305,8 +305,34 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
           <option value="一般報名">一般報名</option>
           <option value="團報">5 人以上團報</option>
           <option value="清大教職員">清大教職員</option>
+          <option value="特約企業員工">特約合作企業員工（含為子女報名）</option>
         </select>
-        <span style="font-size:11px;color:var(--text-muted);margin-top:3px" id="discountNote">2026/11/20（含）前完成報名，不限身份自動適用早鳥優惠價。以上三種身份擇一適用，彼此不可疊加。</span>
+        <span style="font-size:11px;color:var(--text-muted);margin-top:3px" id="discountNote">2026/11/20（含）前完成報名，不限身份自動適用早鳥優惠價。以上四種身份擇一適用，彼此不可疊加。</span>
+      </div>
+      <!-- 特約合作企業：選了公司，才跳出「該公司」可用的核對方式。公司清單與各自的核對方式見下方 PARTNERS 設定 -->
+      <div class="fg full" id="partnerBox" style="display:none">
+        <label for="partnerId">特約公司 <span class="req">*</span></label>
+        <select id="partnerId" name="partnerId">
+          <option value="">請選擇公司</option>
+        </select>
+        <span style="font-size:11px;color:var(--text-muted);margin-top:3px">選擇公司後，下方會出現該公司可用的核對方式。</span>
+      </div>
+      <div class="fg full" id="partnerVerifyBox" style="display:none">
+        <label>員工身分核對 <span class="req">*</span>　<span style="color:var(--text-faint);font-weight:400">以下至少填一項</span></label>
+        <div id="pvEmail" style="display:none">
+          <label class="vh" for="empEmail">公司信箱</label>
+          <input type="email" id="empEmail" name="empEmail" maxlength="254" placeholder="公司信箱，例：name@company.com.tw" style="width:100%">
+          <span id="empEmailHint" style="display:block;font-size:11px;color:var(--text-muted);margin-top:3px"></span>
+        </div>
+        <div id="pvName" style="display:none;margin-top:.5rem">
+          <label class="vh" for="empName">員工本人姓名</label>
+          <input type="text" id="empName" name="empName" maxlength="20" placeholder="員工本人姓名" style="width:100%">
+        </div>
+        <div id="pvId" style="display:none;margin-top:.5rem">
+          <label class="vh" for="empId">員工識別號</label>
+          <input type="text" id="empId" name="empId" maxlength="30" placeholder="員工識別號／員工編號" style="width:100%">
+        </div>
+        <span style="font-size:11px;color:var(--text-muted);margin-top:3px">若無特約公司專屬信箱，請填寫員工本人姓名或員工識別號，方便我們核對。此處的員工指<strong>在該公司任職的本人</strong>，可能是家長，不一定是學員或繳款人。</span>
       </div>
       <div class="fg full">
         <label for="referrer">推薦人姓名（選填）</label>
@@ -405,7 +431,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       </div>
       <div class="fg full" style="background:var(--card-light);border:.5px solid var(--border-soft);border-radius:8px;padding:.9rem 1rem;font-size:12px;line-height:1.75;color:#4a5b6c;gap:0">
         <strong style="color:var(--text-2);font-weight:600">個人資料使用說明</strong>
-        <span style="margin-top:4px">本表單蒐集之個人資料，僅用於本營隊報名、聯繫、保險投保及活動安全管理，活動結束後六個月內刪除，不作其他用途。</span>
+        <span style="margin-top:4px">本表單蒐集之個人資料，僅用於本營隊報名、聯繫、保險投保及活動安全管理，活動結束後六個月內刪除，不作其他用途。選擇特約合作企業優惠者，另同意本營隊於必要時向該公司窗口核對員工身分（姓名、員工識別號或公司信箱）。</span>
       </div>
       </div>
 
@@ -458,7 +484,7 @@ if (!REGISTRATION_OPEN) {
   const EARLY_END = new Date('2026-11-20T23:59:59+08:00');
   if (new Date() <= EARLY_END) return;
   const dn = document.getElementById('discountNote');
-  if (dn) dn.textContent = '早鳥已截止。剩餘兩種身份擇一適用，彼此不可疊加：5 人以上團報／清大教職員。';
+  if (dn) dn.textContent = '早鳥已截止。剩餘三種身份擇一適用，彼此不可疊加：5 人以上團報／清大教職員／特約合作企業員工。';
 })();
 
 // 無障礙：必填欄位補 aria-required（表單為 novalidate，required 僅作語意標記）
@@ -513,9 +539,78 @@ document.querySelectorAll('input[name="dietRestrict"]').forEach(r => {
       (picked && picked.value === '有') ? 'flex' : 'none';
   });
 });
-// 團報名單顯示聯動
+/* ── 特約合作企業設定 ─────────────────────────────────────────────
+   新增或修改公司**只改這個陣列**。後端刻意不存公司對照表，所以多一家公司
+   不用重貼、不用重新部署 Apps Script（只要 git push，線上就生效）。
+     id      送給後端、記在 Sheet 上的編號。公司改名也不要動 id，
+             否則舊報名資料對不回去
+     name    前台顯示與信件用的名稱
+     domain  公司信箱網域。有填才檢查信箱結尾；不符只提示，不擋送出
+     verify  這家公司可用的核對方式，選到該公司才跳出對應欄位：
+               'email' 公司信箱／'name' 員工本人姓名／'id' 員工識別號
+             三個欄位後端一律都收，這裡只決定前台顯示哪幾個 */
+const PARTNERS = [
+  { id: 'P01', name: '昇陽國際半導體', domain: 'psi.com.tw', verify: ['email', 'name', 'id'] }
+  // { id: 'P05', name: '和淞科技', domain: '', verify: ['email', 'name', 'id'] }   // 和淞確認後打開
+];
+const PARTNER_BY_ID = {};
+PARTNERS.forEach(function (p) { PARTNER_BY_ID[p.id] = p; });
+(function () {
+  const sel = document.getElementById('partnerId');
+  PARTNERS.forEach(function (p) {
+    const o = document.createElement('option');
+    o.value = p.id;
+    o.textContent = p.name;
+    sel.appendChild(o);
+  });
+})();
+const PV_INPUT = { email: 'empEmail', name: 'empName', id: 'empId' };
+const PV_WRAP  = { email: 'pvEmail',  name: 'pvName',  id: 'pvId'  };
+function currentPartner() {
+  return PARTNER_BY_ID[document.getElementById('partnerId').value] || null;
+}
+// 只顯示該公司可用的核對欄位；沒顯示的一律清空，避免把用不到的舊值送出去
+function syncPartnerVerify() {
+  const p = currentPartner();
+  document.getElementById('partnerVerifyBox').style.display = p ? 'flex' : 'none';
+  Object.keys(PV_WRAP).forEach(function (k) {
+    const on = !!p && p.verify.indexOf(k) >= 0;
+    const el = document.getElementById(PV_INPUT[k]);
+    document.getElementById(PV_WRAP[k]).style.display = on ? 'block' : 'none';
+    if (!on) el.value = '';
+    el.classList.remove('err');
+  });
+  document.getElementById('empEmailHint').textContent = '';
+}
+// 網域不符只是提示，不擋送出；後端會在 Sheet 上標「⚠️網域不符」提醒人工核對
+function partnerDomainOk() {
+  const p = currentPartner();
+  const v = document.getElementById('empEmail').value.trim().toLowerCase();
+  if (!p || !p.domain || !v) return true;
+  return v.slice(-(p.domain.length + 1)) === '@' + p.domain.toLowerCase();
+}
+document.getElementById('partnerId').addEventListener('change', syncPartnerVerify);
+document.getElementById('empEmail').addEventListener('blur', function () {
+  const p = currentPartner();
+  const hint = document.getElementById('empEmailHint');
+  if (!p || !p.domain || !document.getElementById('empEmail').value.trim()) {
+    hint.textContent = '';
+    return;
+  }
+  if (partnerDomainOk()) {
+    hint.textContent = '';
+  } else {
+    hint.textContent = '這個信箱不是 @' + p.domain + '，仍然可以送出，我們會另外與公司窗口核對。';
+    hint.style.color = '#b26a00';
+  }
+});
+// 團報名單與特約公司顯示聯動
 document.getElementById('discount').addEventListener('change', (e) => {
   document.getElementById('groupBox').style.display = e.target.value === '團報' ? 'block' : 'none';
+  const isPartner = e.target.value === '特約企業員工';
+  document.getElementById('partnerBox').style.display = isPartner ? 'flex' : 'none';
+  if (!isPartner) document.getElementById('partnerId').value = '';
+  syncPartnerVerify();
 });
 const isPhone = v => /^09\d{8}$/.test(v.replace(/[-\s]/g,''));
 const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -598,12 +693,56 @@ form.addEventListener('submit', async (e) => {
       return;
     }
   }
+  // 特約企業：要選公司，且該公司可用的核對方式至少填一項
+  if (document.getElementById('discount').value === '特約企業員工') {
+    const p = currentPartner();
+    if (!p) {
+      document.getElementById('partnerId').classList.add('err');
+      msgBox.textContent = '請選擇特約公司。';
+      msgBox.classList.add('fail');
+      return;
+    }
+    const anyFilled = p.verify.some(function (k) {
+      return document.getElementById(PV_INPUT[k]).value.trim() !== '';
+    });
+    if (!anyFilled) {
+      p.verify.forEach(function (k) {
+        document.getElementById(PV_INPUT[k]).classList.add('err');
+      });
+      msgBox.textContent = '特約企業優惠需要核對員工身分，請至少填寫一項。';
+      msgBox.classList.add('fail');
+      return;
+    }
+    const em = document.getElementById('empEmail').value.trim();
+    if (em && !isEmail(em)) {
+      document.getElementById('empEmail').classList.add('err');
+      msgBox.textContent = '公司信箱格式有誤，請確認後再送出。';
+      msgBox.classList.add('fail');
+      return;
+    }
+  }
   if (!valid) {
     msgBox.textContent = '請確認紅框欄位：必填未填，或電話 / 信箱 / 年齡格式有誤。';
     msgBox.classList.add('fail');
     return;
   }
   // ---- 組資料 ----
+  // 特約欄位：優惠身份不是特約時一律「—」；該公司沒開的核對方式也一律「—」
+  const pp = (function () {
+    const p = document.getElementById('discount').value === '特約企業員工' ? currentPartner() : null;
+    const pick = function (k) {
+      if (!p || p.verify.indexOf(k) < 0) return '—';
+      return document.getElementById(PV_INPUT[k]).value.trim() || '—';
+    };
+    return {
+      partner:     p ? p.id : '—',
+      partnerName: p ? p.name : '—',
+      empEmail:    pick('email'),
+      empName:     pick('name'),
+      empId:       pick('id'),
+      partnerDomainOk: p ? partnerDomainOk() : true
+    };
+  })();
   const data = {
     session: document.getElementById('session').value,
     studentName: document.getElementById('studentName').value.trim(),
@@ -619,6 +758,12 @@ form.addEventListener('submit', async (e) => {
     payerEmail: document.getElementById('payerEmail').value.trim(),
     discount: document.getElementById('discount').value,
     referrer: document.getElementById('referrer').value.trim(),
+    partner: pp.partner,
+    partnerName: pp.partnerName,
+    empId: pp.empId,
+    empName: pp.empName,
+    empEmail: pp.empEmail,
+    partnerDomainOk: pp.partnerDomainOk,
     lunch: (() => {
       const l = document.querySelector('input[name="lunch"]:checked').value;
       if (l !== '代訂午餐') return l;
@@ -681,7 +826,8 @@ let previewConfirmed = false;
 function estimateFee(d) {
   const EARLY_END = new Date('2026-11-20T23:59:59+08:00');
   const early = new Date() <= EARLY_END;
-  const hasStatus = early || d.discount === '團報' || d.discount === '清大教職員';
+  const hasStatus = early || d.discount === '團報' || d.discount === '清大教職員' ||
+                    d.discount === '特約企業員工';
   const hasRef = !!(d.referrer && d.referrer !== '—');
   const LIST = 8500, STEP = 500;
   const lines = [];
@@ -723,6 +869,10 @@ function showPreview(d) {
 
       '<div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--green);margin:.9rem 0 .2rem">報名選擇</div>' +
       row('梯次', esc(d.session)) + row('優惠身份', esc(d.discount)) +
+      (d.partner !== '—' ? row('特約公司', esc(d.partnerName)) : '') +
+      (d.empEmail !== '—' ? row('公司信箱', esc(d.empEmail) + (d.partnerDomainOk ? '' : '　⚠️ 網域不符')) : '') +
+      (d.empName !== '—' ? row('員工姓名', esc(d.empName)) : '') +
+      (d.empId !== '—' ? row('員工識別號', esc(d.empId)) : '') +
       row('推薦人', d.referrer ? esc(d.referrer) : '未填') +
       row('午餐', esc(d.lunch)) +
       row('飲食禁忌', esc(d.diet)) +
