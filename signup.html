@@ -384,7 +384,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
           <option value="清大教職員">清大教職員</option>
           <option value="特約企業員工">特約合作企業員工（含為子女報名）</option>
         </select>
-        <span style="font-size:11px;color:var(--text-muted);margin-top:3px" id="discountNote">2026/11/20（含）前完成報名，不限身份自動適用早鳥優惠價。以上四種身份擇一適用，彼此不可疊加。折扣金額：全天班 $500、半天班 $250。</span>
+        <span style="font-size:11px;color:var(--text-muted);margin-top:3px" id="discountNote">2026/11/22（含）前完成報名，不限身份自動適用早鳥優惠價。以上四種身份擇一適用，彼此不可疊加。折扣金額：全天班 $500、半天班 $250。</span>
       </div>
       <!-- 特約合作企業：選了公司，才跳出「該公司」可用的核對方式。公司清單與各自的核對方式見下方 PARTNERS 設定 -->
       <div class="fg full" id="partnerBox" style="display:none">
@@ -559,7 +559,7 @@ if (!REGISTRATION_OPEN) {
 
 // 早鳥截止後自動收掉早鳥字樣（僅影響顯示；費用試算與後端各自依時間判定）
 (function () {
-  const EARLY_END = new Date('2026-11-20T23:59:59+08:00');
+  const EARLY_END = new Date('2026-11-22T23:59:59+08:00');
   if (new Date() <= EARLY_END) return;
   const dn = document.getElementById('discountNote');
   if (dn) dn.textContent = '早鳥已截止。剩餘三種身份擇一適用，彼此不可疊加：5 人以上團報／清大教職員／特約合作企業員工。折扣金額：全天班 $500、半天班 $250。';
@@ -652,7 +652,9 @@ const PARTNERS = [
   { id: 'P06', name: '合勤集團', domain: '', verify: ['email', 'name', 'id'] },
   { id: 'P07', name: '中強光電', domain: 'coretronic.com', verify: ['email', 'name', 'id'] },
   // 資誠（PwC Taiwan）同仁信箱是 @pwc.com，不是 tw.pwc.com（2026-11-20 由窗口來信確認）。
-  { id: 'P08', name: '資誠聯合會計師事務所', domain: 'pwc.com', verify: ['email', 'name', 'id'] }
+  { id: 'P08', name: '資誠聯合會計師事務所', domain: 'pwc.com', verify: ['email', 'name', 'id'] },
+  // 世界先進積體電路（VIS）同仁信箱是 @vis.com.tw（2026-11-20 由窗口來信確認）。
+  { id: 'P09', name: '世界先進', domain: 'vis.com.tw', verify: ['email', 'name', 'id'] }
 ];
 const PARTNER_BY_ID = {};
 PARTNERS.forEach(function (p) { PARTNER_BY_ID[p.id] = p; });
@@ -949,7 +951,7 @@ const SLOT_PRICE = {
   '全天班（09:00–17:00）': { LIST: 8500, STEP: 500, NAME: '全天班' }
 };
 function estimateFee(d) {
-  const EARLY_END = new Date('2026-11-20T23:59:59+08:00');
+  const EARLY_END = new Date('2026-11-22T23:59:59+08:00');
   const early = new Date() <= EARLY_END;
   const hasStatus = early || d.discount === '團報' || d.discount === '清大教職員' ||
                     d.discount === '特約企業員工';
@@ -958,7 +960,7 @@ function estimateFee(d) {
   const p = SLOT_PRICE[d.slot] || SLOT_PRICE['全天班（09:00–17:00）'];
   const LIST = p.LIST, STEP = p.STEP;
   const lines = [];
-  if (hasStatus) lines.push([early ? '早鳥優惠（11/20 前報名）' : ('優惠身份（' + d.discount + '）'), -STEP]);
+  if (hasStatus) lines.push([early ? '早鳥優惠（11/22 前報名）' : ('優惠身份（' + d.discount + '）'), -STEP]);
   if (hasRef)    lines.push(['推薦人優惠（' + d.referrer + '）', -STEP]);
   const base = LIST - lines.length * STEP;
   return { list: LIST, transfer: base, slotName: p.NAME,
