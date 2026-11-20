@@ -2,8 +2,16 @@
  * 清華大學足球冬令營 2027 — Google Apps Script 後端
  *
  * 部署步驟：
- * 1. Google Sheet 第一列欄位標題（共 32 欄，與下方 appendRow 順序一致）：
- *    報名時間 | 梯次 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 推薦人 | 午餐 | 飲食禁忌 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意 | 健康狀況 | 健康說明 | 緊急醫療授權 | 法定代理人聲明 | 繳費通知 | 行前通知 | 系統訊息 | 特約公司 | 員工識別號 | 員工姓名 | 公司信箱
+ * 1. Google Sheet 第一列欄位標題（共 33 欄，與下方 appendRow 順序一致）：
+ *    報名時間 | 梯次 | 時段 | 學員姓名 | 性別 | 年齡 | 年級 | 收信信箱 | 緊急聯絡人 | 緊急聯絡人電話 | 繳款人姓名 | 繳款人電話 | 繳款人信箱 | 優惠身份 | 推薦人 | 午餐 | 飲食禁忌 | 狀態 | 團報成員 | 衣服尺寸 | 備註 | 照片同意 | 健康狀況 | 健康說明 | 緊急醫療授權 | 法定代理人聲明 | 繳費通知 | 行前通知 | 系統訊息 | 特約公司 | 員工識別號 | 員工姓名 | 公司信箱
+ *
+ *    🔴 2026-11-20 新增第 3 欄「時段」（上午班／下午班／全天班）。
+ *       這一欄**插在中間**，與其他新增欄位的作法相反 —— 刻意與清大羽球的欄位順序
+ *       對齊（兩站的 Sheet 長得一樣，點名表與報表才能共用）。當時足球 0 筆報名，
+ *       插欄沒有資料位移風險。
+ *       ⚠️ **Sheet 必須先插欄，再部署這一版**：ensureColumns_() 只會在最右邊補欄，
+ *          不會自己插中間。順序反了的話每一筆報名都會失敗（會丟明確錯誤，不會寫錯位）。
+ *          懶得手動插的話，部署後先跑一次 migrateAddSlotColumn()。
  *
  *    ⚠️ 2026-11-18 新增最後四欄（特約公司／員工識別號／員工姓名／公司信箱）。
  *       刻意加在「最右邊」而不是插在優惠身份後面：既有資料不會位移，
@@ -19,25 +27,37 @@
  *    - 誰可以存取：所有人
  * 5. 複製 Web App URL，貼到 signup.html 的 GAS_URL
  *
- * 狀態欄位邏輯：
- * - 第 1–25 位報名 → 狀態「正取」，寄報名確認信
- * - 第 26 位起     → 狀態「候補」，寄候補通知信
+ * 狀態欄位邏輯（2026-11-20 起依「時段」計算，與清大羽球一致）：
+ * - 名額以時段為單位，每個時段上限 CONFIG.CAPACITY 人。
+ * - 全天班同時佔用上午與下午兩個時段的名額。
+ * - 報名時段還有空位 → 狀態「正取」，寄報名確認信
+ * - 報名時段已額滿   → 狀態「候補」，寄候補通知信（全天班只要有一邊滿就候補）
  */
 const CONFIG = {
   SHEET_ID: 'YOUR_SHEET_ID_HERE',       // TODO: 換成實際 Sheet ID（只在 Apps Script 填，不要 commit）
   SHEET_NAME: '報名名單',                 // 分頁名稱
-  CAPACITY: 25,                          // 正取名額
+  CAPACITY: 25,                          // 每個時段的正取上限（不是三時段合計）
+  MIN_OPEN: 12,                          // 開班門檻：任一時段的佔用數達此值即可開班
   CAMP_NAME: '清華大學足球冬令營 2027',
   CAMP_DATE: '2027/1/25（一）– 1/29（五）',
+  // 全天班的時間。半天班的時間由 slotScheduleText_() 依時段給，不吃這個值。
   CAMP_TIME: '每日 09:00–17:00（08:30 起開放報到，12:00–14:00 午休）',
   REPLY_EMAIL: 'stayyoung985@gmail.com',
   // 早鳥截止（含當日）。此日期前完成報名者，不限身份適用優惠價
   EARLY_BIRD_DEADLINE: '2026-11-20T23:59:59+08:00',
-  // 定價（2026-08-17 起）。兩道折扣互相獨立、可以疊加，各減 STEP：
+  // 定價（2026-11-20 起分三種時段）。兩道折扣互相獨立、可以疊加，各減該時段的 STEP：
   //   ① 優惠身份：早鳥 / 團報 / 清大教職員 / 特約企業員工（四擇一，彼此不疊加）
   //   ② 推薦人：報名表填了推薦人姓名
-  //   8500 → 8000（單一）→ 7500（兩者皆有）
-  PRICE: { BASE: 8500, STEP: 500 },
+  //   全天 8500 → 8000 → 7500（各 −500）
+  //   上午 4250 → 4000 → 3750（各 −250）
+  //   下午 4500 → 4250 → 4000（各 −250；下午班含點心與實戰賽，比上午貴 250）
+  // ⚠️ 全天價刻意低於「上午＋下午」合計（8500 < 8750），三個層級都便宜 250，
+  //    不能讓家長分兩筆半天報名反而更便宜。改價時務必維持這個關係。
+  PRICE: {
+    FULL: { BASE: 8500, STEP: 500 },
+    AM:   { BASE: 4250, STEP: 250 },
+    PM:   { BASE: 4500, STEP: 250 }
+  },
   // 個資保留期限。報名表上寫「活動結束後六個月內刪除」，這個值就是那個承諾的到期日
   //（營期 1/29 結束 + 6 個月）。purgeOldData() 會拿它當刪除基準。
   DATA_PURGE_AFTER: '2027-07-29T00:00:00+08:00',
@@ -60,26 +80,99 @@ const CONFIG = {
 };
 // 欄位索引（0-based，對應 Sheet 欄位順序）
 const COL = {
-  TIME: 0, SESSION: 1, STUDENT: 2, GENDER: 3, AGE: 4, GRADE: 5,
-  EMAIL: 6, EMG_NAME: 7, EMG_PHONE: 8,
-  PAYER_NAME: 9, PAYER_PHONE: 10, PAYER_EMAIL: 11,
-  DISCOUNT: 12, REFERRER: 13, LUNCH: 14, DIET: 15, STATUS: 16,
-  GROUP: 17, SHIRT: 18, NOTES: 19, PHOTO: 20,
-  HEALTH: 21, HEALTH_DETAIL: 22, MEDICAL: 23, GUARDIAN: 24,
+  // 2026-11-20 起第 3 欄是「時段」，之後所有欄位都往後移一格
+  TIME: 0, SESSION: 1, SLOT: 2, STUDENT: 3, GENDER: 4, AGE: 5, GRADE: 6,
+  EMAIL: 7, EMG_NAME: 8, EMG_PHONE: 9,
+  PAYER_NAME: 10, PAYER_PHONE: 11, PAYER_EMAIL: 12,
+  DISCOUNT: 13, REFERRER: 14, LUNCH: 15, DIET: 16, STATUS: 17,
+  GROUP: 18, SHIRT: 19, NOTES: 20, PHOTO: 21,
+  HEALTH: 22, HEALTH_DETAIL: 23, MEDICAL: 24, GUARDIAN: 25,
   // 特約合作企業（2026-11-18 新增，接在系統訊息之後）
-  PARTNER: 28, EMP_ID: 29, EMP_NAME: 30, EMP_EMAIL: 31
+  PARTNER: 29, EMP_ID: 30, EMP_NAME: 31, EMP_EMAIL: 32
 };
-const NOTICE_COL  = 26;   // 繳費通知（1-based）
-const PRECAMP_COL = 27;   // 行前通知（1-based）
-const SYSMSG_COL  = 28;   // 系統訊息（1-based）
+const NOTICE_COL  = 27;   // 繳費通知（1-based）
+const PRECAMP_COL = 28;   // 行前通知（1-based）
+const SYSMSG_COL  = 29;   // 系統訊息（1-based）
 
-// 標題列應有的 32 欄，順序即寫入順序。checkSetup() 會拿它逐欄比對。
+// 標題列應有的 33 欄，順序即寫入順序。checkSetup() 會拿它逐欄比對。
 const EXPECTED_HEADERS = [
-  '報名時間','梯次','學員姓名','性別','年齡','年級','收信信箱','緊急聯絡人','緊急聯絡人電話',
+  '報名時間','梯次','時段','學員姓名','性別','年齡','年級','收信信箱','緊急聯絡人','緊急聯絡人電話',
   '繳款人姓名','繳款人電話','繳款人信箱','優惠身份','推薦人','午餐','飲食禁忌','狀態','團報成員','衣服尺寸',
   '備註','照片同意','健康狀況','健康說明','緊急醫療授權','法定代理人聲明','繳費通知','行前通知','系統訊息',
   '特約公司','員工識別號','員工姓名','公司信箱'
 ];
+
+// ⚠️ 以下字串必須與 signup.html 的 <input name="slot"> 的 value 逐字相同，
+//    否則白名單驗證會把正常報名擋掉。改一邊就要改另一邊。
+//    與清大羽球（summarcamp）用同一組字串，兩站 Sheet 可以互相比對。
+const SLOT_AM   = '上午班（09:00–12:00）';
+const SLOT_PM   = '下午班（14:00–17:00）';
+const SLOT_FULL = '全天班（09:00–17:00）';
+const VALID_SLOTS = [SLOT_AM, SLOT_PM, SLOT_FULL];
+
+/** 時段 → 價目表那一組。認不出來一律當全天（最貴，不會少收） */
+function priceForSlot_(slot) {
+  const s = String(slot || '').trim();
+  if (s === SLOT_AM) return CONFIG.PRICE.AM;
+  if (s === SLOT_PM) return CONFIG.PRICE.PM;
+  return CONFIG.PRICE.FULL;
+}
+
+/** 時段 → 短名稱（信件開頭用，避免「（全天班（09:00–17:00））」雙層括號） */
+function slotShortName_(slot) {
+  const s = String(slot || '').trim();
+  if (s === SLOT_AM) return '上午班';
+  if (s === SLOT_PM) return '下午班';
+  return '全天班';
+}
+
+/** 時段 → 信裡要寫的時間。吃的是 Sheet 上的完整時段字串。 */
+function slotScheduleText_(slot) {
+  const s = String(slot || '').trim();
+  if (s === SLOT_AM) return '上午班 09:00–12:00（08:00 起可提早送達）';
+  if (s === SLOT_PM) return '下午班 14:00–17:00（最晚 18:00 接回）';
+  return '全天班 09:00–17:00（08:00 起可提早送達，最晚 18:00 接回，12:00–14:00 午休）';
+}
+
+/** 半天班不提供代訂午餐 */
+function isHalfDay_(slot) {
+  const s = String(slot || '').trim();
+  return s === SLOT_AM || s === SLOT_PM;
+}
+
+/**
+ * 計算各時段目前的「正取」佔用數（只算同一梯次）。
+ *
+ * 全天班同時佔用上午與下午，所以 amOcc = 上午 + 全天、pmOcc = 下午 + 全天。
+ * 取消者（狀態不是「正取」）不佔名額。
+ */
+function countSlots_(rows, session) {
+  let am = 0, pm = 0, full = 0;
+  for (let i = 1; i < rows.length; i++) {
+    if (String(rows[i][COL.SESSION]).trim() !== String(session).trim()) continue;
+    if (String(rows[i][COL.STATUS]).trim() !== '正取') continue;
+    const slot = String(rows[i][COL.SLOT]).trim();
+    if (slot === SLOT_AM) am++;
+    else if (slot === SLOT_PM) pm++;
+    else if (slot === SLOT_FULL) full++;
+  }
+  return { am: am, pm: pm, full: full, amOcc: am + full, pmOcc: pm + full };
+}
+
+/** 報這個時段會不會變成候補 */
+function isWaitlisted_(slot, c) {
+  if (slot === SLOT_AM) return c.amOcc >= CONFIG.CAPACITY;
+  if (slot === SLOT_PM) return c.pmOcc >= CONFIG.CAPACITY;
+  // 全天班要同時佔上午與下午，任一邊滿了就只能候補
+  return c.amOcc >= CONFIG.CAPACITY || c.pmOcc >= CONFIG.CAPACITY;
+}
+
+/** 這筆報名在該時段是第幾位（通知信用，讓自己一眼看出擠不擠） */
+function seqInSlot_(slot, c) {
+  if (slot === SLOT_AM) return c.amOcc + 1;
+  if (slot === SLOT_PM) return c.pmOcc + 1;
+  return Math.max(c.amOcc, c.pmOcc) + 1;
+}
 
 /**
  * 確保 Sheet 欄數與 EXPECTED_HEADERS 一致。
@@ -91,6 +184,15 @@ const EXPECTED_HEADERS = [
  */
 function ensureColumns_(sheet) {
   const need = EXPECTED_HEADERS.length;
+  // 舊版（2026-11-20 之前）第 3 欄是「學員姓名」。先認出這個情況給明確指示，
+  // 否則下面的逐欄比對只會丟「第 3 欄應為時段」，看不出來該怎麼修。
+  const probe = sheet.getLastColumn() >= 3
+    ? String(sheet.getRange(1, 3).getValue()).trim() : '';
+  if (probe === '學員姓名') {
+    throw new Error('這張 Sheet 還是舊版欄位（第 3 欄是「學員姓名」）。' +
+                    '2026-11-20 起第 3 欄要是「時段」。請在第 3 欄插入一欄、標題填「時段」，' +
+                    '或直接執行 migrateAddSlotColumn() 由程式插。插完再重試。');
+  }
   const maxCols = sheet.getMaxColumns();
   if (maxCols < need) sheet.insertColumnsAfter(maxCols, need - maxCols);
   const lastCol = sheet.getLastColumn();
@@ -108,6 +210,31 @@ function ensureColumns_(sheet) {
   }
 }
 
+
+/**
+ * 一次性：在第 3 欄插入「時段」欄（2026-11-20 新增半天班用）。
+ *
+ * 只在「第 3 欄標題剛好是學員姓名」時才動手，跑第二次會直接說已經做過了。
+ * 插欄會讓第 3 欄之後的既有資料整列右移一格 —— 這是對的，因為標題也一起右移。
+ * 已有的報名列在新的「時段」欄會是空白，需要人工補；足球在導入時是 0 筆，不會遇到。
+ *
+ * ⚠️ 這支會改 Sheet 結構。手動在 Google Sheet 上插欄是等價的，想自己插就不用跑這支。
+ */
+function migrateAddSlotColumn() {
+  const sheet = getSheet_();
+  const h3 = String(sheet.getRange(1, 3).getValue()).trim();
+  if (h3 === '時段') return '第 3 欄已經是「時段」，不需要處理。';
+  if (h3 !== '學員姓名') {
+    throw new Error('第 3 欄是「' + h3 + '」，不是預期的「學員姓名」。' +
+                    '欄位可能被動過，請人工確認後再處理，程式不會自己猜。');
+  }
+  sheet.insertColumnBefore(3);
+  sheet.getRange(1, 3).setValue('時段');
+  const rows = Math.max(0, sheet.getLastRow() - 1);
+  ensureColumns_(sheet);
+  return '已插入「時段」欄（第 3 欄）。既有資料列：' + rows +
+         (rows ? ' 筆 —— 這些列的「時段」是空白，請人工補上。' : ' 筆。');
+}
 
 /**
  * 把剛寫入那一列的電話欄改成純文字並重寫一次。
@@ -210,7 +337,7 @@ function lineSection() {
  * 主旨開頭固定帶【足球】，兩個營隊的通知在收件匣裡不會混淆。
  * 這封信寄失敗絕不能影響報名結果，呼叫端一律包在 try/catch 內。
  */
-function notifyOwner_(data, clean, status, seq) {
+function notifyOwner_(data, clean, status, seq, occ) {
   const subject = '【足球】新報名　' + status + ' 第 ' + seq + ' 位　' +
                   safeText(clean.studentName, 20);
   const sheetUrl = 'https://docs.google.com/spreadsheets/d/' + CONFIG.SHEET_ID + '/edit';
@@ -221,9 +348,16 @@ function notifyOwner_(data, clean, status, seq) {
   const body =
     CONFIG.CAMP_NAME + '\n' +
     '─────────────────\n' +
-    '狀態：' + status + '（同梯次第 ' + seq + ' 位，上限 ' + CONFIG.CAPACITY + '）\n' +
+    '狀態：' + status + '（該時段第 ' + seq + ' 位，每時段上限 ' + CONFIG.CAPACITY + '）\n' +
     '梯次：' + dash(data.session) + '\n' +
-    '時段：' + '整天班（09:00–17:00）' + '\n' +
+    '時段：' + dash(clean.slot) + '\n' +
+    (occ ? '正取佔用｜上午 ' + occ.amOcc + '／' + CONFIG.CAPACITY +
+           '　下午 ' + occ.pmOcc + '／' + CONFIG.CAPACITY +
+           '　（開班門檻 ' + CONFIG.MIN_OPEN + '／時段：上午 ' +
+           (occ.amOcc >= CONFIG.MIN_OPEN ? '已達' : '差 ' + (CONFIG.MIN_OPEN - occ.amOcc)) +
+           '、下午 ' +
+           (occ.pmOcc >= CONFIG.MIN_OPEN ? '已達' : '差 ' + (CONFIG.MIN_OPEN - occ.pmOcc)) + '）\n'
+         : '') +
     '─────────────────\n' +
     '學員：' + safeText(clean.studentName, 20) +
       '（' + dash(clean.gender) + '，' + dash(clean.age) + ' 歲）\n' +
@@ -310,7 +444,7 @@ function doPost(e) {
         message: '這筆報名剛剛已經送出成功了，請稍候幾分鐘再試，或直接來信確認報名狀態。' });
     }
     // ---- 基本驗證 ----
-    const required = ['session', 'studentName', 'gender', 'age', 'grade', 'email',
+    const required = ['session', 'slot', 'studentName', 'gender', 'age', 'grade', 'email',
                       'emgName', 'emgPhone', 'payerName', 'payerPhone', 'payerEmail',
                       'discount', 'lunch', 'diet', 'shirtSize', 'healthStatus', 'photoConsent'];
     for (const key of required) {
@@ -327,6 +461,10 @@ function doPost(e) {
     }
     if (!data.guardianConsent) {
       return jsonResponse({ status: 'error', message: '請勾選法定代理人聲明' });
+    }
+    // ---- 時段白名單驗證（前端擋得住一般使用者，直接打 API 的要後端自己擋）----
+    if (VALID_SLOTS.indexOf(String(data.slot).trim()) < 0) {
+      return jsonResponse({ status: 'error', message: '報名時段資料有誤，請重新選擇後送出' });
     }
     // ---- 信箱格式驗證（前端驗證對直接打 API 無效，後端必須自己驗）----
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
@@ -364,6 +502,7 @@ function doPost(e) {
     // ---- 淨化（比對與寫入都用這組值）----
     const clean = {
       session:      safeCell(data.session, 40),
+      slot:         safeCell(data.slot, 40),
       studentName:  safeCell(data.studentName, 20),
       gender:       safeCell(data.gender, 20),
       age:          safeCell(data.age, 20),
@@ -377,7 +516,9 @@ function doPost(e) {
       discount:     safeCell(data.discount, 20),
       // 推薦人為選填。空值一律寫「—」，calcAmount 以此判定不適用推薦優惠。
       referrer:     safeCell(data.referrer, 20) || '—',
-      lunch:        safeCell(data.lunch, 30),
+      // 半天班不提供代訂午餐。前端已經隱藏選項，這裡再固定一次，
+      // 直接打 API 的人就算送「代訂午餐」也不會被收 500 元（calcAmount 看的是這一格）
+      lunch:        isHalfDay_(data.slot) ? '不適用（半天）' : safeCell(data.lunch, 30),
       diet:         safeCell(data.diet, 200) || '無',
       groupMembers: safeCell(data.groupMembers, 200) || '—',
       shirtSize:    safeCell(data.shirtSize, 20),
@@ -424,18 +565,15 @@ function doPost(e) {
     if (now > CLOSE_TIME) {
       return jsonResponse({ status: 'error', message: '很抱歉，本梯次報名已截止。如有候補需求請直接來信 stayyoung985@gmail.com' });
     }
-    // ---- 判斷正取或候補（只計算「正取」，取消者不佔名額）----
-    let sessionCount = 0;
-    for (let i = 1; i < rows.length; i++) {
-      const st = String(rows[i][COL.STATUS]).trim();
-      if (String(rows[i][COL.SESSION]).trim() === clean.session && st === '正取') sessionCount++;
-    }
-    const isWaitlist = sessionCount >= CONFIG.CAPACITY;
+    // ---- 判斷正取或候補（以時段為單位，全天班佔用上午＋下午）----
+    const counts = countSlots_(rows, clean.session);
+    const isWaitlist = isWaitlisted_(clean.slot, counts);
     const status = isWaitlist ? '候補' : '正取';
-    // ---- 寫入 Sheet（順序 = 欄位標題順序，共 32 欄）----
+    const seq = seqInSlot_(clean.slot, counts);
+    // ---- 寫入 Sheet（順序 = 欄位標題順序，共 33 欄）----
     sheet.appendRow([
       new Date(),
-      clean.session, clean.studentName, clean.gender, clean.age, clean.grade,
+      clean.session, clean.slot, clean.studentName, clean.gender, clean.age, clean.grade,
       clean.email, clean.emgName, clean.emgPhone,
       clean.payerName, clean.payerPhone, clean.payerEmail,
       clean.discount, clean.referrer, clean.lunch, clean.diet,
@@ -453,7 +591,9 @@ function doPost(e) {
     cache.put(minuteKey, String(inThisMinute + 1), 120);
     // ---- 寄信：失敗不得讓家長看到「送出失敗」（資料已經寫進去了）----
     try {
-      if (isWaitlist) { sendWaitlistEmail(data); } else { sendConfirmEmail(data); }
+      // 傳 clean 的午餐值進去：半天班被後端改成「不適用（半天）」，信裡不能還寫代訂
+      const mailData = Object.assign({}, data, { slot: clean.slot, lunch: clean.lunch });
+      if (isWaitlist) { sendWaitlistEmail(mailData); } else { sendConfirmEmail(mailData); }
     } catch (mailErr) {
       sheet.getRange(sheet.getLastRow(), SYSMSG_COL)
            .setValue('寄信失敗：' + safeCell(mailErr.message, 200));
@@ -461,7 +601,7 @@ function doPost(e) {
     const tParentMail = Date.now();
     // ---- 通知自己有新報名（失敗不影響報名，也不寫進系統訊息欄）----
     try {
-      notifyOwner_(data, clean, status, sessionCount + 1);
+      notifyOwner_(data, clean, status, seq, counts);
     } catch (notifyErr) {
       Logger.log('新報名通知寄送失敗：' + notifyErr);
     }
@@ -490,7 +630,8 @@ function sendConfirmEmail(data) {
 ── 報名資訊 ──
 營隊：${CONFIG.CAMP_NAME}
 梯次：${safeText(data.session,40)}
-時間：${CONFIG.CAMP_TIME}
+時段：${safeText(data.slot,40)}
+時間：${slotScheduleText_(data.slot)}
 學員：${safeText(data.studentName,20)}（${safeText(data.grade,20)}，${safeText(data.gender,20)}，${safeText(data.age,20)} 歲）
 緊急聯絡人：${safeText(data.emgName,20)}（${safeText(data.emgPhone,15)}）
 優惠身份：${safeText(data.discount,20)}${data.partnerName && data.partnerName !== '—' ? '（' + safeText(data.partnerName,40) + '）' : ''}
@@ -512,15 +653,17 @@ ${CONFIG.REPLY_EMAIL}`;
     name: 'Stay Young 清華大學足球冬令營'
   });
 }
-/** 候補通知信（第 26 位起） */
+/** 候補通知信（該時段額滿後） */
 function sendWaitlistEmail(data) {
   const subject = `【${CONFIG.CAMP_NAME}】候補登記通知`;
   const body =
 `您好：
-感謝您為 ${safeText(data.studentName,20)} 報名 ${CONFIG.CAMP_NAME}（${safeText(data.session,40)}）。
-目前正取名額已滿，您的報名已列入「候補名單」。
+感謝您為 ${safeText(data.studentName,20)} 報名 ${CONFIG.CAMP_NAME}（${safeText(data.session,40)}・${slotShortName_(data.slot)}）。
+目前該時段正取名額已滿，您的報名已列入「候補名單」。
 若有名額釋出，我們將立即以 email 通知您，屆時再依信中說明完成報名程序即可。
 候補期間不會收取任何費用。
+※ 其他時段可能仍有名額。若您的時間允許調整，歡迎回覆本信告知，
+　 我們可協助改到還有空位的時段。
 若有任何問題，歡迎直接回覆本信。
 Stay Young 清華大學足球冬令營
 ${CONFIG.REPLY_EMAIL}`;
@@ -555,7 +698,7 @@ function jsonResponse(obj) {
 // 指紋是 SHA-256 的前 8 碼，不可逆 → 不會洩漏 Sheet ID 或 LINE 邀請連結本身。
 // doGet 是公開端點（誰可以存取＝所有人），所以這裡只放不敏感的值。
 // ══════════════════════════════════════════
-const SCRIPT_VERSION = '2026-11-16';
+const SCRIPT_VERSION = '2026-11-20';
 
 /** 取字串的 SHA-256 前 8 碼（16 進位）。空值或仍是佔位字串回 'unset' */
 function fingerprint_(v) {
@@ -925,7 +1068,7 @@ function paymentIsPlaceholder() {
 }
 
 /**
- * 依報名時間、優惠身份與推薦人計算應轉帳金額。
+ * 依時段、報名時間、優惠身份與推薦人計算應轉帳金額。
  *
  * ⚠️ 午餐費「不」併入轉帳總額：本營隊金流走學校、學校依總額抽成，
  *    併進去會連午餐費一起被抽。午餐一律開課第一天現金交給教練，
@@ -936,6 +1079,8 @@ function paymentIsPlaceholder() {
  *    該格清成「—」再重跑，金額就會回到未折扣的價格。
  */
 function calcAmount(row) {
+  const slot = String(row[COL.SLOT] || '').trim();
+  const price = priceForSlot_(slot);
   const regTime = row[COL.TIME];
   const early = (regTime instanceof Date) &&
                 regTime <= new Date(CONFIG.EARLY_BIRD_DEADLINE);
@@ -945,25 +1090,27 @@ function calcAmount(row) {
   const hasReferrer = ref !== '' && ref !== '—';
 
   const steps = (hasStatus ? 1 : 0) + (hasReferrer ? 1 : 0);
-  const base = CONFIG.PRICE.BASE - steps * CONFIG.PRICE.STEP;
+  const base = price.BASE - steps * price.STEP;
 
   const breakdown = [];
   if (hasStatus) {
     breakdown.push((early ? '早鳥優惠' : '優惠身份（' + d + '）') +
-                   '　−NT$ ' + CONFIG.PRICE.STEP);
+                   '　−NT$ ' + price.STEP);
   }
   if (hasReferrer) {
-    breakdown.push('推薦人優惠（' + ref + '）　−NT$ ' + CONFIG.PRICE.STEP);
+    breakdown.push('推薦人優惠（' + ref + '）　−NT$ ' + price.STEP);
   }
 
+  // 半天班沒有代訂午餐（後端寫入時已固定成「不適用（半天）」），這裡自然就是 0
   const mealCash = String(row[COL.LUNCH] || '').indexOf('代訂') >= 0 ? 500 : 0;
-  return { listPrice: CONFIG.PRICE.BASE, base: base, mealCash: mealCash, total: base,
+  return { listPrice: price.BASE, base: base, mealCash: mealCash, total: base,
            hasReferrer: hasReferrer, referrer: ref, breakdown: breakdown,
+           slotLabel: slotShortName_(slot),
            label: breakdown.length ? '已套用優惠' : '一般報名價' };
 }
 
 /** 組繳費通知信內容 */
-function buildPaymentBody(studentName, session, amt) {
+function buildPaymentBody(studentName, session, slot, amt) {
   const p = CONFIG.PAYMENT;
   const due = new Date();
   due.setDate(due.getDate() + p.DEADLINE_DAYS);
@@ -975,7 +1122,8 @@ ${CONFIG.CAMP_NAME} 已達開班標準，確定開班！
 
 ── 費用明細 ──
 梯次：${session}
-原價：NT$ ${amt.listPrice}
+時段：${slot}
+原價：NT$ ${amt.listPrice}（${amt.slotLabel}）
 ${amt.breakdown.length ? amt.breakdown.map(x => '　' + x).join('\n') + '\n' : ''}應轉帳總額：NT$ ${amt.total}
 ${amt.mealCash ? '\n※ 您另有選擇代訂午餐 NT$ ' + amt.mealCash + '（五天）。\n　 午餐費「不含」在上方轉帳金額內，請於開課第一天直接交給教練。\n' : ''}
 ── 轉帳資訊 ──
@@ -999,11 +1147,11 @@ ${CONFIG.REPLY_EMAIL}`;
  * 隨時可以安全執行。
  */
 function previewPaymentNotice() {
-  const amt = { listPrice: CONFIG.PRICE.BASE, base: 7500, mealCash: 500, total: 7500,
+  const amt = { listPrice: CONFIG.PRICE.FULL.BASE, base: 7500, mealCash: 500, total: 7500,
                 hasReferrer: true, referrer: '陳小美（範例）',
                 breakdown: ['早鳥優惠　−NT$ 500', '推薦人優惠（陳小美（範例））　−NT$ 500'],
-                label: '已套用優惠' };
-  const body = buildPaymentBody('王小華（範例）', '第一梯 2027/1/25–1/29', amt);
+                slotLabel: '全天班', label: '已套用優惠' };
+  const body = buildPaymentBody('王小華（範例）', '第一梯 2027/1/25–1/29', SLOT_FULL, amt);
   MailApp.sendEmail({
     to: CONFIG.REPLY_EMAIL,
     subject: `【預覽】${CONFIG.CAMP_NAME} 繳費通知信`,
@@ -1035,7 +1183,7 @@ function sendPaymentNotice() {
     const payerEmail = String(r[COL.PAYER_EMAIL] || '').trim();
     if (!payerEmail) { skipped++; continue; }
     const amt = calcAmount(r);
-    const body = buildPaymentBody(r[COL.STUDENT], r[COL.SESSION], amt);
+    const body = buildPaymentBody(r[COL.STUDENT], r[COL.SESSION], r[COL.SLOT], amt);
     const opts = {
       to: payerEmail,
       subject: `【${CONFIG.CAMP_NAME}】確定開班・繳費通知`,
@@ -1084,6 +1232,7 @@ function preCampLineSection_() {
 function buildPreCampMail(row) {
   const student = safeText(row[COL.STUDENT], 20);
   const payer   = safeText(row[COL.PAYER_NAME], 20) || '家長';
+  const slot    = String(row[COL.SLOT] || '').trim();
   const lunch   = String(row[COL.LUNCH] || '');
   const ordered = lunch.indexOf('代訂') >= 0;
 
@@ -1092,12 +1241,13 @@ function buildPreCampMail(row) {
   const body =
 payer + ' 您好：\n' +
 '\n' +
-student + ' 的清大足球冬令營即將開始，以下是開營前需要知道的事。\n' +
+student + ' 的清大足球冬令營（' + slotShortName_(slot) + '）即將開始，以下是開營前需要知道的事。\n' +
 '\n' +
 '■ 日期與時間\n' +
 '2027/1/25（一）– 1/29（五），共五天\n' +
-'08:00 起可提早送達｜08:30 開放報到｜17:00 放學｜最晚 18:00 接回\n' +
-'延長時段由教練在場看顧，不另收費。\n' +
+'您的時段：' + slotScheduleText_(slot) + '\n' +
+'報到時間：' + (slot === SLOT_PM ? '13:45 起' : '08:30 起') + '\n' +
+'延長時段（提早送達／延後接回）由教練在場看顧，不另收費。\n' +
 '\n' +
 '■ 集合地點\n' +
 '清華大學南大校區 操場司令台（新竹市東區南大路 521 號）\n' +
@@ -1116,6 +1266,9 @@ student + ' 的清大足球冬令營即將開始，以下是開營前需要知�
 '・營隊紀念衣於第一天發放\n' +
 '・孩子如果有身體狀況或過敏，跟報名時填的不同，請報到時直接告訴教練\n' +
 preCampLineSection_() +
+'\n' +
+(slot === SLOT_PM ? '・下午班每天有點心與實戰賽，不需準備午餐\n' : '') +
+(slot === SLOT_AM ? '・上午班 12:00 結束，請自行安排午餐\n' : '') +
 '\n' +
 '■ 停課與請假\n' +
 '颱風、天災依新竹市政府停班停課公告辦理。\n' +
@@ -1205,7 +1358,8 @@ function sendCancelNotice(sessionName) {
       body:
 '您好：\n\n' +
 '感謝您為 ' + rows[i][COL.STUDENT] + ' 報名 ' + CONFIG.CAMP_NAME + '（' + sessionName + '）。\n\n' +
-'很遺憾，本梯次報名人數未達開班標準，經評估後將不予開班，在此向您致上最深的歉意。\n\n' +
+'很遺憾，本梯次報名人數未達開班標準（' + CONFIG.MIN_OPEN + ' 人／時段），' +
+'經評估後將不予開班，在此向您致上最深的歉意。\n\n' +
 '由於本營隊採「確認開班後才收費」的方式，您並未被收取任何費用，無需辦理退費手續。\n\n' +
 '若後續有加開梯次或其他營隊資訊，我們會第一時間通知您。\n' +
 '造成您的不便，我們深感抱歉。\n\n' +

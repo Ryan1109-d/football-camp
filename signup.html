@@ -149,6 +149,18 @@ body{font-family:-apple-system,"PingFang TC","Noto Sans TC","Microsoft JhengHei"
 .same-check{grid-column:1/-1;display:flex;flex-direction:row;align-items:center;gap:8px;padding:.2rem 0}
 .same-check input{width:16px;height:16px;accent-color:var(--green);margin:0;flex:none}
 .same-check label{font-size:13px;color:var(--text-2);cursor:pointer;margin:0}
+.slot-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:2px}
+.slot-opt{position:relative;background:var(--card);border:.5px solid var(--border);border-radius:8px;padding:12px 12px 13px;cursor:pointer;transition:border-color .15s,background .15s}
+.slot-opt:hover{border-color:rgba(27,90,160,.45);background:var(--card-light)}
+.slot-opt input{position:absolute;opacity:0;width:0;height:0}
+.slot-opt:has(input:checked){border-color:var(--green);background:rgba(27,90,160,.06);box-shadow:0 0 0 1px var(--green) inset}
+.slot-opt.err{border-color:var(--red)}
+.slot-name{font-size:13.5px;font-weight:700;color:var(--text-2)}
+.slot-time{font-size:11px;color:var(--text-muted);margin:2px 0 7px}
+.slot-price{font-size:14px;font-weight:700;color:var(--text-2)}
+.slot-disc{font-size:11px;color:var(--green);margin-top:1px}
+.slot-note{grid-column:1/-1;font-size:11px;color:var(--text-muted);margin-top:4px;line-height:1.6}
+@media(max-width:620px){.slot-grid{grid-template-columns:1fr}}
 .lunch-box{grid-column:1/-1;background:var(--card);border:.5px solid var(--border);border-radius:8px;padding:1rem}
 .lt{font-size:12px;color:var(--text-body);margin-bottom:10px}
 .lopt{display:flex;align-items:flex-start;gap:8px;cursor:pointer;margin-bottom:9px}
@@ -220,8 +232,9 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="notice-text">
         <b>活動地點</b>　清華大學南大校區 室外操場（新竹市東區南大路 521 號），請提前確認前往方式。遇雨會調整到室內場地，照常上課。<br>
         <b>當天攜帶</b>　運動服、運動鞋、水壺，<b>護脛請自行準備</b>。足球與標誌錐等訓練用具由營隊備妥。<br>
-        <b>彈性接送</b>　最早 08:00 送達、最晚 18:00 接回，延長時段由教練在場照管，不另收費。<br>
-        <b>午餐與點心</b>　可代訂午餐，五天共 $500（葷素可選），第一天上課時交給教練；每天下午另備點心。<br>
+        <b>三種時段</b>　上午班 09:00–12:00、下午班 14:00–17:00、全天班 09:00–17:00，報名時選一種。每個時段各限 25 人。<br>
+        <b>彈性接送</b>　上午班可 08:00 送達、下午班可 18:00 接回、全天班兩頭都適用，延長時段由教練在場照管，不另收費。<br>
+        <b>午餐與點心</b>　<b>全天班</b>可代訂午餐，五天共 $500（葷素可選），第一天上課時交給教練。<b>半天班不提供代訂午餐</b>（上午班 12:00 結束、下午班 14:00 才開始）。每天下午的點心三種時段都有。<br>
         <b>過敏與忌口</b>　點心是每個孩子都會吃到的，<b>不論有沒有代訂午餐都請填寫</b>，我們採買時會為孩子避開，不另外收費。<br>
         <b>紀念衫</b>　開營第一天發放。尺寸請把孩子現有的合身上衣平鋪測量，<b>不要量身體</b>。<br>
         <b>繳費方式</b>　本營隊的繳費單與收款由學校端統一辦理，請依學校通知完成繳費。<br>
@@ -235,12 +248,45 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
         <input type="text" id="contact_pref_2" name="contact_pref_2" tabindex="-1" autocomplete="off">
       </div>
       <div class="form-card">
-        <div class="fc-title"><span class="fc-num">1</span>報名梯次</div>
+        <div class="fc-title"><span class="fc-num">1</span>報名梯次與時段</div>
       <div class="fg full">
         <label for="session">報名梯次 <span class="req">*</span></label>
         <select id="session" name="session" required>
           <option value="第一梯 2027/1/25–1/29">第一梯｜2027/1/25（一）– 1/29（五）</option>
         </select>
+      </div>
+      <!-- 時段卡的 value 必須與 gas-backend.js 的 SLOT_AM / SLOT_PM / SLOT_FULL 逐字相同，
+           改一邊就要改另一邊，否則後端白名單會把報名擋掉。 -->
+      <div class="fg full" style="margin-bottom:0">
+        <label>報名時段 <span class="req">*</span></label>
+      </div>
+      <div class="slot-grid" id="slotGrid">
+        <label class="slot-opt" data-slot="am">
+          <input type="radio" name="slot" value="上午班（09:00–12:00）">
+          <div class="slot-name">上午班</div>
+          <div class="slot-time">09:00–12:00 半天</div>
+          <div class="slot-price">$4,250</div>
+          <div class="slot-disc">優惠價 $4,000</div>
+        </label>
+        <label class="slot-opt" data-slot="pm">
+          <input type="radio" name="slot" value="下午班（14:00–17:00）">
+          <div class="slot-name">下午班</div>
+          <div class="slot-time">14:00–17:00 半天</div>
+          <div class="slot-price">$4,500</div>
+          <div class="slot-disc">優惠價 $4,250</div>
+        </label>
+        <label class="slot-opt" data-slot="full">
+          <input type="radio" name="slot" value="全天班（09:00–17:00）">
+          <div class="slot-name">全天班</div>
+          <div class="slot-time">09:00–17:00 含午休</div>
+          <div class="slot-price">$8,500</div>
+          <div class="slot-disc">優惠價 $8,000</div>
+        </label>
+        <div class="slot-note">
+          下午班含每日點心與實戰賽。全天班比分開報上午＋下午便宜，也只需繳一次費用。<br>
+          優惠價為適用一種優惠身份後的價格；另填推薦人可再折（全天 $500、半天 $250）。
+          每個時段各限 25 人，額滿改列候補。
+        </div>
       </div>
       </div>
 
@@ -338,7 +384,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
           <option value="清大教職員">清大教職員</option>
           <option value="特約企業員工">特約合作企業員工（含為子女報名）</option>
         </select>
-        <span style="font-size:11px;color:var(--text-muted);margin-top:3px" id="discountNote">2026/11/20（含）前完成報名，不限身份自動適用早鳥優惠價。以上四種身份擇一適用，彼此不可疊加。</span>
+        <span style="font-size:11px;color:var(--text-muted);margin-top:3px" id="discountNote">2026/11/20（含）前完成報名，不限身份自動適用早鳥優惠價。以上四種身份擇一適用，彼此不可疊加。折扣金額：全天班 $500、半天班 $250。</span>
       </div>
       <!-- 特約合作企業：選了公司，才跳出「該公司」可用的核對方式。公司清單與各自的核對方式見下方 PARTNERS 設定 -->
       <div class="fg full" id="partnerBox" style="display:none">
@@ -381,8 +427,9 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
           <label class="vh" for="gm5">團報學員 5 姓名</label><input type="text" class="gb-input" id="gm5" placeholder="學員 5 姓名">
         </div>
       </div>
-      <div class="lunch-box">
-        <div class="lt">午餐安排 <span class="req" style="color:var(--red)">*</span></div>
+      <!-- 半天班不提供代訂午餐 → 選半天時整塊隱藏（後端也會把午餐固定寫成「不適用（半天）」） -->
+      <div class="lunch-box" id="lunchBox" style="display:none">
+        <div class="lt">午餐安排 <span class="req" style="color:var(--red)">*</span>　<span style="color:var(--text-faint)">（僅全天班）</span></div>
         <label class="lopt">
           <input type="radio" name="lunch" value="代訂午餐">
           <div>
@@ -515,7 +562,7 @@ if (!REGISTRATION_OPEN) {
   const EARLY_END = new Date('2026-11-20T23:59:59+08:00');
   if (new Date() <= EARLY_END) return;
   const dn = document.getElementById('discountNote');
-  if (dn) dn.textContent = '早鳥已截止。剩餘三種身份擇一適用，彼此不可疊加：5 人以上團報／清大教職員／特約合作企業員工。';
+  if (dn) dn.textContent = '早鳥已截止。剩餘三種身份擇一適用，彼此不可疊加：5 人以上團報／清大教職員／特約合作企業員工。折扣金額：全天班 $500、半天班 $250。';
 })();
 
 // 無障礙：必填欄位補 aria-required（表單為 novalidate，required 僅作語意標記）
@@ -548,6 +595,23 @@ sameAsEmg.addEventListener('change', () => {
     document.getElementById('payerEmail').value = document.getElementById('email').value;
   });
 });
+// ── 時段選擇：只有全天班才顯示午餐區塊 ──
+// 半天班沒有代訂午餐，選到半天就把午餐還原成「自帶餐食」並收起葷素，
+// 避免家長先選了代訂、再改成半天，結果還是送出代訂。
+function syncSlot() {
+  const picked = document.querySelector('input[name="slot"]:checked');
+  const isFull = !!picked && picked.closest('.slot-opt').dataset.slot === 'full';
+  document.getElementById('lunchBox').style.display = isFull ? 'block' : 'none';
+  if (!isFull) {
+    document.querySelectorAll('input[name="lunch"]').forEach(x => { x.checked = (x.value === '自帶餐食'); });
+    document.getElementById('mealType').style.display = 'none';
+    document.querySelectorAll('input[name="mealType"]').forEach(x => { x.checked = false; });
+  }
+  document.querySelectorAll('.slot-opt').forEach(el => el.classList.remove('err'));
+}
+document.querySelectorAll('input[name="slot"]').forEach(r => r.addEventListener('change', syncSlot));
+syncSlot();
+
 // 午餐葷素聯動
 document.querySelectorAll('input[name="lunch"]').forEach(r => {
   r.addEventListener('change', () => {
@@ -670,6 +734,16 @@ form.addEventListener('submit', async (e) => {
     const el = document.getElementById(id);
     if (el.value.trim() && !fn(el.value)) { el.classList.add('err'); valid = false; }
   });
+  // 時段必選
+  const slotChecked = document.querySelector('input[name="slot"]:checked');
+  if (!slotChecked) {
+    document.querySelectorAll('.slot-opt').forEach(el => el.classList.add('err'));
+    document.getElementById('slotGrid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    msgBox.textContent = '請選擇報名時段（上午班／下午班／全天班）。';
+    msgBox.classList.add('fail');
+    return;
+  }
+  const isFullDay = slotChecked.closest('.slot-opt').dataset.slot === 'full';
   // 健康狀況必選
   const hs = document.querySelector('input[name="healthStatus"]:checked');
   if (!hs) {
@@ -714,8 +788,9 @@ form.addEventListener('submit', async (e) => {
     msgBox.classList.add('fail');
     return;
   }
-  // 代訂午餐必選葷素
-  if (document.querySelector('input[name="lunch"]:checked').value === '代訂午餐' &&
+  // 代訂午餐必選葷素（半天班沒有午餐選項，不檢查）
+  if (isFullDay &&
+      document.querySelector('input[name="lunch"]:checked').value === '代訂午餐' &&
       !document.querySelector('input[name="mealType"]:checked')) {
     alert('請選擇餐食（葷食／素食）。');
     return;
@@ -780,6 +855,7 @@ form.addEventListener('submit', async (e) => {
   })();
   const data = {
     session: document.getElementById('session').value,
+    slot: slotChecked.value,
     studentName: document.getElementById('studentName').value.trim(),
     gender: document.getElementById('gender').value,
     age: document.getElementById('age').value,
@@ -800,6 +876,8 @@ form.addEventListener('submit', async (e) => {
     empEmail: pp.empEmail,
     partnerDomainOk: pp.partnerDomainOk,
     lunch: (() => {
+      // 半天班不提供代訂午餐（後端也會再固定一次）
+      if (!isFullDay) return '不適用（半天）';
       const l = document.querySelector('input[name="lunch"]:checked').value;
       if (l !== '代訂午餐') return l;
       const m = document.querySelector('input[name="mealType"]:checked');
@@ -862,18 +940,27 @@ form.addEventListener('submit', async (e) => {
    最終金額一律以繳費通知為準（後端用伺服器時間判定早鳥，不受瀏覽器時鐘影響）。 */
 let previewConfirmed = false;
 
+// 時段價目表。必須與 gas-backend.js 的 CONFIG.PRICE 逐項一致。
+const SLOT_PRICE = {
+  '上午班（09:00–12:00）': { LIST: 4250, STEP: 250, NAME: '上午班' },
+  '下午班（14:00–17:00）': { LIST: 4500, STEP: 250, NAME: '下午班' },
+  '全天班（09:00–17:00）': { LIST: 8500, STEP: 500, NAME: '全天班' }
+};
 function estimateFee(d) {
   const EARLY_END = new Date('2026-11-20T23:59:59+08:00');
   const early = new Date() <= EARLY_END;
   const hasStatus = early || d.discount === '團報' || d.discount === '清大教職員' ||
                     d.discount === '特約企業員工';
   const hasRef = !!(d.referrer && d.referrer !== '—');
-  const LIST = 8500, STEP = 500;
+  // 認不出時段時用全天價（最貴，不會給家長看到偏低的數字）
+  const p = SLOT_PRICE[d.slot] || SLOT_PRICE['全天班（09:00–17:00）'];
+  const LIST = p.LIST, STEP = p.STEP;
   const lines = [];
   if (hasStatus) lines.push([early ? '早鳥優惠（11/20 前報名）' : ('優惠身份（' + d.discount + '）'), -STEP]);
   if (hasRef)    lines.push(['推薦人優惠（' + d.referrer + '）', -STEP]);
   const base = LIST - lines.length * STEP;
-  return { list: LIST, transfer: base, meal: d.lunch.indexOf('代訂') >= 0 ? 500 : 0, lines: lines };
+  return { list: LIST, transfer: base, slotName: p.NAME,
+           meal: d.lunch.indexOf('代訂') >= 0 ? 500 : 0, lines: lines };
 }
 
 function showPreview(d) {
@@ -907,7 +994,7 @@ function showPreview(d) {
       row('繳款人', esc(d.payerName)) + row('繳款人電話', esc(d.payerPhone)) + row('繳款人信箱', esc(d.payerEmail)) +
 
       '<div style="font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--green);margin:.9rem 0 .2rem">報名選擇</div>' +
-      row('梯次', esc(d.session)) + row('優惠身份', esc(d.discount)) +
+      row('梯次', esc(d.session)) + row('時段', esc(d.slot)) + row('優惠身份', esc(d.discount)) +
       (d.partner !== '—' ? row('特約公司', esc(d.partnerName)) : '') +
       (d.empEmail !== '—' ? row('公司信箱', esc(d.empEmail) + (d.partnerDomainOk ? '' : '　⚠️ 網域不符')) : '') +
       (d.empName !== '—' ? row('員工姓名', esc(d.empName)) : '') +
@@ -922,7 +1009,7 @@ function showPreview(d) {
 
       '<div style="margin-top:1.1rem;background:rgba(27,90,160,.05);border:.5px solid rgba(27,90,160,.28);border-radius:10px;padding:.9rem 1rem">' +
         '<div style="font-size:11.5px;color:var(--text-muted);margin-bottom:.35rem">系統試算費用</div>' +
-        '<div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-muted);padding:1px 0"><span>原價</span><span>' + f.list.toLocaleString() + '</span></div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-muted);padding:1px 0"><span>原價（' + f.slotName + '）</span><span>' + f.list.toLocaleString() + '</span></div>' +
         feeLines +
         '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:.5rem;padding-top:.5rem;border-top:.5px solid rgba(27,90,160,.2)">' +
           '<span style="font-size:12.5px;color:var(--text-2);font-weight:600">應轉帳金額</span>' +

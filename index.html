@@ -83,20 +83,20 @@
 </script>
 <title>清華大學足球冬令營 2027｜Stay Young</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-<meta name="description" content="2027 寒假清華大學足球冬令營，國小三到六年級專屬，專業教練帶領五天全天訓練。1/25–1/29 開課，報名截止 1/10。">
+<meta name="description" content="2027 寒假清華大學足球冬令營，國小三到六年級專屬，專業教練帶領，可選全天班或上午／下午半天班。1/25–1/29 開課，報名截止 1/10。">
 <link rel="canonical" href="https://nthu-football.stayyounglab.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Stay Young 運動團隊">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:url" content="https://nthu-football.stayyounglab.com/">
 <meta property="og:title" content="清華大學足球冬令營 2027｜Stay Young">
-<meta property="og:description" content="2027 寒假清華大學足球冬令營，國小三到六年級專屬，專業教練帶領五天全天訓練。1/25–1/29 開課，報名截止 1/10。">
+<meta property="og:description" content="2027 寒假清華大學足球冬令營，國小三到六年級專屬，專業教練帶領，可選全天班或上午／下午半天班。1/25–1/29 開課，報名截止 1/10。">
 <meta property="og:image" content="https://nthu-football.stayyounglab.com/images/hero-field.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="675">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="清華大學足球冬令營 2027｜Stay Young">
-<meta name="twitter:description" content="2027 寒假清華大學足球冬令營，國小三到六年級專屬，專業教練帶領五天全天訓練。1/25–1/29 開課，報名截止 1/10。">
+<meta name="twitter:description" content="2027 寒假清華大學足球冬令營，國小三到六年級專屬，專業教練帶領，可選全天班或上午／下午半天班。1/25–1/29 開課，報名截止 1/10。">
 <meta name="twitter:image" content="https://nthu-football.stayyounglab.com/images/hero-field.jpg">
 <style>
 :root{
@@ -247,6 +247,9 @@ h1,.st,.ft,.dn,.tl-name,.faq-q{text-wrap:balance}
 .lightbox-cap{position:absolute;bottom:26px;left:0;right:0;text-align:center;color:#cfe0f2;font-size:13px;letter-spacing:.04em}
 .zoomable{cursor:zoom-in}
 .v-cap{font-size:12.5px;color:var(--text-muted);text-align:center;margin-top:8px;letter-spacing:.04em}
+.tl-tag{display:inline-block;margin-left:7px;background:rgba(27,90,160,.08);border:.5px solid rgba(27,90,160,.22);color:var(--green);font-size:10.5px;font-weight:500;letter-spacing:.03em;padding:1px 7px;border-radius:99px;vertical-align:middle;white-space:nowrap}
+/* 時程區是深底，標籤要換成淺字才看得清楚 */
+.sec.dark .tl-tag{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);color:#e8f0f8}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:1.7rem}
 .pc{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.35rem;transition:transform .2s,border-color .2s}
 .pc:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(18,58,99,.08)}
@@ -257,6 +260,15 @@ h1,.st,.ft,.dn,.tl-name,.faq-q{text-wrap:balance}
 .punit{font-size:13px;color:var(--text-faint);font-weight:400}
 .pnote{font-size:12px;color:var(--text-muted);margin-top:6px;line-height:1.6}
 .ph-spacer{height:25px}
+.ptier{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:12px;color:var(--text-muted);padding:4px 0;border-top:.5px solid var(--border-soft);margin-top:6px}
+.ptier:first-of-type{margin-top:10px}
+.ptier b{font-size:14px;color:var(--text-2);font-weight:700;white-space:nowrap}
+.pmeta{margin-top:12px;background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:1.1rem 1.25rem;display:grid;gap:9px}
+.pm-i{display:flex;gap:12px;font-size:12.5px;line-height:1.65;align-items:baseline}
+.pm-k{flex:none;width:72px;color:var(--text-faint);font-size:11.5px;letter-spacing:.04em}
+.pm-v{color:var(--text-body)}
+.pm-v b{color:var(--text-2)}
+@media(max-width:620px){.pm-i{flex-direction:column;gap:1px}.pm-k{width:auto}}
 /* 推薦人優惠：主打賣點，做成深色強調帶 */
 .referral-hero{margin-top:1.5rem;position:relative;overflow:hidden;border-radius:14px;padding:1.9rem 1.8rem;background:linear-gradient(135deg,#0f3f7d 0%,#1560b8 58%,#2470c9 100%);color:#fff;box-shadow:0 14px 34px rgba(15,63,125,.26)}
 .referral-hero::after{content:'';position:absolute;top:-80px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(240,147,15,.3),transparent 68%);border-radius:50%;pointer-events:none}
@@ -353,7 +365,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
 <body>
 <noscript><img height="1" width="1" style="display:none" alt=""
  src="https://www.facebook.com/tr?id=2556852811454390&amp;ev=PageView&amp;noscript=1"></noscript>
-<a class="promo-bar" href="#pricing"><span class="pb-dot"></span><b>早鳥優惠中</b>　11/20 前報名，不限身份自動享優惠價 $8,000　·　再填推薦人，雙方各折 $500<span class="pb-go">看收費方案 →</span></a>
+<a class="promo-bar" href="#pricing"><span class="pb-dot"></span><b>早鳥優惠中</b>　11/20 前報名，不限身份自動享優惠價（全天 $8,000／上午 $4,000／下午 $4,250）　·　再填推薦人可再折<span class="pb-go">看收費方案 →</span></a>
 <nav class="nav">
   <div class="nav-left">
     <a class="nav-home" href="https://stayyounglab.com/" title="回到 Stay Young 首頁">
@@ -396,8 +408,8 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
   <div class="sec-inner">
     <div class="reveal">
       <div class="sl">營隊介紹</div>
-      <div class="st">五天全天，紮實訓練</div>
-      <p class="ss"><span class="cl">Stay Young 累計服務超過 500 位學員。</span><span class="cl">無論是第一次踢球的零基礎孩子，</span><span class="cl">還是已有基礎想更進一步的小球員，</span><span class="cl">課程由專業教練循序漸進設計，</span><span class="cl">五天看得見進步。</span></p>
+      <div class="st">五天訓練，全天或半天都能選</div>
+      <p class="ss"><span class="cl">Stay Young 累計服務超過 500 位學員。</span><span class="cl">無論是第一次踢球的零基礎孩子，</span><span class="cl">還是已有基礎想更進一步的小球員，</span><span class="cl">課程由專業教練循序漸進設計，</span><span class="cl">五天看得見進步。</span><span class="cl">可報全天班，</span><span class="cl">或只報上午／下午半天班。</span></p>
     </div>
     <div class="fgrid">
       <div class="fc reveal"><div class="ft">零基礎友善</div><div class="fd">從最基本的觸球開始教起，第一次踢球也能安心參加</div></div>
@@ -473,17 +485,17 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="tl-item reveal d1">
         <div class="tl-time">09:00 – 12:00</div>
         <div class="tl-dot"></div>
-        <div class="tl-body"><div class="tl-name">上午訓練</div><div class="tl-desc">技術課程與分項練習</div></div>
+        <div class="tl-body"><div class="tl-name">上午訓練<span class="tl-tag">上午班範圍</span></div><div class="tl-desc">技術課程與分項練習</div></div>
       </div>
       <div class="tl-item reveal d2">
         <div class="tl-time">12:00 – 14:00</div>
         <div class="tl-dot rest"></div>
-        <div class="tl-body"><div class="tl-name">午餐與午休</div><div class="tl-desc">營隊代訂或自備餐食，餐後充分休息</div></div>
+        <div class="tl-body"><div class="tl-name">午餐與午休<span class="tl-tag">僅全天班</span></div><div class="tl-desc">營隊代訂或自備餐食，餐後充分休息。上午班 12:00 結束、下午班 14:00 開始，不含這一段。</div></div>
       </div>
       <div class="tl-item reveal d3">
         <div class="tl-time">14:00 – 15:50</div>
         <div class="tl-dot"></div>
-        <div class="tl-body"><div class="tl-name">下午訓練</div><div class="tl-desc">團隊配合與綜合練習</div></div>
+        <div class="tl-body"><div class="tl-name">下午訓練<span class="tl-tag">下午班範圍 14:00–17:00</span></div><div class="tl-desc">團隊配合與綜合練習</div></div>
       </div>
       <div class="tl-item reveal d3">
         <div class="tl-time">15:50 – 16:30</div>
@@ -526,14 +538,29 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="sl">收費方案</div>
     </div>
     <div class="pgrid">
-      <div class="pc hi reveal"><div class="ptag">優惠價</div><div class="pdesc" id="promoDesc">早鳥（11/20 前報名）/ 團體 5 人 / 清大教職員</div><div class="pnum">$8,000 <span class="punit">/ 人</span></div><div class="pnote">三種資格擇一適用即享優惠價，不可疊加</div></div>
-      <div class="pc reveal d1"><div class="ph-spacer"></div><div class="pdesc">一般報名</div><div class="pnum">$8,500 <span class="punit">/ 人</span></div><div class="pnote">個人報名，無需任何條件</div></div>
-      <div class="pc reveal d2"><div class="ph-spacer"></div><div class="pdesc">開班門檻</div><div class="pnum">12 <span class="punit">人</span></div><div class="pnote">確認開班後才會寄送繳費通知，未達門檻不會收取任何費用</div></div>
+      <div class="pc hi reveal"><div class="ptag">最划算</div><div class="pdesc">全天班　09:00–17:00</div><div class="pnum">$8,500 <span class="punit">/ 人</span></div>
+        <div class="ptier"><span>優惠身份</span><b>$8,000</b></div>
+        <div class="ptier"><span>優惠身份 ＋ 推薦人</span><b>$7,500</b></div>
+        <div class="pnote">含午休，可代訂午餐。比分開報上午＋下午便宜，也只需繳一次費用。</div></div>
+      <div class="pc reveal d1"><div class="ph-spacer"></div><div class="pdesc">上午班　09:00–12:00</div><div class="pnum">$4,250 <span class="punit">/ 人</span></div>
+        <div class="ptier"><span>優惠身份</span><b>$4,000</b></div>
+        <div class="ptier"><span>優惠身份 ＋ 推薦人</span><b>$3,750</b></div>
+        <div class="pnote">半天班不提供代訂午餐，12:00 結束。</div></div>
+      <div class="pc reveal d2"><div class="ph-spacer"></div><div class="pdesc">下午班　14:00–17:00</div><div class="pnum">$4,500 <span class="punit">/ 人</span></div>
+        <div class="ptier"><span>優惠身份</span><b>$4,250</b></div>
+        <div class="ptier"><span>優惠身份 ＋ 推薦人</span><b>$4,000</b></div>
+        <div class="pnote">含每日點心與實戰比賽，所以比上午班多 $250。</div></div>
+    </div>
+    <div class="pmeta reveal">
+      <div class="pm-i"><span class="pm-k">優惠身份</span><span class="pm-v" id="promoDesc">早鳥（11/20 前報名）／團體 5 人／清大教職員／特約合作企業員工，<b>擇一適用、不可疊加</b></span></div>
+      <div class="pm-i"><span class="pm-k">折扣金額</span><span class="pm-v">全天班每道折 <b>$500</b>、半天班每道折 <b>$250</b></span></div>
+      <div class="pm-i"><span class="pm-k">名額</span><span class="pm-v">上午、下午<b>各限 25 人</b>（全天班同時佔用上午與下午各 1 位），額滿改列候補</span></div>
+      <div class="pm-i"><span class="pm-k">開班門檻</span><span class="pm-v"><b>12 人</b>　確認開班後才會寄送繳費通知，未達門檻不會收取任何費用</span></div>
     </div>
     <div class="referral-hero reveal">
       <span class="rh-badge">兩人同享 · 可疊加</span>
-      <div class="rh-head">推薦朋友一起報名，<span class="rh-amt">兩人各折 $500</span></div>
-      <p class="rh-sub">不是只有被推薦的人有折扣 —— <b>推薦人與被推薦人雙方都折 $500</b>，兩人合計省下 <b>$1,000</b>。</p>
+      <div class="rh-head">推薦朋友一起報名，<span class="rh-amt">兩人都有折扣</span></div>
+      <p class="rh-sub">不是只有被推薦的人有折扣 —— <b>推薦人與被推薦人雙方都折</b>：全天班各折 $500、半天班各折 $250。</p>
       <div class="rh-flow">
         <div class="rh-step"><span class="rh-n">1</span>報名表填寫推薦人姓名</div>
         <div class="rh-arrow">→</div>
@@ -541,7 +568,7 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
         <div class="rh-arrow">→</div>
         <div class="rh-step"><span class="rh-n">3</span>繳費通知直接折抵</div>
       </div>
-      <p class="rh-note">推薦人須為本營隊的報名者。本項<b id="refStack">可與早鳥／團體 5 人／清大教職員疊加</b>，兩者皆符合者為 <b>$7,500</b>（一般報名 $8,500）。</p>
+      <p class="rh-note">推薦人須為本營隊的報名者。本項<b id="refStack">可與早鳥／團體 5 人／清大教職員／特約合作企業員工疊加</b>，兩者皆符合者：全天班 <b>$7,500</b>、上午班 <b>$3,750</b>、下午班 <b>$4,000</b>。</p>
     </div>
     <div class="refund-box reveal">
       <div class="refund-title">退費規則（繳費後）</div>
@@ -562,14 +589,16 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
       <div class="st">常見問題</div>
     </div>
     <div class="faq-list">
-      <div class="faq-i reveal"><button class="faq-q" type="button">每日上課時間？<span class="faq-arrow">＋</span></button><div class="faq-a">每天 09:00–12:00 上午訓練、12:00–14:00 午餐與午休、14:00–17:00 下午訓練，08:30 就開放報到囉。如果家裡時間不好配合，最早 08:00 就可以把孩子送過來，放學後我們也可以幫忙看顧到 18:00，不用擔心趕不及。</div></div>
-      <div class="faq-i reveal"><button class="faq-q" type="button">可以早點送來、晚點接回嗎？<span class="faq-arrow">＋</span></button><div class="faq-a">可以。本營隊提供彈性接送：<b>最早 08:00 就能把孩子送過來，最晚 18:00 前接回都沒問題</b>。正式課程是 09:00–17:00，前後各延長一小時，延長時段一樣由營隊教練在場照管，不另外收費。這是為了配合家長的上下班時間，不必為了接送特地請假。</div></div>
+      <div class="faq-i reveal"><button class="faq-q" type="button">每日上課時間？<span class="faq-arrow">＋</span></button><div class="faq-a">看您報哪個時段：<b>全天班</b> 09:00–17:00（含 12:00–14:00 午餐與午休），<b>上午班</b> 09:00–12:00，<b>下午班</b> 14:00–17:00。全天班與上午班 08:30 開放報到，下午班 13:45 開放報到。如果家裡時間不好配合，最早 08:00 就可以把孩子送過來，放學後我們也可以幫忙看顧到 18:00，不用擔心趕不及。</div></div>
+      <div class="faq-i reveal"><button class="faq-q" type="button">可以早點送來、晚點接回嗎？<span class="faq-arrow">＋</span></button><div class="faq-a">可以，三種時段都適用。<b>上午班與全天班最早 08:00 就能把孩子送過來；下午班與全天班最晚 18:00 前接回都沒問題</b>。延長時段一樣由營隊教練在場照管，不另外收費。這是為了配合家長的上下班時間，不必為了接送特地請假。</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">需要自備足球裝備嗎？<span class="faq-arrow">＋</span></button><div class="faq-a">穿好活動的運動服和室內運動鞋就可以了，護脛麻煩自己帶。足球、標誌錐這些訓練用具我們現場都會準備好，孩子空手來就行！</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">完全沒有足球基礎可以參加嗎？<span class="faq-arrow">＋</span></button><div class="faq-a">當然可以，而且很多孩子都是第一次踢！我們從最基本的踩球、碰球開始教，教練會盯著每個孩子的節奏走，不會有跟不上的問題。零基礎的小朋友放心來。</div></div>
+      <div class="faq-i reveal"><button class="faq-q" type="button">半天班和全天班怎麼選？<span class="faq-arrow">＋</span></button><div class="faq-a">孩子體力夠、家長時間方便的話，<b>全天班</b>最推薦：技術課與團隊配合都完整走一遍，價格也比分開報上午＋下午便宜。如果孩子是第一次參加營隊、或下午另有安排，可以先報半天。<b>上午班</b>是技術課程與分項練習；<b>下午班</b>是團隊配合與綜合練習，另外含每天的點心與 3v3／4v4 實戰比賽，所以比上午班多 $250。三種時段的教練與場地都一樣。</div></div>
+      <div class="faq-i reveal"><button class="faq-q" type="button">半天班有午餐嗎？<span class="faq-arrow">＋</span></button><div class="faq-a">沒有，<b>半天班不提供代訂午餐</b>。上午班 12:00 就結束、下午班 14:00 才開始，都不含午餐時段，報名表上也不會出現午餐選項。只有全天班需要選擇午餐（代訂或自備）。不過每天下午的點心三種時段都有，所以<b>報名表的過敏與忌口還是一定要填</b>。</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">報名後何時繳費？<span class="faq-arrow">＋</span></button><div class="faq-a">先報名就好，不用馬上付錢！送出後您會收到一封報名確認信，等報名人數達到開班標準、確定開班之後，我們才會寄繳費通知給您。在確定開班前，我們不會收取任何費用。</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">沒收到確認信怎麼辦？<span class="faq-arrow">＋</span></button><div class="faq-a">先麻煩您到「垃圾郵件」或「促銷內容」資料夾找一下，系統信有時會被自動分類過去。如果找過還是沒有，很可能是報名時信箱有誤，請直接來信 stayyoung985@gmail.com 告訴我們孩子的姓名，我們會幫您確認報名狀態並補寄一次，不用擔心報名沒成功。</div></div>
-      <div class="faq-i reveal"><button class="faq-q" type="button">額滿後如何候補？<span class="faq-arrow">＋</span></button><div class="faq-a">如果名額滿了，您的報名會自動排進候補名單，一樣不會收任何費用。只要有人取消釋出名額，我們會立刻用 email 通知您，依序遞補。</div></div>
-      <div class="faq-i reveal"><button class="faq-q" type="button">午餐怎麼安排？<span class="faq-arrow">＋</span></button><div class="faq-a">報名時可以選擇讓我們代訂午餐，五天共 500 元（葷素都可以選），第一天上課交給教練就好。想自己準備便當也沒問題，中午我們會安排休息空間讓孩子好好吃飯午休。另外每天下午我們都會準備點心，讓孩子補充體力。<b>因為點心是每個孩子都會吃到的，報名表上不論您有沒有代訂午餐，都請填寫過敏或忌口</b>（例如花生過敏、不吃牛、奶蛋素），我們採買時會為孩子避開，不另外收費。</div></div>
+      <div class="faq-i reveal"><button class="faq-q" type="button">額滿後如何候補？<span class="faq-arrow">＋</span></button><div class="faq-a">名額是<b>依時段</b>計算的，上午、下午各限 25 人（全天班同時佔用上午與下午各 1 位）。如果您選的時段滿了，報名會自動排進候補名單，一樣不會收任何費用。只要有人取消釋出名額，我們會立刻用 email 通知您，依序遞補。<b>另外兩個時段通常還有空位</b>，如果您的時間可以調整，回信告訴我們就能改到有名額的時段。</div></div>
+      <div class="faq-i reveal"><button class="faq-q" type="button">午餐怎麼安排？<span class="faq-arrow">＋</span></button><div class="faq-a"><b>全天班</b>報名時可以選擇讓我們代訂午餐，五天共 500 元（葷素都可以選），第一天上課交給教練就好。想自己準備便當也沒問題，中午我們會安排休息空間讓孩子好好吃飯午休。<b>半天班不提供代訂午餐</b>（上午班 12:00 就結束、下午班 14:00 才開始）。另外每天下午我們都會準備點心，三種時段的孩子都吃得到。<b>因為點心是每個孩子都會吃到的，報名表上不論您有沒有代訂午餐，都請填寫過敏或忌口</b>（例如花生過敏、不吃牛、奶蛋素），我們採買時會為孩子避開，不另外收費。</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">可以請假嗎？<span class="faq-arrow">＋</span></button><div class="faq-a">可以的，臨時有事請假沒關係，跟教練說一聲，我們可以再幫孩子安排時間補課。不過費用是以整梯計算，單日缺席沒辦法退費，這點要請家長見諒。完整的退費規則可以往上看收費方案那一區（開課前 15 天以上全額退費，越接近開課退費比例越低，開課後則不再退費）。</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">團報優惠怎麼使用？<span class="faq-arrow">＋</span></button><div class="faq-a">找齊五個小朋友一起報名就可以享優惠價！報名時選「團報」並填上同行夥伴的名字，記得每位學員都要各自填一份報名表喔。</div></div>
       <div class="faq-i reveal"><button class="faq-q" type="button">紀念衣什麼時候拿到？<span class="faq-arrow">＋</span></button><div class="faq-a">報名時記得選一下孩子的衣服尺寸，我們會事先準備好，開營第一天就發給大家，讓小朋友穿著同一件隊服一起訓練，很有團隊感！</div></div>
@@ -690,10 +719,12 @@ document.querySelectorAll('.faq-q').forEach((btn, i) => {
   if (new Date() <= end) return;
   var b = document.querySelector('.promo-bar');
   if (b) b.parentNode.removeChild(b);
+  // ⚠️ 這兩段要與上面 HTML 的寫法對齊，只是拿掉「早鳥」那一項。
+  //    2026-11-18 加了特約合作企業員工、11/20 加了半天班，兩段都要跟著有。
   var pd = document.getElementById('promoDesc');
-  if (pd) pd.textContent = '團體 5 人 / 清大教職員';
+  if (pd) pd.innerHTML = '團體 5 人／清大教職員／特約合作企業員工，<b>擇一適用、不可疊加</b>';
   var rs = document.getElementById('refStack');
-  if (rs) rs.textContent = '可與團體 5 人／清大教職員疊加';
+  if (rs) rs.textContent = '可與團體 5 人／清大教職員／特約合作企業員工疊加';
 })();
 
 // ── 報名總開關（與 signup.html 的 REGISTRATION_OPEN 要一致）──
