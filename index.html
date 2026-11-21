@@ -179,6 +179,8 @@ h1,.st,.ft,.dn,.tl-name,.faq-q{text-wrap:balance}
 .sy-mark{height:34px;width:auto;display:block;flex-shrink:0}
 .sy-text{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:900;color:var(--text-2);letter-spacing:.03em;white-space:nowrap}
 .nav-div{width:1px;height:20px;background:var(--border);flex-shrink:0}
+/* 平板寬度時導覽列會擠在一起（加回「回平台」按鈕前就有的問題），先收掉平台文字只留圖標 */
+@media (max-width:1100px){.sy-text{display:none}}
 .nav-links{display:flex;gap:1.4rem;flex:0 0 auto;justify-content:center}
 .nav-links a{font-size:13px;color:var(--text-body);text-decoration:none;transition:color .15s}
 .nav-links a:hover{color:var(--text-2)}
@@ -413,6 +415,11 @@ footer{background:#092b52;padding:1.9rem 1.75rem;display:flex;justify-content:sp
 <a class="promo-bar" href="#pricing"><span class="pb-dot"></span><b>早鳥優惠中</b>　11/22 前報名，不限身份自動享優惠價（全天 $8,000／上午 $4,000／下午 $4,250）　·　再填推薦人可再折<span class="pb-go">看收費方案 →</span></a>
 <nav class="nav">
   <div class="nav-left">
+    <a class="nav-home" href="https://stayyounglab.com/" title="回到 Stay Young 營隊報名平台">
+      <img class="sy-mark" src="images/logo-mark.png" alt="Stay Young 營隊報名平台">
+      <span class="sy-text">Stay Young 報名平台</span>
+    </a>
+    <span class="nav-div"></span>
     <a class="nav-logo" href="#top">清華大學足球冬令營</a>
   </div>
   <div class="nav-links">
